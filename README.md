@@ -13,6 +13,8 @@
 
 [[https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&utm_medium=referral&utm_content=Yangruipis/simpleML&utm_campaign=badger][file:https://api.codacy.com/project/badge/Grade/6c44426cd41f4b0382ca5714d97f56fe]]
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806)](https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade)
+
 * 特征工程
 
 

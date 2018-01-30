@@ -71,7 +71,7 @@ class MyFilter(object):
             return LabelType.multiclass
 
     def _check(self, x, y):
-        if x.shape[0] == y.shape[0]
+        if x.shape[0] == y.shape[0]:
             raise SampleNumberMismatchError
         if len(y.shape) == 1:
             raise LabelTypeError

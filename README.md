@@ -127,10 +127,10 @@
 -   median<sub>absolute</sub><sub>error</sub>
 
 范例：
-
+```python
     from simple_ml.score import *
     print(classify_accuracy(np.array([1,0,1]), np.array([1, 1, 1])))
-
+```
 ## 分类结果作图<a id="sec-2-2" name="sec-2-2"></a>
 
 `注意：`
@@ -138,10 +138,10 @@
 -   如果想先训练再作图，且特征大于2维，则无法做出区域
 
 范例：
-
+```python
     from simple_ml import classify_plot
     classify_plot.classify_plot(model, X_train, y_train, X_test, Y_test, title='My Support Vector Machine')
-
+```
 ## 交叉验证<a id="sec-2-3" name="sec-2-3"></a>
 
 目前提供了两种交叉验证方法：

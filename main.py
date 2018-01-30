@@ -7,6 +7,3 @@ from simple_ml.logistic import *
 from simple_ml.naive_bayes import *
 from simple_ml.svm import *
 from simple_ml.tree import *
-
-a = MyKMeans(10)
-b = MyLogisticRegression()

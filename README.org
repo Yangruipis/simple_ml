@@ -8,6 +8,8 @@
 
 将机器学习的基本流程与算法进行手写实现，仅调用numpy以及python基本库
 
+[[https://img.shields.io/npm/l/express.svg]]  
+
 * 特征工程
 ** 特征预处理
 包括缺失值、异常值、标准化等等，由于比较简单，故跳过

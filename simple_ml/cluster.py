@@ -149,7 +149,7 @@ class MyHierarchical(object):
     def _get_nearest_id(self, candidate_list):
         min_dis = np.inf
         nearest_pair = (-1, -1)
-        for i in range(len(candidate_list)):
+        for i, _ in enumerate(candidate_list):
             for j in range(i+1, len(candidate_list)):
                 dis = self._dis_of_cluster(candidate_list[i], candidate_list[j])
                 if dis < min_dis:
@@ -215,3 +215,6 @@ class MyHierarchical(object):
     @property
     def max_dis(self):
         return self.root.distance
+
+if __name__ == '__main__':
+    km = MyKMeans(10)

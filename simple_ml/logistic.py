@@ -49,7 +49,7 @@ class MyLogisticRegression(MyClassifier):
 
     def fit(self, x, y):
         self._init(x, y)
-        self.w, loss = self._fit()
+        self.w, _ = self._fit()
         if len(self.w) == self.variable_num:
             raise FeatureNumberMismatchError
 

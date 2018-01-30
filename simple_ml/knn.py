@@ -94,7 +94,7 @@ class MyKDTree(MyKnn):
     @staticmethod
     def _choose_split_feature(x, ids):
         x = x[ids]
-        variance_list = list(map(lambda i: np.var(i), x.T))
+        variance_list = list(map(np.var, x.T))
         split_feature_id = variance_list.index(max(variance_list))
         median = np.median(x.T[split_feature_id])
         # split_node = node(None, None, median, split_feature_id, ids)

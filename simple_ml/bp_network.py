@@ -122,7 +122,8 @@ class MyBPNetwork(MyClassifier):
         :param alpha:      更新步长
         :return:
         """
-        for i in range(iter_times):
+        count = 0
+        while count < iter_times:
             rand_int = np.random.randint(0, self.x.shape[0])
             self.x_vector = self.x[rand_int]
             self.y_vector = self.y[rand_int]
@@ -131,6 +132,7 @@ class MyBPNetwork(MyClassifier):
             self._cal_output_error()
             self._cal_hidden_error()
             self._update_param(alpha)
+            count += 1
 
     def predict(self, x):
         if self.b_output is None:

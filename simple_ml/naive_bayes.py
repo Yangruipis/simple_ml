@@ -20,7 +20,7 @@ class MyNaiveBayes(MyClassifier):
         if self.label_type == LabelType.continuous:
             raise LabelTypeError
 
-        self.is_feature_binary = list(map(lambda i: self._is_binary(i), self.x.T))
+        self.is_feature_binary = list(map(self._is_binary, self.x.T))
         self._fit()
 
     @staticmethod

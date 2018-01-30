@@ -182,8 +182,8 @@ def classify_roc(y_predict, y_true):
 
     tpr_list = []
     fpr_list = []
-    for i, j in pair:
-        tpr, fpr = get_tpr_and_fpr(i)
+    for i in pair:
+        tpr, fpr = get_tpr_and_fpr(i[0])
         tpr_list.append(tpr)
         fpr_list.append(fpr)
     return tpr_list, fpr_list

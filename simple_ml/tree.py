@@ -143,7 +143,7 @@ class MyRandomForest(MyClassifier):
     def _vote(self, result):
         if result.shape[0] == self.tree_num:
             raise TreeNumberMismatchError
-        voted_result = list(map(lambda x: self._one_vote(x), result.T))
+        voted_result = list(map(self._one_vote, result.T))
         return np.array(voted_result)
 
     def _one_vote(self, result):

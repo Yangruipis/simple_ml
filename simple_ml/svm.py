@@ -62,7 +62,7 @@ class MySVM(MyClassifier):
         self.alphas = np.zeros(self.sample_num)
         self.kernel_mat = None
 
-    def fit(self, x, y, entire_set=True):
+    def fit(self, x, y):
         """
         两种求解方法：
             1. SOM（本文直接实现该方法）
@@ -73,6 +73,7 @@ class MySVM(MyClassifier):
         # self._clear()
         # 事先计算出核函数矩阵，避免高维下的计算问题
         self.kernel_mat = self._cal_kernel_matrix()
+        entire_set = True
         self._smo_outer(entire_set)
 
     def _cal_kernel_matrix(self):
@@ -245,7 +246,7 @@ class MySVM(MyClassifier):
 
         print('Finished')
 
-    def predict(self, new_x):
+    def predict(self, x):
         if self.error is None:
             raise ModelNotFittedError
 
@@ -258,7 +259,7 @@ class MySVM(MyClassifier):
         support_vector_alphas = self.alphas[support_vector_index]
 
         # step3. 计算预测值向量
-        pred_y_value = np.array(list(map(lambda i: self._predict_single(i, support_vector_x, support_vector_y, support_vector_alphas), new_x)))
+        pred_y_value = np.array(list(map(lambda i: self._predict_single(i, support_vector_x, support_vector_y, support_vector_alphas), x)))
         pred_y_binary = np.array([np.sign(i) for i in pred_y_value])
         return pred_y_binary
 

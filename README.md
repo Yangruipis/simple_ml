@@ -67,7 +67,7 @@
 
 将机器学习的基本流程与算法进行手写实现，仅调用numpy以及python基本库
 
-![img](//img.shields.io/npm/l/express.svg) 
+![](https://img.shields.io/npm/l/express.svg)  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806)](https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade)
 
 # 特征工程<a id="sec-1" name="sec-1"></a>
 
@@ -88,12 +88,14 @@
 
 范例如下
 
+```python
     from simple_ml.filter_select import *
     X = np.random.random(20).reshape(-1, 4)
     Y = np.random.randint(0,2,5)
     mf = MyFilter(filter_type=FilterType.chi2, top_k=3)
     mf.fitTransform(X,Y)
     mf.transform(X)
+```
 
 # 模型评价<a id="sec-2" name="sec-2"></a>
 
@@ -156,10 +158,10 @@
 6.  交叉验证次数
 
 范例：
-
+```python
     from simple_ml.cross_validation import *
     cross_validation(model, X, y, CrossValidationType.holdout, 0.3, 5)
-
+```
 # 分类算法<a id="sec-3" name="sec-3"></a>
 
 ## 类规范<a id="sec-3-1" name="sec-3-1"></a>
@@ -181,7 +183,7 @@
 ### 简单knn<a id="sec-3-2-1" name="sec-3-2-1"></a>
 
 范例：
-
+```python
     from simple_ml.knn import *
     from dataset.classify_data import get_iris
     knn_test = myKNN(K=3,distance_type=DisType.CosSim)
@@ -190,7 +192,7 @@
     knn_test.fit(X_train, y_train)
     print(knn_test.predict(X_test))
     print(knn_test.score(X_test, y_test))
-
+```
 ### KD树<a id="sec-3-2-2" name="sec-3-2-2"></a>
 
 `Comming Soon`
@@ -198,7 +200,7 @@
 ## Logistic回归<a id="sec-3-3" name="sec-3-3"></a>
 
 范例
-
+```python
     from simple_ml.logistic import *
     X = np.array([[2,1], [4,2], [3,3], [4,1], [3,2], [2,3], [1,3]])
     y = np.array([1,2,0,1,0,1,2])
@@ -207,13 +209,13 @@
     print(lr.predict(X))
     print(lr.score(X, y))
     lr.auc_plot(X, y)
-
+```
 ## 贝叶斯相关算法<a id="sec-3-4" name="sec-3-4"></a>
 
 ### 朴素贝叶斯<a id="sec-3-4-1" name="sec-3-4-1"></a>
 
 范例
-
+```python
     from simple_ml.naive_bayes import *
     X = np.array([[0, 0, 0, 1],
                [0, 1, 0, 0],
@@ -225,7 +227,7 @@
     nb.fit(X, y)
     X_test = np.array([0, 0, 0, 0]).reshape(1, -1)
     print(nb.predict(X_test))
-
+```
 ### 半朴素贝叶斯<a id="sec-3-4-2" name="sec-3-4-2"></a>
 
 `Comming Soon`
@@ -235,7 +237,7 @@
 ### CART<a id="sec-3-5-1" name="sec-3-5-1"></a>
 
 范例
-
+```python
     from simple_ml.tree import *
     np.random.seed(1234)
     rt = RegressionTree(min_leaf_samples=3)
@@ -244,11 +246,11 @@
     y_test = np.random.rand(10)
     rt.fit(X, Y)
     print(rt.predict(y_test))
-
+```
 ### 随机森林<a id="sec-3-5-2" name="sec-3-5-2"></a>
 
 范例
-
+```python
     from simple_ml.tree import *
     X, y = get_iris()
     X_train,X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
@@ -257,21 +259,21 @@
     print(mrf.predict(X_test))
     print(y_test)
     mrf.classifyPlot(X_test, y_test)
-
+```
 ## 支持向量机<a id="sec-3-6" name="sec-3-6"></a>
 
 -   暂时只支持二分类问题
 -   提供核函数如下：
-
+```python
     class KernelType(Enum):
         linear = 0      # 线性核
         polynomial = 1  # 多项式核
         gassian = 2     # 高斯核
         laplace = 3     # 拉普拉斯核
         sigmoid = 4     # sigmoid核
-
+```
 范例
-
+```python
     from simple_ml.svm import *
     from simple_ml.classify_data import  get_iris
     X, y = get_iris()
@@ -283,7 +285,7 @@
     print(mysvm.alphas, mysvm.b)
     print(mysvm.predict(X))
     mysvm.classifyPlot(X, y)
-
+```
 ## 神经网络<a id="sec-3-7" name="sec-3-7"></a>
 
 ### BP神经网络<a id="sec-3-7-1" name="sec-3-7-1"></a>
@@ -295,7 +297,7 @@
 ## K均值聚类<a id="sec-4-1" name="sec-4-1"></a>
 
 范例
-
+```python
     from simple_ml.cluster import *
     X = np.array([1, 2,3, 5,6, 10,11,12,20, 35]).reshape(-1, 2)
     X = np.random.rand(*(50, 2))
@@ -306,11 +308,11 @@
     import matplotlib.pyplot as plt
     plt.scatter(x=X[:,0], y=X[:, 1], c=km.labels)
     plt.show()
-
+```
 ## 层次聚类<a id="sec-4-2" name="sec-4-2"></a>
 
 范例
-
+```python
     from simple_ml.cluster import *
     X = np.array([1, 2,3, 5,6, 10,11,12,20, 35]).reshape(-1, 2)
     X = np.random.rand(*(50, 2))
@@ -322,7 +324,7 @@
     import matplotlib.pyplot as plt
     plt.scatter(x=X[:,0], y=X[:, 1], c=km.labels)
     plt.show()
-
+```
 `Losers Always Whine About Their Best`
 
 `献给所有为梦想不懈奋斗的人儿们`

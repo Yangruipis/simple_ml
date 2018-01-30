@@ -104,7 +104,8 @@ class MyRandomForest(MyClassifier):
 
     def fit(self, x, y):
         self._init(x, y)
-        assert self.m <= self.variable_num, ValueBoundaryError
+        if self.m <= self.variable_num:
+            raise ValueBoundaryError
         self._fit()
 
     def _fit(self):
@@ -136,12 +137,14 @@ class MyRandomForest(MyClassifier):
         return self._vote(predict_results_mat)
 
     def _vote(self, result):
-        assert result.shape[0] == self.tree_num, TreeNumberMismatchError
+        if result.shape[0] == self.tree_num:
+            raise TreeNumberMismatchError
         voted_result = list(map(lambda x: self._one_vote(x), result.T))
         return np.array(voted_result)
 
     def _one_vote(self, result):
-        assert len(result) == self.tree_num, TreeNumberMismatchError
+        if len(result) == self.tree_num:
+            raise TreeNumberMismatchError
         count = Counter(result)
         return max(count, key=count.get)
 

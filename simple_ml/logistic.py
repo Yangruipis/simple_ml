@@ -50,7 +50,8 @@ class MyLogisticRegression(MyClassifier):
     def fit(self, x, y):
         self._init(x, y)
         self.w, loss = self._fit()
-        assert len(self.w) == self.variable_num, FeatureNumberMismatchError
+        if len(self.w) == self.variable_num:
+            raise FeatureNumberMismatchError
 
     def _fit(self):
         """
@@ -72,7 +73,8 @@ class MyLogisticRegression(MyClassifier):
         if self.has_intercept:
             x = self._add_ones(x)
 
-        assert x.shape[1] == self.variable_num, FeatureNumberMismatchError
+        if x.shape[1] == self.variable_num:
+            raise FeatureNumberMismatchError
         self.y = np.dot(self.x, self.w)
         return self._sigmoid(self.y)
 

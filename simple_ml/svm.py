@@ -37,14 +37,18 @@ class MySVM(MyClassifier):
 
     def _check_kernel(self, kwargs_dict):
         if self.kernel_type == KernelType.gassian or self.kernel_type == KernelType.laplace:
-            assert 'sigma' in kwargs_dict, KernelMissParameterError("高斯核或拉普拉斯核必须申明带宽sigma参数, sigma>0")
+            if 'sigma' in kwargs_dict:
+                raise KernelMissParameterError("高斯核或拉普拉斯核必须申明带宽sigma参数, sigma>0")
             self.sigma = kwargs_dict['sigma']
         elif self.kernel_type == KernelType.polynomial:
-            assert 'd' in kwargs_dict, KernelMissParameterError("多项式核必须申明幂指数d参数, d>=1")
+            if 'd' in kwargs_dict:
+                raise KernelMissParameterError("多项式核必须申明幂指数d参数, d>=1")
             self.d = kwargs_dict['d']
         elif self.kernel_type == KernelType.sigmoid:
-            assert 'beta' in kwargs_dict, KernelMissParameterError("sigmoid核必须申明beta参数, beta>0")
-            assert 'theta' in kwargs_dict, KernelMissParameterError("sigmoid核必须申明theta参数, theta<0")
+            if 'beta' in kwargs_dict:
+                raise KernelMissParameterError("sigmoid核必须申明beta参数, beta>0")
+            if 'theta' in kwargs_dict:
+                raise KernelMissParameterError("sigmoid核必须申明theta参数, theta<0")
             self.beta = kwargs_dict['beta']
             self.theta = kwargs_dict['theta']
         else:
@@ -266,7 +270,8 @@ class MySVM(MyClassifier):
         """
         根据输入的矩阵和行向量，计算kernel值
         """
-        assert x_mat.shape[1] == len(x_vector), FeatureNumberMismatchError
+        if x_mat.shape[1] == len(x_vector):
+            raise FeatureNumberMismatchError
         if kernel_type == KernelType.linear:
             return np.dot(x_mat, x_vector.reshape(-1, 1)).ravel()
         elif kernel_type == KernelType.polynomial:

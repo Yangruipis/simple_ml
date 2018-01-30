@@ -42,7 +42,8 @@ def _get_binary_confusion_matrix(y_predict, y_true):
     _check_input(y_predict, y_true)
     joint = list(zip(y_predict, y_true))
     joint_counted = dict(Counter(joint))
-    assert len(joint_counted) <= 4, ValueError
+    if len(joint_counted) <= 4:
+        raise ValueError
     matrix = np.array([[0.0, 0.0], [0.0, 0.0]])
     for i in [0, 1]:
         for j in [0, 1]:
@@ -166,7 +167,8 @@ def classify_roc(y_predict, y_true):
     """
     _check_input(y_predict, y_true)
 
-    assert isinstance(y_predict[0], float), LabelTypeError("ROC curve only support probability output")
+    if isinstance(y_predict[0], float):
+        raise LabelTypeError("ROC curve only support probability output")
 
     pair = zip(y_predict, y_true)
     pair = sorted(pair, key=lambda x: x[0], reverse=True)

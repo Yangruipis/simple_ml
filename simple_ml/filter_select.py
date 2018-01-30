@@ -71,14 +71,17 @@ class MyFilter(object):
             return LabelType.multiclass
 
     def _check(self, x, y):
-        assert x.shape[0] == y.shape[0], SampleNumberMismatchError
-        assert len(y.shape) == 1, LabelTypeError
+        if x.shape[0] == y.shape[0]
+            raise SampleNumberMismatchError
+        if len(y.shape) == 1:
+            raise LabelTypeError
         self.label_type = self._check_label_type(y)
         self.x = x
         self.y = y
         self.sample_num = x.shape[0]
         self.variable_num = x.shape[1]
-        assert self.top_k < self.variable_num, ValueBoundaryError
+        if self.top_k < self.variable_num:
+            raise ValueBoundaryError
         self._selectIds = np.zeros(self.top_k)
 
     def fit(self, x, y=None):

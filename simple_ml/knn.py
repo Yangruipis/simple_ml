@@ -27,17 +27,11 @@ class MyKnn(MyClassifier):
         """
         pass
 
-    def predict(self, x, k=None, dist_type=None):
+    def predict(self, x):
         if self.x is None:
             raise ModelNotFittedError
-        if k is None:
-            k = self.k
-        else:
-            k = k
-        if dist_type is None:
-            dist_type = self.dist_type
-        dist_func = self._get_dist_func(dist_type)
-        return list(map(lambda i: self._predict_single_sample(i, k, dist_func), x))
+        dist_func = self._get_dist_func(self.dist_type)
+        return list(map(lambda i: self._predict_single_sample(i, self.k, dist_func), x))
 
     def _predict_single_sample(self, x, k, dist_func):
         sim_list = list(map(lambda i: dist_func(x, i), self.x))
@@ -65,8 +59,8 @@ class MyKnn(MyClassifier):
         else:
             raise DistanceTypeError
 
-    def score(self, x, y, k=None, dist_type=None):
-        y_predict = self.predict(x, k, dist_type)
+    def score(self, x, y):
+        y_predict = self.predict(x)
         count_dict = dict(Counter(y_predict))
         if len(count_dict) <= 2:
             # binary classifyn

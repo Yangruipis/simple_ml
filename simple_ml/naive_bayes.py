@@ -9,7 +9,7 @@ from .my_error import *
 
 
 class MyNaiveBayes(MyClassifier):
-    
+
     def __init__(self):
         super(MyNaiveBayes, self).__init__()
         self.is_feature_binary = []
@@ -59,7 +59,7 @@ class MyNaiveBayes(MyClassifier):
         if self.prob_array is None:
             raise ModelNotFittedError
 
-        return np.array(list(map(lambda i: self._predict_single_sample(i), x)))
+        return np.array(list(map(self._predict_single_sample, x)))
 
     def _predict_single_sample(self, x):
         # 1. 更新prob_array中连续变量的取值

@@ -136,7 +136,7 @@ class MyBPNetwork(MyClassifier):
         if self.b_output is None:
             raise ModelNotFittedError
 
-        return np.array(list(map(lambda i: self._predict_single(i), x)))
+        return np.array(list(map(self._predict_single, x)))
 
     def _predict_single(self, x):
         z_hide_new = self.z_hide.copy()

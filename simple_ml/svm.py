@@ -89,7 +89,7 @@ class MySVM(MyClassifier):
             kernel_func = lambda x_i, x_j: np.exp(- np.sqrt(np.sum((x_i - x_j)**2)) / self.sigma)
         else:
             return
-        
+
         kernel_mat = np.zeros((self.sample_num, self.sample_num))
         for i in range(self.sample_num):
             for j in range(i, self.sample_num):

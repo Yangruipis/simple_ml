@@ -18,12 +18,11 @@ class MyFilter(object):
         self.top_k = top_k
 
     def _var_select(self):
-        variance_array = list(map(lambda x: np.var(x), self.x.T))
+        variance_array = list(map(np.var, self.x.T))
         self._get_top_k_ids(variance_array)
 
     def _corr_select(self):
-        func = lambda x, y: np.corrcoef(x, y)
-        corr_array = list(map(lambda x: func(x, self.y)[0][1], self.x.T))
+        corr_array = list(map(lambda x: np.corrcoef(x, self.y)[0][1], self.x.T))
         self._get_top_k_ids(corr_array)
 
     def _chi_select(self):

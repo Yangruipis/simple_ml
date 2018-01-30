@@ -8,7 +8,11 @@ from .my_error import *
 
 class TreeNode:
 
-    def __init__(self, left=None, right=None, dataId=[], left_featureId=[], value=None):
+    def __init__(self, left=None, right=None, dataId=None, left_featureId=None, value=None):
+        if dataId == None:
+            dataId = []
+        if left_featureId == None:
+            left_featureId = []
         self.left = left
         self.right = right
         self.dataId = dataId

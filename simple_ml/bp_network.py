@@ -1,8 +1,11 @@
 # -*- coding:utf-8 -*-
 
 
-from .my_classifier import *
+from .my_classifier import MyClassifier
 from .score import *
+import numpy as np
+from .my_error import ModelNotFittedError
+from .my_enumrate import LabelType
 
 
 class MyBPNetwork(MyClassifier):

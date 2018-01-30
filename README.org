@@ -8,7 +8,7 @@
 
 将机器学习的基本流程与算法进行手写实现，仅调用numpy以及python基本库
 
-[[https://img.shields.io/npm/l/express.svg]]  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806)](https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade)
+[[https://img.shields.io/npm/l/express.svg]] [[https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806!:https://www.codacy.com/app/Yangruipis/simpleML?utm_source%3Dgithub.com&amp%3Butm_medium%3Dreferral&amp%3Butm_content%3DYangruipis/simpleML&amp%3Butm_campaign%3DBadge_Grade][https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806!:https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade]]
 
 * 特征工程
 ** 特征预处理

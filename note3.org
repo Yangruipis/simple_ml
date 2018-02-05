@@ -36,6 +36,19 @@
 
 但是，如果每个神经元输出结果是0或者1，将会使结果过于敏感，因此要通过sigmoid函数将其转为连续输出
 
+*** 激活函数
+
+1. sigmoid
+2. tanh
+3. 修正线性单元(Rectified linear unit，ReLU）
+
+ReLU(x) = 
+- 0, if x <= 0
+- x, if x > 0
+
+~起到单侧抑制的作用~
+~由于非负区间的梯度为常数，因此不存在梯度消失问题(Vanishing Gradient Problem)~
+
 ** BP反向传播网络
 
 ref : http://blog.csdn.net/u014303046/article/details/78200010
@@ -329,8 +342,91 @@ h_t = O_t \odot tanh(c_t)
 
 ** 实现
 
-*** Experiment 1. 一个简单的缺失语言自动补全
+*** 方案1. win10 tensorflow 安装
+ref:
+http://blog.csdn.net/weixin_36368407/article/details/54177380
 
+**** Cuda & cudnn
+
+**** TensorFlow
+
+*** 方案2. 基于theano的Keras win10 安装
+
+http://blog.csdn.net/circle2015/article/details/54235127
+
+1. 安装 mingw
+
+#+BEGIN_SRC bash
+conda install mingw libpython
+#+END_SRC
+
+2. pip install theano
+3. pip install keras
+4. 主文件夹中找到 .keras的配置文件，修改默认后台为theano
+5. 配置theano
+
+c://Users//ray//.theanorc.txt 文件，里面加入theano的配置项
+#+BEGIN_SRC 
+[global]
+floatX=float32
+device=cpu
+[blas]
+ldflags=-LC:\\Users\\yangr\\Documents\\OpenBLAS\\bin -LC:\\Users\\yangr\\Documents\\OpenBLAS\\lib -lopenblas
+[gcc]  
+cxxflags=-IC:\\Users\\yangr\\Anaconda3\\MinGW
+#+END_SRC
+
+其中openBlas加速库要提前下载：
+1. 下载openblas库http://sourceforge.net/projects/openblas/files/v0.2.14
+2. 下载mingw64 http://sourceforge.net/projects/openblas/files/v0.2.14/mingw64_dll.zip/download ，并将其添加到openblas/bin/
+3. 路径输入至.theanorc.txt
+
+=如果遇到问题=
+
+#+BEGIN_SRC python
+File "E:\Things_Installed_Here\Anaconda_Py\envs\Py341\lib\site-packages\theano-0.7.0-py3.4.egg\theano\gof\cmodule.py", line 331, in dlimport
+    rval = __import__(module_name, {}, {}, [module_name])
+ImportError: DLL load failed: The specified module could not be found.
+#+END_SRC
+
+则如下操作：
+#+BEGIN_SRC bash
+$ conda remove mingw
+$ conda install m2w64-toolchain
+#+END_SRC
+*** Keras Tips
+
+**** 自定义 metrics 性能评估函数
+#+BEGIN_SRC python
+import keras.backend as K
+def f1_score(y_true, y_pred):
+
+    # Count positive samples.
+    c1 = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    c2 = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    c3 = K.sum(K.round(K.clip(y_true, 0, 1)))
+
+    # If there are no true samples, fix the F1 score at 0.
+    if c3 == 0:
+        return 0
+
+    # How many selected items are relevant?
+    precision = c1 / c2
+
+    # How many relevant items are selected?
+    recall = c1 / c3
+
+    # Calculate f1_score
+    f1_score = 2 * (precision * recall) / (precision + recall)
+    return f1_score
+#+END_SRC
+
+*** Experiment 1. 信贷违约预测模型
+
+*** Experiment 2. 一个简单的缺失语言自动补全
+
+
+*** Experiment 3. 手写数字识别
 * 推荐算法
 * 机器学习算法调试
 ** 梯度检查

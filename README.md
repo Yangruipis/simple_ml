@@ -325,6 +325,34 @@
     plt.scatter(x=X[:,0], y=X[:, 1], c=km.labels)
     plt.show()
 ```
+
+# Boosting学习
+## AdaBoost
+```python
+from simple_ml.ensemble import MyAdaBoost
+import numpy as np
+X = np.array([[2,1], [4,2], [3,3], [4,1], [3,2], [2,3], [1,3]])
+y = np.array([1,2,0,1,0,1,2])
+lr = MyAdaBoost(nums=10)
+lr.fit(X, y)
+lr.predict(X)
+```
+## GBDT
+- 只支持0-1特征
+- 只支持连续标签
+- 只支持平方损失
+
+```python
+from simple_ml.ensemble import *
+
+X = np.array([1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1]).reshape(2, -1).T
+y = np.array([3., 3.2, 2., 2.1, 1.5, 2.3, 1.4, 2.1])
+gbdt = MyGBDT()
+gbdt.fit(X, y)
+print(gbdt.predict(np.array([[1, 1], [0, 0], [1, 0], [0, 1]])))
+```
+
+
 `Losers Always Whine About Their Best`
 
 `献给所有为梦想不懈奋斗的人儿们`

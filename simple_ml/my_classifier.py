@@ -19,7 +19,7 @@ class MyClassifier(object):
         self._clear()
         x_sample_num = self._check_x(x)
         y_sample_num = self._check_y(y)
-        if x_sample_num == y_sample_num:
+        if x_sample_num != y_sample_num:
             raise SampleNumberMismatchError
         self.sample_num = x_sample_num
         self.variable_num = x.shape[1]
@@ -36,7 +36,7 @@ class MyClassifier(object):
     @staticmethod
     def _check_x(x):
         if isinstance(x, np.ndarray) or isinstance(x, pd.DataFrame):
-            if len(x.shape) == 2:
+            if len(x.shape) != 2:
                 raise FeatureTypeError
             return x.shape[0]
         else:
@@ -45,9 +45,9 @@ class MyClassifier(object):
     @staticmethod
     def _check_y(y):
         if isinstance(y, np.ndarray) or isinstance(y, pd.Series):
-            if len(y.shape) == 1:
+            if len(y.shape) != 1:
                 raise LabelArrayTypeError
-            return len(y)
+            return y.shape[0]
         else:
             raise LabelArrayTypeError
 

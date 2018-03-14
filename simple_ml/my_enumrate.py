@@ -35,3 +35,10 @@ class KernelType(Enum):
     gassian = 2
     laplace = 3
     sigmoid = 4
+
+class ClassifierType(Enum):
+    LR = 0
+    CART = 1
+    SVM = 2
+    NB = 3
+    KNN = 4

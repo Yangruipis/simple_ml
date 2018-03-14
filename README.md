@@ -61,6 +61,12 @@
 <li><a href="#sec-4-2">4.2. 层次聚类</a></li>
 </ul>
 </li>
+<li><a href="#sec-5">5. Boosting学习 </a>
+<ul>
+<li><a href="#sec-5-1">5.1. AdaBoost</a></li>
+<li><a href="#sec-5-2">5.2. GBDT</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>

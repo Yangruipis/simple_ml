@@ -86,3 +86,76 @@ class MyNaiveBayes(MyClassifier):
 
     def classify_plot(self, x, y):
         classify_plot(self, self.x, self.y, x, y, title='My Naive Bayes')
+
+
+class MyBayesMinimumError(MyClassifier):
+
+    def __init__(self):
+        super(MyBayesMinimumError, self).__init__()
+        self.mu = None
+        self.sigma = None
+        self.prior = None
+        self.labels = None
+
+    def fit(self, x, y):
+        self._init(x, y)
+        if self.label_type == LabelType.continuous:
+            raise LabelTypeError
+
+        self._get_normal_distribution()
+
+    def _get_normal_distribution(self):
+        _y = np.unique(self.y)
+        self.labels = _y
+        self.prior = [len(self.y[self.y == i]) / self.sample_num for i in _y]
+        self.mu = []
+        self.sigma = []
+        for i in _y:
+            _x = self.x[self.y == i]
+            self.mu.append(self._get_mu(_x))
+            self.sigma.append(self._get_sigma(_x))
+
+    def _get_probability(self, x):
+        res = []
+        for i in range(len(self.mu)):
+            temp = 1/(np.sqrt(2*np.pi)**self.variable_num * np.sqrt(self.sigma[i]))
+            temp *= np.exp(-1/2 * np.dot(np.dot((x - self.mu), self.sigma[i]), (x - self.mu)))
+            temp *= self.prior[i]
+            res.append(temp)
+        return res
+
+    @staticmethod
+    def _get_mu(x):
+        return np.mean(x, axis=0)
+
+    @staticmethod
+    def _get_sigma(x):
+        return np.cov(x)
+
+    def predict(self, x):
+        if not self.mu:
+            raise ModelNotFittedError
+        return np.array([self._predict_single(i) for i in x])
+
+    def _predict_single(self,x):
+        res = self._get_probability(x)
+        return self.labels[np.argmax(res)]
+
+    def score(self, x, y):
+        y_predict = self.predict(x)
+        if self.label_type == LabelType.binary:
+            return classify_f1(y_predict, y)
+        else:
+            return classify_f1_macro(y_predict, y)
+
+    def classify_plot(self, x, y):
+        classify_plot(self, self.x, self.y, x, y, title='My Bayes Minimum Error')
+
+
+class MyBayesMinimumRisk(MyBayesMinimumError):
+
+    def __init__(self):
+        super(MyBayesMinimumRisk, self).__init__()
+
+    def predict(self, x, risk):
+        from costcla.models import BayesMinimumRiskClassifier

@@ -39,6 +39,8 @@
 <ul>
 <li><a href="#sec-3-4-1">3.4.1. 朴素贝叶斯</a></li>
 <li><a href="#sec-3-4-2">3.4.2. 半朴素贝叶斯</a></li>
+<li><a href="#sec-3-4-2">3.4.3. 贝叶斯最小误差</a></li>
+<li><a href="#sec-3-4-2">3.4.4. 贝叶斯最小风险</a></li>
 </ul>
 </li>
 <li><a href="#sec-3-5">3.5. 基于树的算法</a>
@@ -238,6 +240,21 @@
 
 `Comming Soon`
 
+### 贝叶斯最小误差<a id="sec-3-4-3" name="sec-3-4-3"></a>
+
+注意：只支持离散标签
+```python
+from simple_ml.bayes import MyBayesMinimumError
+```
+
+
+### 贝叶斯最小风险<a id="sec-3-4-4" name="sec-3-4-4"></a>
+注意：只支持离散标签
+```python
+from simple_ml.bayes import MyBayesMinimumRisk
+```
+
+
 ## 基于树的算法<a id="sec-3-5" name="sec-3-5"></a>
 
 ### CART<a id="sec-3-5-1" name="sec-3-5-1"></a>
@@ -332,8 +349,8 @@
     plt.show()
 ```
 
-# Boosting学习
-## AdaBoost
+# Boosting学习<a id="sec-5" name="sec-5"></a>
+## AdaBoost<a id="sec-5-1" name="sec-5-1"></a>
 ```python
 from simple_ml.ensemble import MyAdaBoost
 import numpy as np
@@ -343,7 +360,7 @@ lr = MyAdaBoost(nums=10)
 lr.fit(X, y)
 lr.predict(X)
 ```
-## GBDT
+## GBDT<a id="sec-5-2" name="sec-5-2"></a>
 - 只支持0-1特征
 - 只支持连续标签
 - 只支持平方损失

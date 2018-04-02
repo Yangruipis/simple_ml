@@ -171,7 +171,7 @@ class MyBayesMinimumRisk(MyBayesMinimumError):
         label_num = len(np.unique(y))
         if self.cost_mat.shape[0] != label_num or self.cost_mat.shape[1] != label_num:
             raise CostMatMismatchError
-        super(MyBayesMinimumError, self).fit(x, y)
+        super(MyBayesMinimumRisk, self).fit(x, y)
 
     def _predict_single(self, x):
         prob = self._get_probability(x)

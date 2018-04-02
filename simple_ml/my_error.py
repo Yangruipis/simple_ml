@@ -51,6 +51,16 @@ class SampleNumberMismatchError(MisMatchError):
         pass
 
 
+class CostMatMismatchError(MisMatchError):
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    @staticmethod
+    def __new__(cls, *args, **kwargs):
+        pass
+
+
 class FeatureTypeError(TypeError):
 
     def __init__(self, *args, **kwargs):

@@ -137,7 +137,7 @@ class MyBayesMinimumError(MyClassifier):
             raise ModelNotFittedError
         return np.array([self._predict_single(i) for i in x])
 
-    def _predict_single(self,x):
+    def _predict_single(self, x):
         res = self._get_probability(x)
         return self.labels[np.argmax(res)]
 
@@ -154,8 +154,26 @@ class MyBayesMinimumError(MyClassifier):
 
 class MyBayesMinimumRisk(MyBayesMinimumError):
 
-    def __init__(self):
+    def __init__(self, cost_mat):
+        """
+        初始化，保存分类损失矩阵
+        :param cost_mat: 分类损失矩阵
+               要求：
+                   1. m x m 维，m为所有类别数目
+                   2. 第i行第j列表示将属于类别i的样本分到类别j所造成的损失
+                   3. 每一行，每一列的类别必须按照数值从小到大的顺序排列，
+                      比如第i行表示在np.unique(y)中第i个label
+        """
         super(MyBayesMinimumRisk, self).__init__()
+        self.cost_mat = cost_mat
 
-    def predict(self, x, risk):
-        pass
+    def fit(self, x, y):
+        label_num = len(np.unique(y))
+        if self.cost_mat.shape[0] != label_num or self.cost_mat.shape[1] != label_num:
+            raise CostMatMismatchError
+        super(MyBayesMinimumError, self).fit(x, y)
+
+    def _predict_single(self, x):
+        prob = self._get_probability(x)
+        alpha = np.dot(prob, self.cost_mat)
+        return self.labels[np.argmin(alpha)]

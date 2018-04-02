@@ -118,8 +118,8 @@ class MyBayesMinimumError(MyClassifier):
     def _get_probability(self, x):
         res = []
         for i in range(len(self.mu)):
-            temp = 1/(np.sqrt(2*np.pi)**self.variable_num * np.sqrt(self.sigma[i]))
-            temp *= np.exp(-1/2 * np.dot(np.dot((x - self.mu), self.sigma[i]), (x - self.mu)))
+            temp = 1/(np.sqrt(2*np.pi)**self.variable_num * np.sqrt(np.linalg.det(self.sigma[i])))
+            temp *= np.exp(-1/2 * np.dot(np.dot((x - self.mu[i]), np.linalg.inv(self.sigma[i])), (x - self.mu[i])))
             temp *= self.prior[i]
             res.append(temp)
         return res
@@ -130,7 +130,7 @@ class MyBayesMinimumError(MyClassifier):
 
     @staticmethod
     def _get_sigma(x):
-        return np.cov(x)
+        return np.cov(x.T)
 
     def predict(self, x):
         if not self.mu:
@@ -158,4 +158,4 @@ class MyBayesMinimumRisk(MyBayesMinimumError):
         super(MyBayesMinimumRisk, self).__init__()
 
     def predict(self, x, risk):
-        from costcla.models import BayesMinimumRiskClassifier
+        pass

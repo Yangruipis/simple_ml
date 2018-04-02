@@ -244,7 +244,19 @@
 
 注意：只支持离散标签
 ```python
+import numpy as np
 from simple_ml.bayes import MyBayesMinimumError
+
+X = np.array([[2,1],
+             [0,3],
+             [3,0],
+             [1,2],
+             [2,0],
+              [0,1.5]])
+y = np.array([1,0,1,0,1,0])
+bme = MyBayesMinimumError()
+bme.fit(X, y)
+print(bme.predict(X))
 ```
 
 

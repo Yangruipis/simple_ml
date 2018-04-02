@@ -38,100 +38,40 @@ class CostMatMismatchError(MisMatchError):
 
 
 class FeatureTypeError(TypeError):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass
 
 
 class LabelArrayTypeError(TypeError):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass
 
 
 class DistanceTypeError(TypeError):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass
 
 
 class CrossValidationTypeError(TypeError):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass
 
 
 class FilterTypeError(TypeError):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass
 
 
 class LabelTypeError(TypeError):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass
 
 
 class KernelTypeError(TypeError):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass
 
 
 class ValueBoundaryError(ValueError):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass
 
 
 class KernelMissParameterError(KernelTypeError):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass
 
 
 class ModelNotFittedError(Exception):
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @staticmethod
-    def __new__(cls, *args, **kwargs):
-        pass
+    pass

@@ -30,7 +30,7 @@ ref:
 import numpy as np
 from collections import Counter
 import matplotlib.pyplot as plt
-from .my_error import LabelLengthMismatchError, LabelTypeError
+from .base_error import LabelLengthMismatchError, LabelTypeError
 
 
 def _check_input(y_predict, y_true):

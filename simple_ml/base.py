@@ -4,8 +4,8 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 import pandas as pd
 from collections import Counter
-from .my_enumrate import *
-from .my_error import *
+from .base_enum import *
+from .base_error import *
 
 
 class MyClassifier(object):

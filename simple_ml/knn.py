@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
 
 
-from .my_classifier import *
-from .my_enumrate import DisType
+from .base import *
+from .base_enum import DisType
 from .score import *
 from .classify_plot import classify_plot
-from .my_error import DistanceTypeError
+from .base_error import DistanceTypeError
 
 
 class MyKnn(MyClassifier):

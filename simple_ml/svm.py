@@ -1,10 +1,10 @@
 # -*- coding:utf-8 -*-
 
-from .my_classifier import *
-from .my_enumrate import KernelType
+from .base import *
+from .base_enum import KernelType
 from .classify_plot import classify_plot
 from .score import *
-from .my_error import KernelTypeError, KernelMissParameterError, FeatureNumberMismatchError
+from .base_error import KernelTypeError, KernelMissParameterError, FeatureNumberMismatchError
 
 class MySVM(MyClassifier):
 

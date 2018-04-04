@@ -8,8 +8,8 @@
 """
 
 import matplotlib.pyplot as plt
-from .my_classifier import *
-from .my_error import LabelTypeError
+from .base import *
+from .base_error import LabelTypeError
 
 
 def transform_y(y):

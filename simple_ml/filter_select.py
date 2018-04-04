@@ -5,10 +5,10 @@ filter方法进行特征选择
 """
 
 from minepy import MINE
-from .my_classifier import *
+from .base import *
 from collections import Counter
-from .my_enumrate import FilterType
-from .my_error import *
+from .base_enum import FilterType
+from .base_error import *
 
 
 class MyFilter(object):

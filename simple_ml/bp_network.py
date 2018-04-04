@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
 
 
-from .my_classifier import MyClassifier
+from .base import MyClassifier
 from .score import *
 import numpy as np
-from .my_error import ModelNotFittedError
-from .my_enumrate import LabelType
+from .base_error import ModelNotFittedError
+from .base_enum import LabelType
 
 
 class MyBPNetwork(MyClassifier):

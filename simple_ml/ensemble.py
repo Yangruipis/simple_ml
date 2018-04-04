@@ -1,9 +1,9 @@
 # -*- coding:utf-8 -*-
 
-from .my_classifier import *
+from .base import *
 from .score import *
-from .my_error import FeatureNumberMismatchError, ModelNotFittedError
-from .my_enumrate import ClassifierType
+from .base_error import FeatureNumberMismatchError, ModelNotFittedError
+from .base_enum import ClassifierType
 
 
 class MyAdaBoost(MyClassifier):

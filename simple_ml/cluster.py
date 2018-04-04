@@ -3,8 +3,8 @@
 
 import numpy as np
 from numpy.linalg import norm
-from .my_enumrate import DisType
-from .my_error import *
+from .base_enum import DisType
+from .base_error import *
 
 class MyKMeans(object):
 

@@ -1,9 +1,9 @@
 # -*- coding:utf-8 -*-
 
-from .my_classifier import *
+from .base import *
 from .score import *
 from .classify_plot import classify_plot
-from .my_error import *
+from .base_error import *
 
 
 class TreeNode:

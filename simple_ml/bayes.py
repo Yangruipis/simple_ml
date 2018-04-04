@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
 
 
-from .my_classifier import *
-from .my_enumrate import LabelType
+from .base import *
+from .base_enum import LabelType
 from .score import *
 from .classify_plot import classify_plot
-from .my_error import *
+from .base_error import *
 
 
 class MyNaiveBayes(MyClassifier):

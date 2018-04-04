@@ -5,6 +5,10 @@
 <li><a href="#sec-1">1. 特征工程</a>
 <ul>
 <li><a href="#sec-1-1">1.1. 特征预处理</a></li>
+<ul>
+<li><a href="#sec-1-1-1">1.1.1. PCA降维</a></li>
+<li><a href="#sec-1-1-2">1.1.2. PCA高维降维</a></li>
+</ul>
 <li><a href="#sec-1-2">1.2. 特征选择</a>
 <ul>
 <li><a href="#sec-1-2-1">1.2.1. Filter方法</a></li>
@@ -81,7 +85,27 @@
 
 ## 特征预处理<a id="sec-1-1" name="sec-1-1"></a>
 
-包括缺失值、异常值、标准化等等，由于比较简单，故跳过
+### PCA降维<a id="sec-1-1-1" name="sec-1-1-1"></a>
+当特征数小于样本数时：
+```python
+from simple_ml.pca import *
+
+pca = PCA(1)
+a = np.array([[1,3,2], [3,5,1], [4,7,3], [1,2,0], [0,2,1]])
+print(pca.fit_transform(a))
+print(pca.explain_ratio)
+```
+
+### PCA高维降维<a id="sec-1-1-1" name="sec-1-1-1"></a>
+当特征数远小于样本数时，通过矩阵分解进行低维PCA
+```python
+from simple_ml.pca import *
+
+pca = SuperPCA(1)
+a = np.array([[1,3,2], [3,5,1], [4,7,3], [1,2,0], [0,2,1]])
+print(pca.fit_transform(a.T))
+print(pca.explain_ratio)
+```
 
 ## 特征选择<a id="sec-1-2" name="sec-1-2"></a>
 

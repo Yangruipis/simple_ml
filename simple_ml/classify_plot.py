@@ -19,7 +19,7 @@ def transform_y(y):
         return y
 
 
-def classify_plot(model: MyClassifier, x_train, y_train, x_test, y_test, title="", px=200):
+def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title="", px=200):
     feature_num = x_train.shape[1]
     # 检查特征数，如果大于2，则降维至2
     if feature_num == 1:

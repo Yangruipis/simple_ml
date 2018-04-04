@@ -174,7 +174,7 @@
 
 ## 类规范<a id="sec-3-1" name="sec-3-1"></a>
 
-我在base.py 中给出了所有分类算法所虚继承的抽象类：myClassifier
+我在base.py 中给出了所有分类算法所虚继承的抽象类：BaseClassifier
 
 主要作用是：
 -   检查X，Y输入合法性

@@ -12,10 +12,10 @@ from .classify_plot import classify_plot
 from .base_error import FeatureNumberMismatchError
 
 
-class MyLogisticRegression(MyClassifier):
+class BaseLogisticRegression(BaseClassifier):
 
     def __init__(self, tol=0.01, step=0.01, threshold=0.5, has_intercept=True):
-        super(MyLogisticRegression, self).__init__()
+        super(BaseLogisticRegression, self).__init__()
         self.tol = tol
         self.step = step
         self.has_intercept = has_intercept
@@ -42,7 +42,7 @@ class MyLogisticRegression(MyClassifier):
         return np.column_stack((np.ones(x.shape[0]), x))
 
     def _init(self, x, y):
-        super(MyLogisticRegression, self)._init(x, y)
+        super(BaseLogisticRegression, self)._init(x, y)
         if self.has_intercept:
             self.x = self._add_ones(self.x)
             self.variable_num += 1

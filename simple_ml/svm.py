@@ -6,7 +6,7 @@ from .classify_plot import classify_plot
 from .score import *
 from .base_error import KernelTypeError, KernelMissParameterError, FeatureNumberMismatchError
 
-class MySVM(MyClassifier):
+class BaseSVM(BaseClassifier):
 
     def __init__(self, c, tol, precision, max_iter, kernel_type, **kwargs):
         """
@@ -23,7 +23,7 @@ class MySVM(MyClassifier):
                         laplace(需提供参数：sigma)
                         sigmoid(需提供参数：beta, theta)
         """
-        super(MySVM, self).__init__()
+        super(BaseSVM, self).__init__()
         self.c = c
         self.tol = tol
         self.precision = precision

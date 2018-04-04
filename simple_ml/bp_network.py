@@ -1,17 +1,17 @@
 # -*- coding:utf-8 -*-
 
 
-from .base import MyClassifier
+from .base import BaseClassifier
 from .score import *
 import numpy as np
 from .base_error import ModelNotFittedError
 from .base_enum import LabelType
 
 
-class MyBPNetwork(MyClassifier):
+class BaseBPNetwork(BaseClassifier):
 
     def __init__(self, alpha=0.1, iter_times=1000, hidden_layer=1, hidden_neuron=4):
-        super(MyBPNetwork, self).__init__()
+        super(BaseBPNetwork, self).__init__()
         self.alpha = alpha
         self.iterTimes = iter_times
         self.hide_layer_amount = hidden_layer               # 多少层隐含层

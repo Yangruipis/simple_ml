@@ -20,7 +20,7 @@ class TreeNode:
         self.value = value
 
 
-class RegressionTree(MyClassifier):
+class RegressionTree(BaseClassifier):
 
     def __init__(self, min_leaf_samples=1):
         super(RegressionTree, self).__init__()
@@ -98,10 +98,10 @@ class RegressionTree(MyClassifier):
             return classify_f1(y_predict, y)
 
 
-class MyRandomForest(MyClassifier):
+class BaseRandomForest(BaseClassifier):
 
     def __init__(self, m, tree_num=200):
-        super(MyRandomForest, self).__init__()
+        super(BaseRandomForest, self).__init__()
         self.m = m
         self.tree_num = tree_num
         self.forest = None

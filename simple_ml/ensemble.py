@@ -6,10 +6,10 @@ from .base_error import FeatureNumberMismatchError, ModelNotFittedError
 from .base_enum import ClassifierType
 
 
-class MyAdaBoost(MyClassifier):
+class BaseAdaBoost(BaseClassifier):
 
     def __init__(self, classifier=ClassifierType.LR, nums=10):
-        super(MyAdaBoost, self).__init__()
+        super(BaseAdaBoost, self).__init__()
         self.classifier = classifier
         self.nums = nums
         self.clf_list = []
@@ -91,7 +91,7 @@ class LeafNode(TreeNode):
         self.gamma = None    # GBDT需要记录的元素，当是回归树（平方损失）时，等于y_predict
 
 
-class CART(MyClassifier):
+class CART(BaseClassifier):
 
     def __init__(self):
         super(CART, self).__init__()
@@ -174,7 +174,7 @@ class CART(MyClassifier):
         return self._find_leaf_node(x, self.root)
 
 
-class MyGBDT(MyClassifier):
+class BaseGBDT(BaseClassifier):
     """
     1. $F_0(x) = argmin_\rho \sum _{i=1}^N L(y_i, \rho)$
     2. For $m = 1$ to $M$ do:
@@ -190,7 +190,7 @@ class MyGBDT(MyClassifier):
     """
 
     def __init__(self, nums=10):
-        super(MyGBDT, self).__init__()
+        super(BaseGBDT, self).__init__()
         self.nums = nums
         self.F = []
         self.Trees = [CART() for i in range(nums)]

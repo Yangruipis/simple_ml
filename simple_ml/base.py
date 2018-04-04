@@ -8,7 +8,7 @@ from .base_enum import *
 from .base_error import *
 
 
-class MyClassifier(object):
+class BaseClassifier(object):
 
     __metaclass__ = ABCMeta
 
@@ -71,4 +71,26 @@ class MyClassifier(object):
 
     @abstractmethod
     def score(self, x, y):
+        pass
+
+
+class BaseTransform(object):
+
+    __doc__ = "This is a Transform Abstract Class"
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def fit(self, *args):
+        pass
+
+    @abstractmethod
+    def transform(self, *args):
+        pass
+
+    @abstractmethod
+    def fit_transform(self, *args):
         pass

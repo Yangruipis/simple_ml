@@ -8,10 +8,10 @@ from .classify_plot import classify_plot
 from .base_error import DistanceTypeError
 
 
-class MyKnn(MyClassifier):
+class BaseKnn(BaseClassifier):
 
     def __init__(self, k=1, distance_type=DisType.Eculidean):
-        super(MyKnn, self).__init__()
+        super(BaseKnn, self).__init__()
         self.k = k
         self.dist_type = distance_type
         self.x = None
@@ -86,7 +86,7 @@ class Node:
         self.sample_ids = sample_ids
 
 
-class MyKDTree(MyKnn):
+class MyKDTree(BaseKnn):
 
     def __init__(self, k=5, dist_type=DisType.Eculidean):
         super(MyKDTree, self).__init__(k, dist_type)

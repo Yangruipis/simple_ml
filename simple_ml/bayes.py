@@ -8,10 +8,10 @@ from .classify_plot import classify_plot
 from .base_error import *
 
 
-class MyNaiveBayes(MyClassifier):
+class BaseNaiveBayes(BaseClassifier):
 
     def __init__(self):
-        super(MyNaiveBayes, self).__init__()
+        super(BaseNaiveBayes, self).__init__()
         self.is_feature_binary = []
         self.prob_array = None
 
@@ -88,10 +88,10 @@ class MyNaiveBayes(MyClassifier):
         classify_plot(self, self.x, self.y, x, y, title='My Naive Bayes')
 
 
-class MyBayesMinimumError(MyClassifier):
+class BaseBayesMinimumError(BaseClassifier):
 
     def __init__(self):
-        super(MyBayesMinimumError, self).__init__()
+        super(BaseBayesMinimumError, self).__init__()
         self.mu = None
         self.sigma = None
         self.prior = None
@@ -152,7 +152,7 @@ class MyBayesMinimumError(MyClassifier):
         classify_plot(self, self.x, self.y, x, y, title='My Bayes Minimum Error')
 
 
-class MyBayesMinimumRisk(MyBayesMinimumError):
+class MyBayesMinimumRisk(BaseBayesMinimumError):
 
     def __init__(self, cost_mat):
         """

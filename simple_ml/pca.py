@@ -69,15 +69,15 @@ class SuperPCA(PCA):
         super(SuperPCA, self).__init__(top_n)
 
     def fit(self, x):
-        self._sample_number = x.shape[0]
+        _sample_number = x.shape[0]
         self._variable_num = x.shape[1]
-        if self._sample_number == 1:
+        if _sample_number == 1:
             raise NeedMoreSampleError
 
-        if self._sample_number > self._variable_num:
+        if _sample_number > self._variable_num:
             super(SuperPCA, self).fit(x)
         else:
-            if self.top_n > self._sample_number:
+            if self.top_n > _sample_number:
                 raise PCATopNTooLargeError
 
             self._fit(x)
@@ -85,7 +85,7 @@ class SuperPCA(PCA):
     def _fit(self, x):
         x_new = x.copy()
         for i in range(x_new.shape[0]):
-            x_new[:, i] = (x_new[:, i] - np.mean(x_new[:, i])) * 1.0 / np.sqrt(self._sample_number - 1)
+            x_new[:, i] = (x_new[:, i] - np.mean(x_new[:, i])) * 1.0 / np.sqrt(x.shape[0] - 1)
 
         p = np.dot(x_new, x_new.T)
         self._eigen_value, _eigen_vector = np.linalg.eig(p)    # 得到n个特征值

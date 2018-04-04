@@ -84,13 +84,13 @@ class BaseTransform(object):
         pass
 
     @abstractmethod
-    def fit(self, *args):
+    def fit(self, x, y):
         pass
 
     @abstractmethod
-    def transform(self, *args):
+    def transform(self, x):
         pass
 
     @abstractmethod
-    def fit_transform(self, *args):
+    def fit_transform(self, x, y):
         pass

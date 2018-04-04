@@ -16,7 +16,7 @@ class PCA(BaseTransform):
         self._explain = None
         self._top_n_index = None
 
-    def fit(self, x):
+    def fit(self, x, y=None):
         self._variable_num = x.shape[1]
         if self.top_n > self._variable_num:
             raise PCATopNTooLargeError
@@ -48,7 +48,7 @@ class PCA(BaseTransform):
         res = [np.dot(row, i) for i in self._eigen_vector.T[self._top_n_index]]
         return np.array(res)
 
-    def fit_transform(self, x):
+    def fit_transform(self, x, y=None):
         self.fit(x)
         return self.transform(x)
 
@@ -68,7 +68,7 @@ class SuperPCA(PCA):
         """
         super(SuperPCA, self).__init__(top_n)
 
-    def fit(self, x):
+    def fit(self, x, y=None):
         _sample_number = x.shape[0]
         self._variable_num = x.shape[1]
         if _sample_number == 1:

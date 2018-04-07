@@ -96,7 +96,7 @@ print(pca.fit_transform(a))
 print(pca.explain_ratio)
 ```
 
-### PCA高维降维<a id="sec-1-1-1" name="sec-1-1-1"></a>
+### PCA高维降维<a id="sec-1-1-2" name="sec-1-1-2"></a>
 当特征数远小于样本数时，通过矩阵分解进行低维PCA
 ```python
 from simple_ml.pca import *

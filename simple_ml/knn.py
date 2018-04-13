@@ -3,6 +3,7 @@
 
 from simple_ml.base.base_enum import DisType
 from simple_ml.base.base_error import DistanceTypeError
+from simple_ml.base.base import BaseClassifier
 from .classify_plot import classify_plot
 from .score import *
 

@@ -5,9 +5,8 @@ filter方法进行特征选择
 """
 
 from collections import Counter
-
+import numpy as np
 from minepy import MINE
-
 from simple_ml.base.base_enum import FilterType
 from simple_ml.base.base_error import *
 

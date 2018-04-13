@@ -3,7 +3,7 @@
 
 from simple_ml.base.base_enum import LabelType
 from simple_ml.base.base_error import ModelNotFittedError
-from .base import BaseClassifier
+from simple_ml.base.base import BaseClassifier
 from .score import *
 
 

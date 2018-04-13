@@ -8,8 +8,10 @@
 """
 
 import matplotlib.pyplot as plt
-
+from simple_ml.base.base import BaseClassifier
 from simple_ml.base.base_error import LabelTypeError
+import numpy as np
+from simple_ml.base.base_enum import LabelType
 
 
 def transform_y(y):

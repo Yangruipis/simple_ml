@@ -3,6 +3,7 @@
 from simple_ml.base.base_enum import ClassifierType
 from simple_ml.base.base_error import FeatureNumberMismatchError, ModelNotFittedError
 from .score import *
+from simple_ml.base.base import BaseClassifier
 
 
 class BaseAdaBoost(BaseClassifier):
@@ -56,8 +57,8 @@ class BaseAdaBoost(BaseClassifier):
         self.weights = np.multiply(temp, self.weights)
         self.weights = self.weights / np.sum(self.weights)
 
-
-    def _update_alpha(self, y_pred, y_true):
+    @staticmethod
+    def _update_alpha(y_pred, y_true):
         true_pred_count = 0
         for i in range(len(y_pred)):
             if y_pred[i] == y_true[i]:
@@ -105,9 +106,9 @@ class CART(BaseClassifier):
     def _gen_tree(self, node: TreeNode):
         best = self._get_best_divide(node.sample_id)
 
-        if best[0] == -1 :
+        if best[0] == -1:
             y_predict = np.mean(self.y[node.sample_id])
-            leaf_node =  LeafNode(y_predict, node.sample_id)
+            leaf_node = LeafNode(y_predict, node.sample_id)
             leaf_node.feature_id = node.feature_id
             leaf_node.feature_value = node.feature_value
             leaf_node.gamma = y_predict
@@ -118,10 +119,8 @@ class CART(BaseClassifier):
         column_data = self.x[:, feature_id]
         feature_values = np.unique(column_data)
 
-
         left_sample_id = node.sample_id[column_data[node.sample_id] == feature_values[0]]
         right_sample_id = node.sample_id[column_data[node.sample_id] == feature_values[1]]
-
 
         left_node = TreeNode(left_sample_id)
         right_node = TreeNode(right_sample_id)
@@ -146,7 +145,7 @@ class CART(BaseClassifier):
                 continue
             residual_square = 0
             for v in value:
-                temp = self.y[sample_id][column_data==v]
+                temp = self.y[sample_id][column_data == v]
                 residual_square += np.sum(np.square(temp - np.mean(temp)))
             if residual_square < best[1]:
                 best = (i, residual_square)
@@ -196,12 +195,12 @@ class BaseGBDT(BaseClassifier):
 
     def fit(self, x, y):
         self._init(x, y)
-        self._init_F0()
+        self._init_f0()
         for m in range(self.nums):
             y_residual = self._get_residual(m)
             tree = self.Trees[m]
             tree.fit(x, y_residual)
-            self._update_F(tree)
+            self._update_f(tree)
 
     def predict(self, x):
         res = [self._predict_single(i) for i in x]
@@ -218,14 +217,14 @@ class BaseGBDT(BaseClassifier):
             res += res_predict
         return res
 
-    def _update_F(self, tree: CART):
+    def _update_f(self, tree: CART):
         leaf_node_list = tree.leaf_node_list
-        F = np.zeros(self.sample_num)
+        f = np.zeros(self.sample_num)
         for leaf_node in leaf_node_list:
-            F[leaf_node.sample_id] = leaf_node.gamma
+            f[leaf_node.sample_id] = leaf_node.gamma
 
-        F += 1 * self.F[-1]
-        self.F.append(F)
+        f += 1 * self.F[-1]
+        self.F.append(f)
 
     def _get_residual(self, m):
         """
@@ -236,10 +235,10 @@ class BaseGBDT(BaseClassifier):
             raise IndexError
         return self.y - self.F[m]
 
-    def _init_F0(self):
+    def _init_f0(self):
         """
         用y的均值初始化第一个分类器F0
         """
-        F0 = np.ones(self.sample_num)
-        F0 = F0 * np.mean(self.y)
-        self.F.append(F0)
+        f0 = np.ones(self.sample_num)
+        f0 = f0 * np.mean(self.y)
+        self.F.append(f0)

@@ -2,7 +2,7 @@
 
 
 from sklearn.model_selection import train_test_split
-
+import numpy as np
 from simple_ml.base.base_enum import CrossValidationType
 from simple_ml.base.base_error import *
 

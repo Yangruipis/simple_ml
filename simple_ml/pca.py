@@ -3,7 +3,7 @@
 import numpy as np
 
 from simple_ml.base.base_error import *
-from .base import BaseTransform
+from simple_ml.base.base import BaseTransform
 
 
 class PCA(BaseTransform):

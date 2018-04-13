@@ -6,7 +6,8 @@
 - 结果经过检验，和stata的logit回归结果一致
 """
 
-from simple_ml.base.base_error import FeatureNumberMismatchError
+from simple_ml.base.base_error import FeatureNumberMismatchError, ModelNotFittedError
+from simple_ml.base.base import BaseClassifier
 from .classify_plot import classify_plot
 from .score import *
 

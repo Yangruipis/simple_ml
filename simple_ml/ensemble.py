@@ -1,9 +1,8 @@
 # -*- coding:utf-8 -*-
 
-from .base import *
+from simple_ml.base.base_enum import ClassifierType
+from simple_ml.base.base_error import FeatureNumberMismatchError, ModelNotFittedError
 from .score import *
-from .base_error import FeatureNumberMismatchError, ModelNotFittedError
-from .base_enum import ClassifierType
 
 
 class BaseAdaBoost(BaseClassifier):

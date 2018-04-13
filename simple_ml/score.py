@@ -27,10 +27,12 @@ ref:
 
 """
 
-import numpy as np
 from collections import Counter
+
 import matplotlib.pyplot as plt
-from .base_error import LabelLengthMismatchError, LabelTypeError
+import numpy as np
+
+from simple_ml.base.base_error import LabelLengthMismatchError, LabelTypeError
 
 
 def _check_input(y_predict, y_true):

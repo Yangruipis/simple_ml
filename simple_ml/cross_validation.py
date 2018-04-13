@@ -2,9 +2,9 @@
 
 
 from sklearn.model_selection import train_test_split
-from .base import *
-from .base_enum import CrossValidationType
-from .base_error import *
+
+from simple_ml.base.base_enum import CrossValidationType
+from simple_ml.base.base_error import *
 
 
 def cross_validation(model, x, y, method=CrossValidationType.holdout, test_size=0.3, cv=5):

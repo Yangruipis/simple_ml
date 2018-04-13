@@ -1,11 +1,12 @@
 # -*- coding:utf-8 -*-
 
 
-from .base import *
-from .base_enum import LabelType
-from .score import *
+from simple_ml.base.base_enum import LabelType
+from simple_ml.base.base_error import *
+from simple_ml.base.base import BaseClassifier
 from .classify_plot import classify_plot
-from .base_error import *
+from .score import *
+
 
 
 class BaseNaiveBayes(BaseClassifier):

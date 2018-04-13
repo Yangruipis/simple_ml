@@ -1,8 +1,9 @@
 # -*- coding:utf-8 -*-
 
-from .base import BaseTransform
 import numpy as np
-from .base_error import *
+
+from simple_ml.base.base_error import *
+from .base import BaseTransform
 
 
 class PCA(BaseTransform):

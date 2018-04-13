@@ -1,11 +1,10 @@
 # -*- coding:utf-8 -*-
 
 
+from simple_ml.base.base_enum import LabelType
+from simple_ml.base.base_error import ModelNotFittedError
 from .base import BaseClassifier
 from .score import *
-import numpy as np
-from .base_error import ModelNotFittedError
-from .base_enum import LabelType
 
 
 class BaseBPNetwork(BaseClassifier):

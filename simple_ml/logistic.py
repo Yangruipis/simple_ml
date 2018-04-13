@@ -6,10 +6,9 @@
 - 结果经过检验，和stata的logit回归结果一致
 """
 
-from .base import *
-from .score import *
+from simple_ml.base.base_error import FeatureNumberMismatchError
 from .classify_plot import classify_plot
-from .base_error import FeatureNumberMismatchError
+from .score import *
 
 
 class BaseLogisticRegression(BaseClassifier):

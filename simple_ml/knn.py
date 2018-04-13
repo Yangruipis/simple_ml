@@ -1,11 +1,10 @@
 # -*- coding:utf-8 -*-
 
 
-from .base import *
-from .base_enum import DisType
-from .score import *
+from simple_ml.base.base_enum import DisType
+from simple_ml.base.base_error import DistanceTypeError
 from .classify_plot import classify_plot
-from .base_error import DistanceTypeError
+from .score import *
 
 
 class BaseKnn(BaseClassifier):

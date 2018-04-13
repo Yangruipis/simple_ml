@@ -1,10 +1,10 @@
 # -*- coding:utf-8 -*-
 
-from .base import *
-from .base_enum import KernelType
+from simple_ml.base.base_enum import KernelType
+from simple_ml.base.base_error import KernelTypeError, KernelMissParameterError, FeatureNumberMismatchError
 from .classify_plot import classify_plot
 from .score import *
-from .base_error import KernelTypeError, KernelMissParameterError, FeatureNumberMismatchError
+
 
 class BaseSVM(BaseClassifier):
 

@@ -1,9 +1,8 @@
 # -*- coding:utf-8 -*-
 
-from .base import *
-from .score import *
+from simple_ml.base.base_error import *
 from .classify_plot import classify_plot
-from .base_error import *
+from .score import *
 
 
 class TreeNode:

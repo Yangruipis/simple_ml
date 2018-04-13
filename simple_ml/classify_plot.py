@@ -8,8 +8,8 @@
 """
 
 import matplotlib.pyplot as plt
-from .base import *
-from .base_error import LabelTypeError
+
+from simple_ml.base.base_error import LabelTypeError
 
 
 def transform_y(y):

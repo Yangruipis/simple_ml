@@ -6,10 +6,12 @@
 - 结果经过检验，和stata的logit回归结果一致
 """
 
-from simple_ml.base.base_error import FeatureNumberMismatchError, ModelNotFittedError
+from simple_ml.base.base_error import *
 from simple_ml.base.base import BaseClassifier
-from .classify_plot import classify_plot
-from .score import *
+from simple_ml.base.base_enum import LabelType
+from simple_ml.helper import classify_plot
+from simple_ml.score import *
+import scipy.optimize as so
 
 
 class BaseLogisticRegression(BaseClassifier):
@@ -36,7 +38,6 @@ class BaseLogisticRegression(BaseClassifier):
         sigmoid_array = self._sigmoid(np.dot(self.x, w.reshape(-1, 1)).reshape(1, -1)[0])    # 存在重复计算的问题
         return -1 / self.variable_num * np.sum(self.y * np.log(sigmoid_array) + (1 - self.y) *
                                                np.log(1 - sigmoid_array))
-
     @staticmethod
     def _add_ones(x):
         return np.column_stack((np.ones(x.shape[0]), x))
@@ -49,8 +50,10 @@ class BaseLogisticRegression(BaseClassifier):
 
     def fit(self, x, y):
         self._init(x, y)
+        if self.label_type != LabelType.binary:
+            raise LabelTypeError("Logistic回归暂时只支持二分类问题")
         self.w, _ = self._fit()
-        if len(self.w) == self.variable_num:
+        if len(self.w) != self.variable_num:
             raise FeatureNumberMismatchError
 
     def _fit(self):
@@ -98,3 +101,46 @@ class BaseLogisticRegression(BaseClassifier):
 
     def classify_plot(self, x, y):
         classify_plot(self, self.x, self.y, x, y, title='My Logistic Regression')
+
+
+class Lasso(BaseLogisticRegression):
+
+    def __init__(self, tol=0.01, lamb=0.1, step=0.01, threshold=0.5, has_intercept=True):
+        super(Lasso, self).__init__(tol, step, threshold, has_intercept)
+        self.lamb = lamb
+
+    def _loss_function_value(self, w):
+        """
+        直接采用平方损失，当然用logistic损失也行
+        :param w: 参数向量
+        :return: 损失函数值
+        """
+        return np.mean(np.square(self.y - self._sigmoid(np.dot(self.x, w))))+ self.lamb * np.sum(np.abs(w))
+
+    def _loss_change_one_value(self, value, *args):
+        w = args[0].copy()
+        w[args[1]] = value
+        return self._loss_function_value(w)
+
+    def _update_w(self, w_old, i):
+        """
+        坐标下降法进行求解，每一次固定除w_i以外所有w，用爬山法求最优
+        :param w_old: 参数向量
+        :param i: 第i个参数不固定，其他的都固定
+        :return: void
+        """
+        if i >= len(w_old):
+            raise MisMatchError
+        w_old[i] = so.fmin(self._loss_change_one_value, w_old[i], (w_old, i), disp=False)[0]
+
+    def _fit(self):
+        _min = np.inf
+        w_0 = np.zeros(self.variable_num)
+        loss = self._loss_function_value(w_0)
+        while abs(loss - _min) > self.tol:
+            if loss < _min:
+                _min = loss
+            for i in range(self.variable_num):
+                self._update_w(w_0, i)
+            loss = self._loss_function_value(w_0)
+        return w_0, _min

@@ -111,3 +111,7 @@ class Filter(BaseTransform):
     def fit_transform(self, x, y):
         self.fit(x, y)
         return self.transform(x)
+
+class Enmbedded(BaseTransform):
+
+    pass

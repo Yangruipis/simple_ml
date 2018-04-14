@@ -40,19 +40,19 @@ class BaseClassifier(object):
     def _check_x(x):
         if isinstance(x, np.ndarray) or isinstance(x, pd.DataFrame):
             if len(x.shape) != 2:
-                raise FeatureTypeError
+                raise FeatureTypeError("请输入二维数组")
             return x.shape[0]
         else:
-            raise FeatureTypeError
+            raise FeatureTypeError("请输入二维Numpy.array或pandas.Series")
 
     @staticmethod
     def _check_y(y):
         if isinstance(y, np.ndarray) or isinstance(y, pd.Series):
             if len(y.shape) != 1:
-                raise LabelArrayTypeError
+                raise LabelArrayTypeError("请输入一维数组")
             return y.shape[0]
         else:
-            raise LabelArrayTypeError
+            raise LabelArrayTypeError("请输入一维Numpy.array或pandas.Series")
 
     @staticmethod
     def _check_label_type(y):

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.base.base_enum import ClassifierType
+from simple_ml.base.base_enum import ClassifierType, LabelType
 from simple_ml.base.base_error import *
 from .score import *
 from simple_ml.base.base import BaseClassifier
@@ -101,6 +101,9 @@ class CART(BaseClassifier):
 
     def fit(self, x, y):
         self._init(x, y)
+        for i in self.feature_type:
+            if i == LabelType.continuous:
+                raise FeatureTypeError
         self.importance = np.zeros(self.variable_num)
         root = TreeNode(np.arange(self.sample_num))
         self.root = self._gen_tree(root)
@@ -118,7 +121,7 @@ class CART(BaseClassifier):
             return leaf_node
 
         feature_id = best[0]
-        self.importance[feature_id] = best[1]
+        self.importance[feature_id] += best[1]
         column_data = self.x[:, feature_id]
         feature_values = np.unique(column_data)
 
@@ -211,12 +214,12 @@ class BaseGBDT(BaseClassifier):
 
     @property
     def importance_score(self):
-        if not self.importance:
+        if self.importance is None:
             raise ModelNotFittedError
         return self.importance
 
     def feature_select(self, top_n):
-        if not self.importance:
+        if self.importance is None:
             raise ModelNotFittedError
         if top_n > self.variable_num:
             raise TopNTooLargeError

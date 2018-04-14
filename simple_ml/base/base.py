@@ -28,6 +28,7 @@ class BaseClassifier(object):
         self.x = np.array(x)
         self.y = y
         self.label_type = self._check_label_type(self.y)
+        self.feature_type = self._check_feature_type(self.x)
 
     def _clear(self):
         self.x = None
@@ -55,13 +56,26 @@ class BaseClassifier(object):
 
     @staticmethod
     def _check_label_type(y):
-        count = dict(Counter(y))
+        count = np.unique(y)
         if len(count) == 2:
             return LabelType.binary
         elif len(count) > len(y)/2:
             return LabelType.continuous
         else:
-            return LabelType.multiclass
+            return LabelType.multi_class
+
+    @staticmethod
+    def _check_feature_type(x):
+        res = []
+        for feature in x.T:
+            count = np.unique(feature)
+            if len(count) == 2:
+                res.append(LabelType.binary)
+            elif len(count) > len(feature) // 2:
+                res.append(LabelType.continuous)
+            else:
+                res.append(LabelType.multi_class)
+        return res
 
     @abstractmethod
     def fit(self, x, y):

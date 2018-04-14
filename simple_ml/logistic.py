@@ -28,10 +28,10 @@ class BaseLogisticRegression(BaseClassifier):
     def _sigmoid(x):
         return 1 / (1 + np.exp(-x))
 
-    def _update_w(self, w_old, step):
+    def _update_w(self, w_old, *args):
         sigmoid_array = self._sigmoid(np.dot(self.x, w_old.reshape(-1, 1)).reshape(1, -1)[0])
         epsilon_array = self.y - sigmoid_array
-        w_new = w_old + step * np.dot(self.x.T, epsilon_array)
+        w_new = w_old + self.step * np.dot(self.x.T, epsilon_array)
         return w_new
 
     def _loss_function_value(self, w):
@@ -66,20 +66,20 @@ class BaseLogisticRegression(BaseClassifier):
         t = np.Inf
         loss_new = loss_init
         while t > self.tol:
-            w_old = self._update_w(w_old, self.step)
+            w_old = self._update_w(w_old)
             loss_new = self._loss_function_value(w_old)
             t = abs(loss_new - loss_init)
             loss_init = loss_new
         return w_old, loss_new
 
     def _predict(self, x):
-        if self.has_intercept:
+        if self.has_intercept and x[:, 0].any() != 0:
             x = self._add_ones(x)
 
-        if x.shape[1] == self.variable_num:
+        if x.shape[1] != self.variable_num:
             raise FeatureNumberMismatchError
-        self.y = np.dot(self.x, self.w)
-        return self._sigmoid(self.y)
+        y = np.dot(x, self.w)
+        return self._sigmoid(y)
 
     def predict(self, x):
         if self.w is None:
@@ -100,6 +100,7 @@ class BaseLogisticRegression(BaseClassifier):
         classify_roc_plot(predict_y, y)
 
     def classify_plot(self, x, y):
+        x = self._add_ones(x)
         classify_plot(self, self.x, self.y, x, y, title='My Logistic Regression')
 
 
@@ -115,20 +116,21 @@ class Lasso(BaseLogisticRegression):
         :param w: 参数向量
         :return: 损失函数值
         """
-        return np.mean(np.square(self.y - self._sigmoid(np.dot(self.x, w))))+ self.lamb * np.sum(np.abs(w))
+        return np.mean(np.square(self.y - self._sigmoid(np.dot(self.x, w)))) + self.lamb * np.sum(np.abs(w))
 
     def _loss_change_one_value(self, value, *args):
         w = args[0].copy()
         w[args[1]] = value
         return self._loss_function_value(w)
 
-    def _update_w(self, w_old, i):
+    def _update_w(self, w_old, *args):
         """
         坐标下降法进行求解，每一次固定除w_i以外所有w，用爬山法求最优
         :param w_old: 参数向量
         :param i: 第i个参数不固定，其他的都固定
         :return: void
         """
+        i = args[0]
         if i >= len(w_old):
             raise MisMatchError
         w_old[i] = so.fmin(self._loss_change_one_value, w_old[i], (w_old, i), disp=False)[0]
@@ -144,3 +146,19 @@ class Lasso(BaseLogisticRegression):
                 self._update_w(w_0, i)
             loss = self._loss_function_value(w_0)
         return w_0, _min
+
+class Ridge(Lasso):
+
+    def __init__(self, tol=0.01, lamb=0.1, step=0.01, threshold=0.5, has_intercept=True):
+        super(Ridge, self).__init__(tol, lamb, step, threshold, has_intercept)
+
+    def _loss_function_value(self, w):
+        """
+        直接采用平方损失，当然用logistic损失也行
+        :param w: 参数向量
+        :return: 损失函数值
+        """
+        return np.mean(np.square(self.y - self._sigmoid(np.dot(self.x, w)))) + self.lamb * np.sum(np.square(w))
+
+
+

@@ -70,6 +70,9 @@ def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title
     elif feature_num > 2:
         pca = PCA(2)
         x_train = pca.fit_transform(x_train)
+        if x_test.shape[1] + 1 == x_train.shape[1]:
+            x_test = np.column_stack((np.ones(x_test.shape[0]), x_test))
+
         x_test = pca.transform(x_test)
 
     model.fit(x_train, y_train)
@@ -107,7 +110,6 @@ def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title
     # Put the result into a color plot
     z = transform_y(z)
     z = z.reshape(xx.shape)
-    print(z)
     ax.contourf(xx, yy, z, cmap=cm, alpha=.8)
 
     # Plot also the training points

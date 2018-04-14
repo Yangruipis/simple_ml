@@ -38,6 +38,7 @@ class BaseLogisticRegression(BaseClassifier):
         sigmoid_array = self._sigmoid(np.dot(self.x, w.reshape(-1, 1)).reshape(1, -1)[0])    # 存在重复计算的问题
         return -1 / self.variable_num * np.sum(self.y * np.log(sigmoid_array) + (1 - self.y) *
                                                np.log(1 - sigmoid_array))
+
     @staticmethod
     def _add_ones(x):
         return np.column_stack((np.ones(x.shape[0]), x))
@@ -147,6 +148,7 @@ class Lasso(BaseLogisticRegression):
             loss = self._loss_function_value(w_0)
         return w_0, _min
 
+
 class Ridge(Lasso):
 
     def __init__(self, tol=0.01, lamb=0.1, step=0.01, threshold=0.5, has_intercept=True):
@@ -159,6 +161,3 @@ class Ridge(Lasso):
         :return: 损失函数值
         """
         return np.mean(np.square(self.y - self._sigmoid(np.dot(self.x, w)))) + self.lamb * np.sum(np.square(w))
-
-
-

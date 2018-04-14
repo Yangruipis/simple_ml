@@ -81,6 +81,18 @@
 
 ![](https://img.shields.io/npm/l/express.svg)  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806)](https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade)
 
+TODO list:
+
+- [ ] test case
+- [ ] a efficient bp network 
+- [ ] more optimal method
+- [x] train test split func in helper
+- [ ] other feature select method to add
+- [ ] lasso and Ridge
+- [ ] add GBDT feature select
+- [ ] update Readme
+
+
 # 特征工程<a id="sec-1" name="sec-1"></a>
 
 ## 特征预处理<a id="sec-1-1" name="sec-1-1"></a>
@@ -422,6 +434,7 @@ gbdt = MyGBDT()
 gbdt.fit(X, y)
 print(gbdt.predict(np.array([[1, 1], [0, 0], [1, 0], [0, 1]])))
 ```
+
 
 
 `Losers Always Whine About Their Best`

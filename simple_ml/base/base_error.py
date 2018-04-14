@@ -37,10 +37,10 @@ class CostMatMismatchError(MisMatchError):
         super(CostMatMismatchError, self).__init__(err)
 
 
-class PCATopNTooLargeError(MisMatchError):
+class TopNTooLargeError(MisMatchError):
 
-    def __init__(self, err="PCA所选主成分数过多"):
-        super(PCATopNTooLargeError, self).__init__(err)
+    def __init__(self, err="top n数目超过可选择的最大数目"):
+        super(TopNTooLargeError, self).__init__(err)
 
 
 class FeatureTypeError(TypeError):

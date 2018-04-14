@@ -20,7 +20,7 @@ class PCA(BaseTransform):
     def fit(self, x, y=None):
         self._variable_num = x.shape[1]
         if self.top_n > self._variable_num:
-            raise PCATopNTooLargeError
+            raise TopNTooLargeError
         self._fit(x)
 
     def _fit(self, x):
@@ -79,7 +79,7 @@ class SuperPCA(PCA):
             super(SuperPCA, self).fit(x)
         else:
             if self.top_n > _sample_number:
-                raise PCATopNTooLargeError
+                raise TopNTooLargeError
 
             self._fit(x)
 

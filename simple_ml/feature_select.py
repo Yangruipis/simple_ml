@@ -7,13 +7,15 @@ filter方法进行特征选择
 from collections import Counter
 import numpy as np
 from minepy import MINE
-from simple_ml.base.base_enum import FilterType
+from simple_ml.base.base_enum import FilterType, LabelType
 from simple_ml.base.base_error import *
+from simple_ml.base.base import BaseTransform
 
 
-class MyFilter(object):
+class Filter(BaseTransform):
 
     def __init__(self, filter_type, top_k):
+        super(Filter, self).__init__()
         self.filterType = filter_type
         self.top_k = top_k
 

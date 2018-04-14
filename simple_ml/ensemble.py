@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from simple_ml.base.base_enum import ClassifierType
-from simple_ml.base.base_error import FeatureNumberMismatchError, ModelNotFittedError
+from simple_ml.base.base_error import *
 from .score import *
 from simple_ml.base.base import BaseClassifier
 
@@ -97,9 +97,11 @@ class CART(BaseClassifier):
         super(CART, self).__init__()
         self.leaf_node_list = []
         self.root = None
+        self.importance = None
 
     def fit(self, x, y):
         self._init(x, y)
+        self.importance = np.zeros(self.variable_num)
         root = TreeNode(np.arange(self.sample_num))
         self.root = self._gen_tree(root)
 
@@ -116,6 +118,7 @@ class CART(BaseClassifier):
             return leaf_node
 
         feature_id = best[0]
+        self.importance[feature_id] = best[1]
         column_data = self.x[:, feature_id]
         feature_values = np.unique(column_data)
 
@@ -192,15 +195,32 @@ class BaseGBDT(BaseClassifier):
         self.nums = nums
         self.F = []
         self.Trees = [CART() for i in range(nums)]
+        self.importance = None
 
     def fit(self, x, y):
         self._init(x, y)
         self._init_f0()
+        temp = []
         for m in range(self.nums):
             y_residual = self._get_residual(m)
             tree = self.Trees[m]
             tree.fit(x, y_residual)
             self._update_f(tree)
+            temp.append(tree.importance)
+        self.importance = np.mean(np.array(temp), axis=0)
+
+    @property
+    def importance_score(self):
+        if not self.importance:
+            raise ModelNotFittedError
+        return self.importance
+
+    def feature_select(self, top_n):
+        if not self.importance:
+            raise ModelNotFittedError
+        if top_n > self.variable_num:
+            raise TopNTooLargeError
+        return self.importance.argsort()[-top_n:][::-1]
 
     def predict(self, x):
         res = [self._predict_single(i) for i in x]

@@ -83,15 +83,16 @@
 
 TODO list:
 
-- [ ] test case
+- [ ] test cases
 - [ ] an efficient bp network 
-- [ ] more optimal method
+- [ ] more optimal methods
 - [x] train test split func in helper
 - [ ] other feature select method to add
-- [ ] lasso and Ridge
-- [ ] add GBDT feature select
+- [x] lasso and Ridge
+- [x] add GBDT feature select
 - [ ] update Readme
 - [ ] setup.py
+- [ ] examples
 
 # 特征工程<a id="sec-1" name="sec-1"></a>
 

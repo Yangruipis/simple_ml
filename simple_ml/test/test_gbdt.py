@@ -2,8 +2,8 @@
 
 import unittest
 from simple_ml.ensemble import CART, BaseGBDT
-import numpy as np
 from simple_ml.base.base_error import *
+import numpy as np
 
 
 class TESTGBDT(unittest.TestCase):

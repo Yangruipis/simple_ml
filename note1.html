@@ -1,0 +1,3883 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Algorithm when DataMining</title>
+<!-- 2018-02-28 周三 15:40 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="杨 睿" />
+<meta  name="keywords" content="Machine Learning" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js", "[Contrib]/siunitx/siunitx.js", "[Contrib]/mhchem/mhchem.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        TeX: {extensions: ["AMSmath.js","AMSsymbols.js",  "[Contrib]/siunitx/siunitx.js", "[Contrib]/mhchem/mhchem.js"]},
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Algorithm when DataMining</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. <span class="done DONE">DONE</span> 模型选择<code>[3/3]</code></a>
+<ul>
+<li><a href="#sec-1-1">1.1. <span class="done DONE">DONE</span> 模型评价<code>[4/4]</code></a>
+<ul>
+<li><a href="#sec-1-1-1">1.1.1. <span class="done DONE">DONE</span> 二分类模型</a></li>
+<li><a href="#sec-1-1-2">1.1.2. <span class="done DONE">DONE</span> 多分类模型</a></li>
+<li><a href="#sec-1-1-3">1.1.3. <span class="done DONE">DONE</span> 回归模型</a></li>
+<li><a href="#sec-1-1-4">1.1.4. <span class="done CANCELED">CANCELED</span> 聚类模型</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-2">1.2. <span class="done DONE">DONE</span> 交叉验证</a></li>
+<li><a href="#sec-1-3">1.3. <span class="done CANCELED">CANCELED</span> 网格搜索</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. <span class="done DONE">DONE</span> 预处理<code>[5/5]</code></a>
+<ul>
+<li><a href="#sec-2-1">2.1. <span class="done CANCELED">CANCELED</span> 标准化，归一化</a></li>
+<li><a href="#sec-2-2">2.2. <span class="done CANCELED">CANCELED</span> 异常值</a></li>
+<li><a href="#sec-2-3">2.3. <span class="done CANCELED">CANCELED</span> 缺失值</a></li>
+<li><a href="#sec-2-4">2.4. <span class="done CANCELED">CANCELED</span> 编码</a></li>
+<li><a href="#sec-2-5">2.5. <span class="done DONE">DONE</span> 特征选择</a>
+<ul>
+<li><a href="#sec-2-5-1">2.5.1. Filter</a>
+<ul>
+<li><a href="#sec-2-5-1-1">2.5.1.1. 方差法</a></li>
+<li><a href="#sec-2-5-1-2">2.5.1.2. 相关系数</a></li>
+<li><a href="#sec-2-5-1-3">2.5.1.3. 卡方检验</a></li>
+<li><a href="#sec-2-5-1-4">2.5.1.4. 互信息</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-5-2">2.5.2. Wrapper</a></li>
+<li><a href="#sec-2-5-3">2.5.3. Embedded</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-3">3. <span class="done DONE">DONE</span> 基于树的算法<code>[2/2]</code></a>
+<ul>
+<li><a href="#sec-3-1">3.1. <span class="done DONE">DONE</span> 决策树</a>
+<ul>
+<li><a href="#sec-3-1-1">3.1.1. 分类树</a></li>
+<li><a href="#sec-3-1-2">3.1.2. 回归树</a></li>
+<li><a href="#sec-3-1-3">3.1.3. <span class="todo TODO">TODO</span> 剪枝</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-2">3.2. <span class="done DONE">DONE</span> 随机森林</a>
+<ul>
+<li><a href="#sec-3-2-1">3.2.1. 概述</a></li>
+<li><a href="#sec-3-2-2">3.2.2. 优缺点</a>
+<ul>
+<li><a href="#sec-3-2-2-1">3.2.2.1. 优点</a></li>
+<li><a href="#sec-3-2-2-2">3.2.2.2. 缺点</a></li>
+<li><a href="#sec-3-2-2-3">3.2.2.3. 为什么随机森林不存在过拟合问题</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-2-3">3.2.3. 实现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-4">4. <span class="done DONE">DONE</span> KNN相关算法<code>[2/2]</code></a>
+<ul>
+<li><a href="#sec-4-1">4.1. <span class="done DONE">DONE</span> KNN</a>
+<ul>
+<li><a href="#sec-4-1-1">4.1.1. 模型</a>
+<ul>
+<li><a href="#sec-4-1-1-1">4.1.1.1. 三要素</a></li>
+<li><a href="#sec-4-1-1-2">4.1.1.2. 距离度量</a></li>
+<li><a href="#sec-4-1-1-3">4.1.1.3. K值的选择</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-1-2">4.1.2. 分类的规则</a></li>
+<li><a href="#sec-4-1-3">4.1.3. 代码实现</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-2">4.2. <span class="done DONE">DONE</span> KD树</a></li>
+</ul>
+</li>
+<li><a href="#sec-5">5. <span class="done DONE">DONE</span> Logistic<code>[3/3]</code></a>
+<ul>
+<li><a href="#sec-5-1">5.1. <span class="done DONE">DONE</span> 理论</a>
+<ul>
+<li><a href="#sec-5-1-1">5.1.1. sigmoid函数</a></li>
+<li><a href="#sec-5-1-2">5.1.2. 估计方法</a>
+<ul>
+<li><a href="#sec-5-1-2-1">5.1.2.1. 最小二乘估计</a></li>
+<li><a href="#sec-5-1-2-2">5.1.2.2. 极大似然估计</a></li>
+</ul>
+</li>
+<li><a href="#sec-5-1-3">5.1.3. 求解</a>
+<ul>
+<li><a href="#sec-5-1-3-1">5.1.3.1. 梯度下降 （gradient descent）</a></li>
+<li><a href="#sec-5-1-3-2">5.1.3.2. 随机梯度下降（stochastic gradient descent）</a></li>
+<li><a href="#sec-5-1-3-3">5.1.3.3. 小批量梯度下降（mini-batch gradient descent）</a></li>
+<li><a href="#sec-5-1-3-4">5.1.3.4. 学习率更新</a></li>
+<li><a href="#sec-5-1-3-5">5.1.3.5. 拟牛顿法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-5-2">5.2. <span class="done DONE">DONE</span> 实现</a></li>
+<li><a href="#sec-5-3">5.3. <span class="done DONE">DONE</span> 多元logistic情况（Multinormal）</a></li>
+</ul>
+</li>
+<li><a href="#sec-6">6. <span class="done DONE">DONE</span> 基于贝叶斯的算法</a>
+<ul>
+<li><a href="#sec-6-1">6.1. 朴素贝叶斯</a>
+<ul>
+<li><a href="#sec-6-1-1">6.1.1. 贝叶斯模型简介</a></li>
+<li><a href="#sec-6-1-2">6.1.2. 朴素贝叶斯模型的提出</a></li>
+<li><a href="#sec-6-1-3">6.1.3. 拉普拉斯平滑</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-2">6.2. 半朴素贝叶斯</a></li>
+<li><a href="#sec-6-3">6.3. 贝叶斯网络</a></li>
+</ul>
+</li>
+<li><a href="#sec-7">7. <span class="done DONE">DONE</span> EM算法</a>
+<ul>
+<li><a href="#sec-7-1">7.1. 简介</a></li>
+</ul>
+</li>
+<li><a href="#sec-8">8. <span class="done DONE">DONE</span> 集成学习</a>
+<ul>
+<li><a href="#sec-8-1">8.1. 理论</a>
+<ul>
+<li><a href="#sec-8-1-1">8.1.1. Boosting方法</a>
+<ul>
+<li><a href="#sec-8-1-1-1">8.1.1.1. Adaboost算法</a></li>
+<li><a href="#sec-8-1-1-2">8.1.1.2. GBDT(Gradient Boosting Decision Tree)</a></li>
+</ul>
+</li>
+<li><a href="#sec-8-1-2">8.1.2. bagging</a></li>
+<li><a href="#sec-8-1-3">8.1.3. 为什么说bagging减少variance，而boosting减少bias</a></li>
+</ul>
+</li>
+<li><a href="#sec-8-2">8.2. 相关包学习</a>
+<ul>
+<li><a href="#sec-8-2-1">8.2.1. GBDT</a></li>
+<li><a href="#sec-8-2-2">8.2.2. XGBoost</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-9">9. <span class="todo TODO">TODO</span> 支持向量机<code>[5/6]</code></a>
+<ul>
+<li><a href="#sec-9-1">9.1. <span class="done DONE">DONE</span> 线性可分支持向量机与对偶方法</a>
+<ul>
+<li><a href="#sec-9-1-1">9.1.1. 对偶问题</a></li>
+<li><a href="#sec-9-1-2">9.1.2. KKT条件(Karush-Kuhn-Tucker, 库恩塔克条件)</a></li>
+<li><a href="#sec-9-1-3">9.1.3. SMO算法(Sequential Minimal Optimization， 序列最小化）</a></li>
+</ul>
+</li>
+<li><a href="#sec-9-2">9.2. <span class="done DONE">DONE</span> 线性不可分支持向量机</a>
+<ul>
+<li><a href="#sec-9-2-1">9.2.1. 核函数</a>
+<ul>
+<li><a href="#sec-9-2-1-1">9.2.1.1. 核函数的优势</a></li>
+<li><a href="#sec-9-2-1-2">9.2.1.2. 哪些通用核函数</a></li>
+<li><a href="#sec-9-2-1-3">9.2.1.3. 如何选择核函数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-9-3">9.3. <span class="done DONE">DONE</span> 线性支持向量机(软间隔与正则化)</a>
+<ul>
+<li><a href="#sec-9-3-1">9.3.1. 软间隔</a></li>
+<li><a href="#sec-9-3-2">9.3.2. 损失函数</a></li>
+<li><a href="#sec-9-3-3">9.3.3. 加入松弛变量</a>
+<ul>
+<li><a href="#sec-9-3-3-1">9.3.3.1. KKT条件：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-9-4">9.4. <span class="done DONE">DONE</span> 实现</a></li>
+<li><a href="#sec-9-5">9.5. <span class="todo TOLEARN">TOLEARN</span> 支持向量回归</a></li>
+</ul>
+</li>
+<li><a href="#sec-10">10. 神经网络</a></li>
+<li><a href="#sec-11">11. <span class="done DONE">DONE</span> 聚类算法<code>[2/2]</code></a>
+<ul>
+<li><a href="#sec-11-1">11.1. <span class="done DONE">DONE</span> Kmeans</a></li>
+<li><a href="#sec-11-2">11.2. <span class="done DONE">DONE</span> 层次聚类</a></li>
+</ul>
+</li>
+<li><a href="#sec-12">12. <span class="done DONE">DONE</span> 数值优化专题</a>
+<ul>
+<li><a href="#sec-12-1">12.1. 预备知识</a>
+<ul>
+<li><a href="#sec-12-1-1">12.1.1. 损失函数</a>
+<ul>
+<li><a href="#sec-12-1-1-1">12.1.1.1. 0-1损失(Binary Loss)</a></li>
+<li><a href="#sec-12-1-1-2">12.1.1.2. 感知损失（Perceptron Loss）</a></li>
+<li><a href="#sec-12-1-1-3">12.1.1.3. Hinge Loss</a></li>
+<li><a href="#sec-12-1-1-4">12.1.1.4. 对数损失</a></li>
+<li><a href="#sec-12-1-1-5">12.1.1.5. 平方损失</a></li>
+<li><a href="#sec-12-1-1-6">12.1.1.6. 绝对损失(Absolute Loss)</a></li>
+<li><a href="#sec-12-1-1-7">12.1.1.7. 指数损失</a></li>
+</ul>
+</li>
+<li><a href="#sec-12-1-2">12.1.2. 函数几个重要的点</a>
+<ul>
+<li><a href="#sec-12-1-2-1">12.1.2.1. 拐点</a></li>
+<li><a href="#sec-12-1-2-2">12.1.2.2. 极值点</a></li>
+<li><a href="#sec-12-1-2-3">12.1.2.3. 驻点</a></li>
+<li><a href="#sec-12-1-2-4">12.1.2.4. 鞍点（saddle point）</a></li>
+</ul>
+</li>
+<li><a href="#sec-12-1-3">12.1.3. 梯度和海塞矩阵</a></li>
+</ul>
+</li>
+<li><a href="#sec-12-2">12.2. 优化方法</a>
+<ul>
+<li><a href="#sec-12-2-1">12.2.1. 优化问题划分：</a>
+<ul>
+<li><a href="#sec-12-2-1-1">12.2.1.1. 凸优化</a></li>
+<li><a href="#sec-12-2-1-2">12.2.1.2. 无约束最优化</a></li>
+<li><a href="#sec-12-2-1-3">12.2.1.3. 约束最优化</a></li>
+<li><a href="#sec-12-2-1-4">12.2.1.4. 局部最优化</a></li>
+</ul>
+</li>
+<li><a href="#sec-12-2-2">12.2.2. 详细的优化方法：</a>
+<ul>
+<li><a href="#sec-12-2-2-1">12.2.2.1. 坐标下降</a></li>
+<li><a href="#sec-12-2-2-2">12.2.2.2. 梯度下降</a></li>
+<li><a href="#sec-12-2-2-3">12.2.2.3. 随机梯度下降</a></li>
+<li><a href="#sec-12-2-2-4">12.2.2.4. 共轭梯度法</a></li>
+<li><a href="#sec-12-2-2-5">12.2.2.5. 牛顿法</a></li>
+<li><a href="#sec-12-2-2-6">12.2.2.6. 拟牛顿法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-12-3">12.3. 程序编写</a></li>
+</ul>
+</li>
+<li><a href="#sec-13">13. 神经网络与深度学习</a>
+<ul>
+<li><a href="#sec-13-1">13.1. 神经网络与深度学习简介</a></li>
+<li><a href="#sec-13-2">13.2. 感知机学习</a></li>
+<li><a href="#sec-13-3">13.3. 一般神经网络</a>
+<ul>
+<li><a href="#sec-13-3-1">13.3.1. 激活函数</a></li>
+</ul>
+</li>
+<li><a href="#sec-13-4">13.4. BP反向传播网络</a>
+<ul>
+<li><a href="#sec-13-4-1">13.4.1. 推导</a>
+<ul>
+<li><a href="#sec-13-4-1-1">13.4.1.1. 公式一：输出层误差</a></li>
+<li><a href="#sec-13-4-1-2">13.4.1.2. 公式二：隐含层误差</a></li>
+<li><a href="#sec-13-4-1-3">13.4.1.3. 公式三：参数变化率，即w和b的梯度</a></li>
+<li><a href="#sec-13-4-1-4">13.4.1.4. 公式四：参数更新规则</a></li>
+</ul>
+</li>
+<li><a href="#sec-13-4-2">13.4.2. 实现</a></li>
+</ul>
+</li>
+<li><a href="#sec-13-5">13.5. 卷积神经网络</a>
+<ul>
+<li><a href="#sec-13-5-1">13.5.1. 卷积</a>
+<ul>
+<li><a href="#sec-13-5-1-1">13.5.1.1. 卷积中的超参数：</a></li>
+</ul>
+</li>
+<li><a href="#sec-13-5-2">13.5.2. 池化(Pooling)</a></li>
+<li><a href="#sec-13-5-3">13.5.3. 全连接</a></li>
+<li><a href="#sec-13-5-4">13.5.4. 卷积层参数的确定</a></li>
+</ul>
+</li>
+<li><a href="#sec-13-6">13.6. 循环神经网络(Recurrent Neural Network)</a>
+<ul>
+<li><a href="#sec-13-6-1">13.6.1. 单向循环神经网络</a></li>
+<li><a href="#sec-13-6-2">13.6.2. 双向循环神经网络</a></li>
+<li><a href="#sec-13-6-3">13.6.3. 训练方法：BPTT</a></li>
+<li><a href="#sec-13-6-4">13.6.4. softmax 层</a></li>
+<li><a href="#sec-13-6-5">13.6.5. 优缺点</a></li>
+<li><a href="#sec-13-6-6">13.6.6. 输入与输出</a></li>
+</ul>
+</li>
+<li><a href="#sec-13-7">13.7. 递归神经网络(Recursive Neural Network)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="__">了解</span></span></a></li>
+<li><a href="#sec-13-8">13.8. LSTM</a></li>
+<li><a href="#sec-13-9">13.9. 实现</a>
+<ul>
+<li><a href="#sec-13-9-1">13.9.1. 方案1. win10 tensorflow 安装</a>
+<ul>
+<li><a href="#sec-13-9-1-1">13.9.1.1. Cuda &amp; cudnn</a></li>
+<li><a href="#sec-13-9-1-2">13.9.1.2. TensorFlow</a></li>
+</ul>
+</li>
+<li><a href="#sec-13-9-2">13.9.2. 方案2. 基于theano的Keras win10 安装</a></li>
+<li><a href="#sec-13-9-3">13.9.3. Keras Tips</a>
+<ul>
+<li><a href="#sec-13-9-3-1">13.9.3.1. 自定义 metrics 性能评估函数</a></li>
+</ul>
+</li>
+<li><a href="#sec-13-9-4">13.9.4. Experiment 1. 信贷违约预测模型</a></li>
+<li><a href="#sec-13-9-5">13.9.5. Experiment 2. 一个简单的缺失语言自动补全</a></li>
+<li><a href="#sec-13-9-6">13.9.6. Experiment 3. 手写数字识别</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-14">14. 工具</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> <span class="done DONE">DONE</span> 模型选择<code>[3/3]</code></h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-21 周日 15:46]</span></span>
+</li>
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-21 周日 15:26]</span></span>
+</li>
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-21 周日 15:18]</span></span>
+</li>
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-13 周六 15:34]</span></span>
+</li>
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-13 周六 15:34]</span></span>
+</li>
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-13 周六 15:34]</span></span>
+</li>
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-07 周日 14:13]</span></span>
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> <span class="done DONE">DONE</span> 模型评价<code>[4/4]</code></h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+见文件 utils/score.py
+</p>
+</div>
+<div id="outline-container-sec-1-1-1" class="outline-4">
+<h4 id="sec-1-1-1"><span class="section-number-4">1.1.1</span> <span class="done DONE">DONE</span> 二分类模型</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<ul class="org-ul">
+<li>accuracy
+</li>
+<li>precision
+</li>
+<li>recall
+</li>
+<li>f1
+</li>
+<li>auc<sub>roc</sub>
+<ul class="org-ul">
+<li>只在输出为概率时有用，如logistic回归
+</li>
+<li>auc 位roc曲线的下面积，其物理意义为任取一对正负样本对，正样本的score大于负样本的概率
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1-1-2" class="outline-4">
+<h4 id="sec-1-1-2"><span class="section-number-4">1.1.2</span> <span class="done DONE">DONE</span> 多分类模型</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<ul class="org-ul">
+<li>f1<sub>micro</sub>
+</li>
+<li>f1<sub>macro</sub>
+</li>
+<li>f1<sub>weight</sub>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1-1-3" class="outline-4">
+<h4 id="sec-1-1-3"><span class="section-number-4">1.1.3</span> <span class="done DONE">DONE</span> 回归模型</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<ul class="org-ul">
+<li>explained<sub>variance</sub>
+</li>
+<li>absolute<sub>error</sub>
+</li>
+<li>squared<sub>error</sub>
+</li>
+<li>RMSE(root mean squared error)
+</li>
+<li>RMSLE(root mean squared log error, in case of the abnormal value)
+</li>
+<li>r2
+</li>
+<li>median<sub>absolute</sub><sub>error</sub>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1-1-4" class="outline-4">
+<h4 id="sec-1-1-4"><span class="section-number-4">1.1.4</span> <span class="done CANCELED">CANCELED</span> 聚类模型</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+<code>了解即可</code>
+</p>
+<ul class="org-ul">
+<li>互信息
+</li>
+<li>rand系数
+</li>
+<li>轮廓系数
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> <span class="done DONE">DONE</span> 交叉验证</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>留出法：选出两个互斥子集分别作为训练集和测试集
+</li>
+<li>K折交叉：分成K个互斥子集，对每一个子集作为测试集，其他的作为训练集，进行K次检验（K=样本数时，为留一法）
+</li>
+<li>自助法：
+</li>
+</ul>
+<p>
+从训练集D中有放回的抽样，得到D'，如果抽的次数足够多，则始终没被抽到的概率将近三分之一：
+</p>
+
+\begin{eqnarray}
+\nonumber
+\lim_{m\rightarrow \infty} ( 1- \frac{1}{m}) ^ m \rightarrow \frac{1}{e} = 0.368
+\end{eqnarray}
+
+<p>
+注意：该公式在随机森林抽取变量时也同样用掉了，证明三分之一这个概率
+</p>
+
+<p>
+此时将D'作为训练集，D/D'(没被抽到的)作为测试集，进行验证。
+</p>
+
+<p>
+<code>自助法在数据集较小，难以有效划分训练集和测试集时非常有用</code> ，但是由于改变了初始数据的分布，因此会引入估计偏差，所以前两种用的比较多一点
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> <span class="done CANCELED">CANCELED</span> 网格搜索</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> <span class="done DONE">DONE</span> 预处理<code>[5/5]</code></h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-23 周二 19:21]</span></span>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> <span class="done CANCELED">CANCELED</span> 标准化，归一化</h3>
+</div>
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> <span class="done CANCELED">CANCELED</span> 异常值</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+winsorize 变换
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> <span class="done CANCELED">CANCELED</span> 缺失值</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li>均值、中值、分位数、众数、随机值填补，效果一般
+</li>
+<li>通过其他非缺失变量预测，或是进行差值与拟合，但是必须是存在某些关系的变量才行
+</li>
+<li>最准确的方法：把变量映射到高维空间。比如性别，有男、女、缺失三种情况，则映射成3个变量：是否男、是否女、是否缺失。连续值不建议这样处理。
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> <span class="done CANCELED">CANCELED</span> 编码</h3>
+</div>
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> <span class="done DONE">DONE</span> 特征选择</h3>
+<div class="outline-text-3" id="text-2-5">
+</div><div id="outline-container-sec-2-5-1" class="outline-4">
+<h4 id="sec-2-5-1"><span class="section-number-4">2.5.1</span> Filter</h4>
+<div class="outline-text-4" id="text-2-5-1">
+<p>
+自变量和目标变量之间的关联
+</p>
+
+<p>
+<code>注意</code>
+</p>
+
+<ul class="org-ul">
+<li>自变量只有两种情况：连续 或 0-1
+</li>
+<li>因变量有三种情况：连续  0-1 或 多分类
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-2-5-1-1" class="outline-5">
+<h5 id="sec-2-5-1-1"><span class="section-number-5">2.5.1.1</span> 方差法</h5>
+<div class="outline-text-5" id="text-2-5-1-1">
+<ul class="org-ul">
+<li>任何自变量
+</li>
+<li>任何因变量
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-5-1-2" class="outline-5">
+<h5 id="sec-2-5-1-2"><span class="section-number-5">2.5.1.2</span> 相关系数</h5>
+<div class="outline-text-5" id="text-2-5-1-2">
+<ul class="org-ul">
+<li>任何自变量
+</li>
+<li>连续或 0-1 因变量
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-5-1-3" class="outline-5">
+<h5 id="sec-2-5-1-3"><span class="section-number-5">2.5.1.3</span> 卡方检验</h5>
+<div class="outline-text-5" id="text-2-5-1-3">
+<ul class="org-ul">
+<li>任何自变量
+</li>
+<li>0-1或多分类因变量
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-5-1-4" class="outline-5">
+<h5 id="sec-2-5-1-4"><span class="section-number-5">2.5.1.4</span> 互信息</h5>
+<div class="outline-text-5" id="text-2-5-1-4">
+<ul class="org-ul">
+<li>任何自变量
+</li>
+<li>任何因变量（最大信息系数法用以处理定量数据）
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-5-2" class="outline-4">
+<h4 id="sec-2-5-2"><span class="section-number-4">2.5.2</span> Wrapper</h4>
+<div class="outline-text-4" id="text-2-5-2">
+<p>
+递归特征消除
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-5-3" class="outline-4">
+<h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> Embedded</h4>
+<div class="outline-text-4" id="text-2-5-3">
+<p>
+<code>为什么正则项(Regularization)可以防止过拟合？</code>
+</p>
+
+<p>
+ref: <a href="http://blog.csdn.net/jackie_zhu/article/details/52134592">http://blog.csdn.net/jackie_zhu/article/details/52134592</a>
+ref: <a href="https://www.zhihu.com/question/20700829">https://www.zhihu.com/question/20700829</a>
+</p>
+
+<p>
+模型过拟合的原因往往是模型过于复杂，拟合了不需要的参数
+</p>
+
+<p>
+简单的说，正则项通过损失函数中的惩罚项，对参数施加限制，使其对噪声和异常值敏感程度较小
+</p>
+
+<ul class="org-ul">
+<li>L1正则
+</li>
+</ul>
+
+\begin{eqnarray}
+\nonumber
+J = \frac{1}{N}\sum_{i=1}^N (f(x_i) - y_i)^2 + \lambda \sum_{i=1}^N ||w||
+\end{eqnarray}
+
+<ul class="org-ul">
+<li>L2正则
+</li>
+</ul>
+
+\begin{eqnarray}
+\nonumber
+J = \frac{1}{N}\sum_{i=1}^N (f(x_i) - y_i)^2 + \lambda \sum_{i=1}^N ||w||^2
+\end{eqnarray}
+
+
+<p>
+这里的 lambda 越大，表示对 w 的限制越强， w越接近0，（对应图中的区域越小） 模型复杂度越低，越不容易过拟合，模型方差越小
+</p>
+
+<p>
+<code>过拟合：高方差</code>
+<code>欠拟合：高偏差</code>
+</p>
+
+<p>
+<code>概率论角度解释</code>
+</p>
+
+<p>
+比如L2正则，相当于施加了一个0均值，α<sup>-1</sup> 为方差的正态分布约束，将其加入到极大似然里去，求对数，去掉常数项，即是后面的形式
+</p>
+
+<ul class="org-ul">
+<li>当 α=0 时，即高斯分布方差趋向于无穷大，为无信息先验，即没有加上约束
+</li>
+<li>当 α 增大时，表明先验的方差越小，模型越稳定，相对的variance越小，越不容易过拟合
+</li>
+</ul>
+
+
+<div class="figure">
+<p><img src="pics/ridge.png" alt="ridge.png" />
+</p>
+</div>
+
+
+<p>
+<code>为什么L1正则可做特征选择？</code>
+</p>
+
+
+<div class="figure">
+<p><img src="pics/lasso.png" alt="lasso.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> <span class="done DONE">DONE</span> 基于树的算法<code>[2/2]</code></h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-16 周二 11:25]</span></span>
+</li>
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-15 周一 14:38]</span></span>
+</li>
+<li>State "TODO"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-13 周六 15:38]</span></span>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> <span class="done DONE">DONE</span> 决策树</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>State "TODO"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2017-12-23 周六 16:10]</span></span>
+</li>
+</ul>
+
+<div class="figure">
+<p><img src="pics/decision_tree.png" alt="decision_tree.png" />
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-1-1" class="outline-4">
+<h4 id="sec-3-1-1"><span class="section-number-4">3.1.1</span> 分类树</h4>
+<div class="outline-text-4" id="text-3-1-1">
+
+<div class="figure">
+<p><img src="pics/tree2.png" alt="tree2.png" />
+</p>
+</div>
+
+<ol class="org-ol">
+<li>ID3 
+<ul class="org-ul">
+<li>划分依据：最大信息熵增益
+</li>
+<li>多叉树
+</li>
+<li>只针对分类变量
+</li>
+</ul>
+</li>
+<li>C4.5 
+<ul class="org-ul">
+<li>划分依据：信息增益比率（使用分裂信息来惩罚取值较多的Feature，防止取值较多的feature由于其信息增益较大而被优先选中）
+</li>
+<li>多叉树
+</li>
+<li>分类变量或连续变量
+</li>
+</ul>
+</li>
+<li>CART
+<ul class="org-ul">
+<li>根据基尼系数划分
+</li>
+<li>二叉树
+</li>
+<li>分类变量或连续变量
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3-1-2" class="outline-4">
+<h4 id="sec-3-1-2"><span class="section-number-4">3.1.2</span> 回归树</h4>
+<div class="outline-text-4" id="text-3-1-2">
+<p>
+回归树本质上与分类树类似，只不过每一个分支节点和叶节点，都会得到一个因变量的预测值，并通过该预测值得到估计的均方误差，用来判断分类的结果，作为划分依据
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-1-3" class="outline-4">
+<h4 id="sec-3-1-3"><span class="section-number-4">3.1.3</span> <span class="todo TODO">TODO</span> 剪枝</h4>
+<div class="outline-text-4" id="text-3-1-3">
+<ul class="org-ul">
+<li>State "TODO"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-15 周一 14:38]</span></span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> <span class="done DONE">DONE</span> 随机森林</h3>
+<div class="outline-text-3" id="text-3-2">
+</div><div id="outline-container-sec-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1"><span class="section-number-4">3.2.1</span> 概述</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+什么是随机森林：
+</p>
+
+<ul class="org-ul">
+<li>森林：根据集成学习(Ensemble Learning)的思想，通过多个决策树进行分类，最终结果由多个决策树结果投票得到
+</li>
+<li>随机：决策树的训练样本是从原始训练集中随机得到的：
+<ul class="org-ul">
+<li>原始训练集的总样本数为N，而每棵树的随机训练集的样本数也为N，但是是从原始样本中有放回抽N次得到的(bootstrap)
+</li>
+<li>原始训练集的总特征数为M，而每棵树的随机训练集的特征数为m(m&lt;=M)，从原始样本的M个特征中随机无放回的抽取，m为随机森林唯一的超参数
+</li>
+</ul>
+</li>
+</ul>
+
+<p>
+<code>为什么抽取样本时是有放回的</code> 如果不是有放回抽样，则每颗树的训练样本都是一样的（如果抽N个）、或者是高度相关的（如果抽n(n&lt;N)个样本，此时至少有(2*n-N)个样本是一样的） 
+</p>
+
+<p>
+随机森林的错误率和两个因素有关：
+</p>
+<ol class="org-ol">
+<li>两颗树样本的相关性越大，错误率越大
+</li>
+<li>每个树的分类能力越强，整个森林的错误率越小
+</li>
+</ol>
+
+<p>
+参数m的增加将导致树之间的相关性和树的分类能力同时增加，而m的减小也会导致两者同时减小，因此 <code>如何确定m非常关键</code>
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2"><span class="section-number-4">3.2.2</span> 优缺点</h4>
+<div class="outline-text-4" id="text-3-2-2">
+</div><div id="outline-container-sec-3-2-2-1" class="outline-5">
+<h5 id="sec-3-2-2-1"><span class="section-number-5">3.2.2.1</span> 优点</h5>
+<div class="outline-text-5" id="text-3-2-2-1">
+<ol class="org-ol">
+<li>在当前所有算法中，具有极好的准确率
+</li>
+<li>能够有效地运行在大数据集上
+</li>
+<li>能够处理具有高维特征的输入样本，而且不需要降维
+</li>
+<li>能够评估各个特征在分类问题上的重要性
+</li>
+<li>在生成过程中，能够获取到内部生成误差的一种无偏估计
+</li>
+<li>对于缺省值问题也能够获得很好得结果
+</li>
+<li>需要调的参数非常少
+</li>
+<li>几乎不会有过拟合的问题，因为它相当于已经在内部进行了交叉验证（Breiman，2001），然而这点尚有争议（Elith and 
+</li>
+</ol>
+<p>
+Graham，2009）。
+</p>
+<ol class="org-ol">
+<li>不需要顾忌多重共线性
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-2-2" class="outline-5">
+<h5 id="sec-3-2-2-2"><span class="section-number-5">3.2.2.2</span> 缺点</h5>
+<div class="outline-text-5" id="text-3-2-2-2">
+<ol class="org-ol">
+<li>对于回归问题表现不好，无法给出连续的预测，并且只能在训练集因变量的范围内进行预测
+</li>
+<li>对于许多统计建模者来说，随机森林给人的感觉像是一个 <code>黑盒子</code>
+</li>
+<li>对于非平衡数据集效果不好，倾向于类别较多的值
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-2-3" class="outline-5">
+<h5 id="sec-3-2-2-3"><span class="section-number-5">3.2.2.3</span> 为什么随机森林不存在过拟合问题</h5>
+<div class="outline-text-5" id="text-3-2-2-3">
+<ol class="org-ol">
+<li>随机的样本和随机的特征使得模型不易陷入过拟合，具有较强的抗噪能力
+</li>
+<li>无需通过交叉验证对其误差进行估计，它可以在内部进行评估，通过oob估计得到误差的无偏估计：
+<ol class="org-ol">
+<li>对每个样本，计算它作为oob样本的树对它的分类情况（约1/3的树）；
+</li>
+<li>然后以简单多数投票作为该样本的分类结果；
+</li>
+</ol>
+</li>
+</ol>
+<p>
+　3) 最后用误分个数占样本总数的比率作为随机森林的oob误分率。
+<code>oob误分率是随机森林泛化误差的一个无偏估计，它的结果近似于需要大量计算的k折交叉验证。</code>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-3" class="outline-4">
+<h4 id="sec-3-2-3"><span class="section-number-4">3.2.3</span> 实现</h4>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> <span class="done DONE">DONE</span> KNN相关算法<code>[2/2]</code></h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-07 周日 20:10]</span></span>
+</li>
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-07 周日 20:10]</span></span>
+</li>
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-04 周四 14:31]</span></span>
+</li>
+<li>State "TODO"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-04 周四 14:31]</span></span>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> <span class="done DONE">DONE</span> KNN</h3>
+<div class="outline-text-3" id="text-4-1">
+</div><div id="outline-container-sec-4-1-1" class="outline-4">
+<h4 id="sec-4-1-1"><span class="section-number-4">4.1.1</span> 模型</h4>
+<div class="outline-text-4" id="text-4-1-1">
+<p>
+简述： 根据离待分类点距离最近的K个点的label，确定待分类点的label。
+</p>
+</div>
+
+<div id="outline-container-sec-4-1-1-1" class="outline-5">
+<h5 id="sec-4-1-1-1"><span class="section-number-5">4.1.1.1</span> 三要素</h5>
+<div class="outline-text-5" id="text-4-1-1-1">
+<ul class="org-ul">
+<li>训练集
+</li>
+<li>距离度量
+</li>
+<li>K值
+</li>
+</ul>
+
+<p>
+当三要素确定后，分类结果可以唯一确定。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-1-1-2" class="outline-5">
+<h5 id="sec-4-1-1-2"><span class="section-number-5">4.1.1.2</span> 距离度量</h5>
+<div class="outline-text-5" id="text-4-1-1-2">
+<ul class="org-ul">
+<li>明可夫斯基距离 $ &sum;<sub>l=1</sub><sup>n</sup> |x<sub>i</sub><sup>(l)</sup> - x<sub>j</sub><sup>(l)</sup>|<sup>p</sup> $
+</li>
+<li>欧式距离 p = 2
+</li>
+<li>曼哈顿距离 p = 1
+</li>
+<li>最大值距离, p = inf, \(\max_{l} |x_i^{(l)} - x_j^{(l)}|\)
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-4-1-1-3" class="outline-5">
+<h5 id="sec-4-1-1-3"><span class="section-number-5">4.1.1.3</span> K值的选择</h5>
+<div class="outline-text-5" id="text-4-1-1-3">
+<ul class="org-ul">
+<li>K值较小：
+<ul class="org-ul">
+<li>学习的近似误差(approximation error)减小，只有相近的点才会起到作用
+</li>
+<li>学习的估计误差(estimation error)增大，对近邻的点过于敏感，容易过拟合
+</li>
+</ul>
+</li>
+<li>K值增大：
+<ul class="org-ul">
+<li>与上面刚好相反，意味着模型变简单，容易欠拟合
+</li>
+</ul>
+</li>
+</ul>
+
+<p>
+在实际应用中，K一般取一个较小的值，然后通过交叉验证法来取最佳K值
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4-1-2" class="outline-4">
+<h4 id="sec-4-1-2"><span class="section-number-4">4.1.2</span> 分类的规则</h4>
+<div class="outline-text-4" id="text-4-1-2">
+<p>
+KNN算法中的分类决策规则往往是多数表决
+</p>
+
+<p>
+<b>多数表决等价于经验风险最小化</b> 《统计学习方法》(P40)
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4-1-3" class="outline-4">
+<h4 id="sec-4-1-3"><span class="section-number-4">4.1.3</span> 代码实现</h4>
+</div>
+</div>
+
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> <span class="done DONE">DONE</span> KD树</h3>
+<div class="outline-text-3" id="text-4-2">
+<ul class="org-ul">
+<li>用原始数据生成一颗平衡二叉树，对数据进行保存于索引
+</li>
+<li>维度越接近样本数时，效率越低，越接近于KNN
+</li>
+<li>找最近邻需要通过二叉搜索和 <b>回溯</b> 算法
+<ol class="org-ol">
+<li>从root节点开始，DFS搜索直到叶子节点，同时在stack中顺序存储已经访问的节点。
+</li>
+<li>如果搜索到叶子节点，当前的叶子节点被设为最近邻节点。
+</li>
+<li>然后通过stack回溯:
+</li>
+<li>如果当前点的距离比最近邻点距离近，更新最近邻节点.
+</li>
+<li>然后检查以最近距离为半径的圆是否和父节点的超平面相交.
+</li>
+<li>如果相交，则必须到父节点的另外一侧，用同样的DFS搜索法，开始检查最近邻节点。
+</li>
+<li>如果不相交，则继续往上回溯，而父节点的另一侧子节点都被淘汰，不再考虑的范围中.
+</li>
+<li>当搜索回到root节点时，搜索完成，得到最近邻节点。
+</li>
+</ol>
+</li>
+<li>算法复杂度分析：
+</li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Algorithm</th>
+<th scope="col" class="left">Average</th>
+<th scope="col" class="left">Worst</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">Space</td>
+<td class="left">O(n)</td>
+<td class="left">O(n)</td>
+</tr>
+
+<tr>
+<td class="left">Search</td>
+<td class="left">O(logn)</td>
+<td class="left">O(n)</td>
+</tr>
+
+<tr>
+<td class="left">Insert</td>
+<td class="left">O(logn)</td>
+<td class="left">O(n)</td>
+</tr>
+
+<tr>
+<td class="left">Delete</td>
+<td class="left">O(logn)</td>
+<td class="left">O(n)</td>
+</tr>
+</tbody>
+</table>
+<ul class="org-ul">
+<li>当考虑K近邻时，可以维护一个近邻的优先队列（见<a href="https://en.wikipedia.org/wiki/K-d_tree">wiki<sub>KDTree</sub></a>)
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> <span class="done DONE">DONE</span> Logistic<code>[3/3]</code></h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-16 周二 11:29]</span></span>
+</li>
+<li>State "TODO"       from "DONE"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-13 周六 15:40]</span></span>
+</li>
+<li>State "DONE"       from "DONE"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-13 周六 15:40]</span></span>
+</li>
+<li>State "DONE"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-13 周六 15:40]</span></span>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> <span class="done DONE">DONE</span> 理论</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+ref : <a href="http://blog.csdn.net/zjuPeco/article/details/77165974">http://blog.csdn.net/zjuPeco/article/details/77165974</a>
+</p>
+</div>
+<div id="outline-container-sec-5-1-1" class="outline-4">
+<h4 id="sec-5-1-1"><span class="section-number-4">5.1.1</span> sigmoid函数</h4>
+<div class="outline-text-4" id="text-5-1-1">
+\begin{eqnarray}
+\nonumber
+f(x) = \frac{1}{1+e^{-x}} 
+\end{eqnarray}
+
+<p>
+将(-inf, inf)定义域映射到(0,1)值域，与之类似的还有tan函数。
+</p>
+
+<p>
+sigmoid的重要性质：
+</p>
+
+<p>
+$$
+f'(x) = f(x)(1-f(x))
+$$
+</p>
+
+<p>
+对于logfistic回归模型，考虑 \(x=(1, x_1, x_2,...,x_n)\) ，设条件概率 \(P(y=1|x)=p\) ，则logistic回归模型为：
+</p>
+\begin{eqnarray}
+\nonumber
+P(y=1|x) = \frac{1}{1+e^{-g(x)}} 
+\end{eqnarray}
+<p>
+其中：
+</p>
+\begin{eqnarray}
+\nonumber
+g(x) = w^T x 
+\end{eqnarray}
+
+<p>
+那么相反，在x条件下不发生的概率为 \[ P(y=0|x)=1-p=1-P(y=1|x) \] ，所以，
+</p>
+\begin{eqnarray}
+\nonumber
+P(y=0|x) = 1 - \frac{1}{1+e^{-g(x)}} = \frac{1}{1+e^{g(x)}}
+\end{eqnarray}
+
+<p>
+所以事件发生于不发生的概率比为：
+</p>
+
+\begin{eqnarray}
+\nonumber
+\frac{P(y=1|x)}{P(y=0|x)} = e^{g(x)}
+\end{eqnarray}
+
+<p>
+两边取对数得到：
+</p>
+
+
+\begin{eqnarray}
+\nonumber
+log(\frac{p}{1-p}) = g(x) = w^T x
+\end{eqnarray}
+</div>
+</div>
+
+<div id="outline-container-sec-5-1-2" class="outline-4">
+<h4 id="sec-5-1-2"><span class="section-number-4">5.1.2</span> 估计方法</h4>
+<div class="outline-text-4" id="text-5-1-2">
+<p>
+首先当然我们想到的是最小二乘估计，模仿线性回归，令残差平方和作为损失函数：
+</p>
+</div>
+
+<div id="outline-container-sec-5-1-2-1" class="outline-5">
+<h5 id="sec-5-1-2-1"><span class="section-number-5">5.1.2.1</span> 最小二乘估计</h5>
+<div class="outline-text-5" id="text-5-1-2-1">
+<p>
+损失函数为：
+</p>
+
+\begin{eqnarray}
+\nonumber
+j(w) = \sum_i \frac{1}{2} (\phi(g(x_i)) - y_i)^2
+\end{eqnarray}
+
+<p>
+其中 \(\phi()\) 为sigmoid函数， 此时发现损失函数非凸，导致存在较多的局部最小值，难以求解
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5-1-2-2" class="outline-5">
+<h5 id="sec-5-1-2-2"><span class="section-number-5">5.1.2.2</span> 极大似然估计</h5>
+<div class="outline-text-5" id="text-5-1-2-2">
+<p>
+将上文中的 \(P(y=i|x), i \in {0,1}\) 写成一般形式：
+</p>
+
+\begin{eqnarray}
+\nonumber
+P(y|x,w) = \phi(g(x))^y (1 - \phi(g(x)))^{(1-y)}
+\end{eqnarray}
+
+<p>
+对于每一个样本，极大似然估计假设其独立同分布，则将每个样本概率相乘，可得其联合概率（似然值），为了方便计算，我们对似然值取对数，同时另z = g(x)：
+</p>
+
+\begin{eqnarray}
+\nonumber
+log(L(w)) = \sum_{i=1}^n (y^{(i)} ln(\phi(z^{(i)})) + (1-y^{(i)})(1 - ln(\phi(z^{(i)})))
+\end{eqnarray}
+
+<p>
+此时要取似然函数的最大值，而为了与损失函数对应，因此我们在左右两侧加上负号，得到损失函数：
+</p>
+
+<p>
+$$
+J(w) = -log(L(w))
+$$
+</p>
+
+<p>
+<code>注意，这里就是为什么logistic回归要用对数损失而不是平方损失</code>
+</p>
+
+<p>
+此时损失函数见下图，如果样本值为1，则sigmoid函数值越接近1，损失越小
+</p>
+
+
+<div class="figure">
+<p><img src="pics/logistic_loss.png" alt="logistic_loss.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5-1-3" class="outline-4">
+<h4 id="sec-5-1-3"><span class="section-number-4">5.1.3</span> 求解</h4>
+<div class="outline-text-4" id="text-5-1-3">
+</div><div id="outline-container-sec-5-1-3-1" class="outline-5">
+<h5 id="sec-5-1-3-1"><span class="section-number-5">5.1.3.1</span> 梯度下降 （gradient descent）</h5>
+<div class="outline-text-5" id="text-5-1-3-1">
+<p>
+梯度方向即函数变化最快的方向，沿着梯度方向寻找更容易找到函数的最大值，而沿着梯度想法的方向寻找更容易找到最小值
+</p>
+
+<p>
+sigmoid函数有着如下优良的性质，因此求导非常容易
+</p>
+\begin{eqnarray}
+\phi ' (z) = \phi (z) (1 - \phi(z))
+\end{eqnarray}
+
+<p>
+对于梯度下降，我们需要求损失函数在参数向量一个分量上的偏导数，用以更新参数向量：
+</p>
+
+
+\begin{eqnarray}
+\frac{\partial J(w)}{\partial w_j} = - \sum_{i=1}^n (y^{(i)} \frac{1}{\phi(z^{(i)})} - (1 - y^{(i)}) \frac{1}{1 - \phi(z^{(i)})}) \frac{\partial \phi(z^{(i)})} {w_i}
+\end{eqnarray}
+
+<p>
+而根据sigmoid的性质，可得：
+</p>
+
+\begin{eqnarray}
+\nonumber
+\frac{\partial \phi(z^{(i)})}{w_i} = \phi'(z^{(i)}) \frac{\partial z^{(i)}}{\partial w_i}
+\end{eqnarray}
+
+<p>
+综上带入，即可得到较为简化的梯度函数：
+</p>
+
+\begin{eqnarray}
+\nonumber
+w_j := w_j - \eta \frac{\partial J(w)}{\partial w_i} = w_j + \eta \sum_{i=1}^n (y^{(i)} - \phi(z^{(i)})) x_j^{(i)}
+\end{eqnarray}
+</div>
+</div>
+
+<div id="outline-container-sec-5-1-3-2" class="outline-5">
+<h5 id="sec-5-1-3-2"><span class="section-number-5">5.1.3.2</span> 随机梯度下降（stochastic gradient descent）</h5>
+<div class="outline-text-5" id="text-5-1-3-2">
+<p>
+梯度下降的公式中可以看出，在样本量非常大，即 n-&gt;inf 时，每次更新权重会非常耗时，随机梯度下降即是为了解决此问题提出的
+</p>
+
+<p>
+随机梯度下降是指每次更新权重时随机选出一个样本进行，而不是之前的全样本计算然后加总
+</p>
+
+<p>
+<code>随机梯度下降加速</code> 对梯度下降重新建模：$w := m * w - &eta; ()$，m表示动量（ <code>Momentum</code> ），物理意义为摩擦力，为了防止参数在谷底不能停止的情况，一般在一开始将m设为0.5，在一定的迭代次数后不断增加，最后到0.99。
+</p>
+
+<p>
+在实践中，一般采取SGD + momentum的方式
+</p>
+</div>
+</div>
+<div id="outline-container-sec-5-1-3-3" class="outline-5">
+<h5 id="sec-5-1-3-3"><span class="section-number-5">5.1.3.3</span> 小批量梯度下降（mini-batch gradient descent）</h5>
+<div class="outline-text-5" id="text-5-1-3-3">
+<p>
+不使用全样本，而是每次抽取一定数量的样本
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5-1-3-4" class="outline-5">
+<h5 id="sec-5-1-3-4"><span class="section-number-5">5.1.3.4</span> 学习率更新</h5>
+<div class="outline-text-5" id="text-5-1-3-4">
+<ul class="org-ul">
+<li>逐步降低（Step decay），即经过一定迭代次数后将学习率乘以一个小的衰减因子。典型的做法包括经过5次迭代（epoch）后学习率乘以0.5，或者20次迭代后乘以0.1。
+</li>
+<li>指数衰减（Exponential decay），其数学表达式可以表示为：α=α0e−kt，其中，α0和k是需要设置的超参数，t是迭代次数。
+</li>
+<li>倒数衰减（1/t decay），其数学表达式可以表示为：α=α0/(1+kt)，其中，α0和k是需要设置的超参数，t是迭代次数。
+</li>
+</ul>
+
+<p>
+实践中发现逐步衰减的效果优于另外两种方法，一方面在于其需要设置的超参数数量少，另一方面其可解释性也强于另两种方法。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-5-1-3-5" class="outline-5">
+<h5 id="sec-5-1-3-5"><span class="section-number-5">5.1.3.5</span> 拟牛顿法</h5>
+<div class="outline-text-5" id="text-5-1-3-5">
+<p>
+上述所有方法都是一阶更新方法，而加速的另外一种思路是利用二阶更新方法，包括牛顿法、拟牛顿法(<a href="http://blog.csdn.net/itplus/article/details/21897443">http://blog.csdn.net/itplus/article/details/21897443</a>)等等（这里要用到Hessian矩阵，对内存要求较高）。
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> <span class="done DONE">DONE</span> 实现</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+见mysimlpelogit.py
+</p>
+</div>
+</div>
+<div id="outline-container-sec-5-3" class="outline-3">
+<h3 id="sec-5-3"><span class="section-number-3">5.3</span> <span class="done DONE">DONE</span> 多元logistic情况（Multinormal）</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+如果存在多个分类，那么可以训练多个分类器，一类一个，每一个训练样本都只属于下面两类：“是这类”和“不是这类”。训练的时候也是训练N套参数。
+</p>
+
+<p>
+对于一个测试样本，带入每一个分类器计算一遍概率，以概率最大的分类有效。
+</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> <span class="done DONE">DONE</span> 基于贝叶斯的算法</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>State "DONE"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-17 周三 12:58]</span></span>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> 朴素贝叶斯</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+<a href="#西瓜书">西瓜书</a>
+</p>
+</div>
+<div id="outline-container-sec-6-1-1" class="outline-4">
+<h4 id="sec-6-1-1"><span class="section-number-4">6.1.1</span> 贝叶斯模型简介</h4>
+<div class="outline-text-4" id="text-6-1-1">
+<ul class="org-ul">
+<li>判别式模型(discriminative models)：直接对P(Y|X)建模，来预测Y，包括决策树，BP神经网络，支持向量机
+</li>
+<li>生成式模型(generative models): 先对联合概率分布P(X, Y)建模，再由此获得P(Y|X)，包括贝叶斯模型
+</li>
+</ul>
+
+<p>
+贝叶斯公式为（ <code>此处贝叶斯公式的分母由全概率公式推导得到</code> ）:
+</p>
+
+\begin{eqnarray}
+\nonumber
+P(Y|X) = \frac{P(Y) P(X|Y)}{P(X)}
+\end{eqnarray}
+
+<p>
+P(Y)为先验概率；P(X|Y)为样本对标记的条件概率，又称为似然；P(X)为用于归一化的“证据”(evidence)因子。因此估计P(Y|X)的问题变为如何估计P(Y)和P(X|Y)。
+</p>
+
+<ul class="org-ul">
+<li>P(Y)的估计：根据大数定律，当训练集包含充足的独立同分布样本时，可以通过样本频率估计总体概率
+</li>
+<li>P(X|Y)的估计：当训练集维度很高时，往往存在极多种可能，导致很多概率稀疏，因此有着较大的困难
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-2" class="outline-4">
+<h4 id="sec-6-1-2"><span class="section-number-4">6.1.2</span> 朴素贝叶斯模型的提出</h4>
+<div class="outline-text-4" id="text-6-1-2">
+<p>
+为了克服P(X|Y)在有限样本下估计困难的问题，提出“属性条件独立性假设”，即每个属性独立的对分类结果产生影响
+</p>
+
+<p>
+<code>贝叶斯公式分母对于所有类别来说是常数</code>: 因为给定类别下只要比较正的概率和负的概率谁大即可，而正负概率的分母相等
+</p>
+
+
+<p>
+由于对每个类别来说，P(X)是相同的，因此我们得到朴素贝叶斯判定准则：
+</p>
+
+\begin{eqnarray}
+\nonumber
+h_{nb}(x) = \max_{y \in Y} P(y) \prod\limits_{i=1}^{d} P(x_i|y)
+\end{eqnarray}
+
+<p>
+其中，d为属性数，x<sub>i为第i个属性的取值，y为标签的类别，Y为标签的集合，此时x</sub><sub>i的取值是我们要预测的测试样本的取值</sub>
+</p>
+
+<ul class="org-ul">
+<li>标签的先验概率可以非常容易的得到：
+</li>
+</ul>
+
+\begin{eqnarray}
+\nonumber
+P(y) = \frac{|D_y|}{|D|}
+\end{eqnarray}
+
+<p>
+其中|D<sub>y|为第y类样本的数目，|D|为全样本数目</sub>
+</p>
+
+<ul class="org-ul">
+<li>条件概率P(x<sub>i</sub> | y)可以估计为：
+</li>
+</ul>
+
+\begin{eqnarray}
+\nonumber
+P(x_i|y) = \frac{|D_{y,x_i}|}{|D_y|}
+\end{eqnarray}
+
+<p>
+其中|D<sub>y,x<sub>i</sub></sub>|表示在D<sub>y</sub> 中，第i个属性取值为x<sub>i的样本个数</sub>
+</p>
+
+<ul class="org-ul">
+<li>对于连续属性，假定服从正态分布，利用样本可以估计出第y类样本该属性的均值和标准差，在根据该属性的取值和正态分布密度函数，得到其概率。
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-3" class="outline-4">
+<h4 id="sec-6-1-3"><span class="section-number-4">6.1.3</span> 拉普拉斯平滑</h4>
+<div class="outline-text-4" id="text-6-1-3">
+<p>
+<code>为何要平滑</code>
+</p>
+
+<p>
+当某一类别下某属性的取值并没有观测到，这并不意味着其概率为0，但是会导致整个概率等于0，因此需要进行平滑使其非常小但是不为0。
+</p>
+
+<p>
+<code>什么是拉普拉斯平滑</code>
+</p>
+
+\begin{eqnarray}
+\nonumber
+\hat{P(y)} = \frac{|D_y| + 1}{|D| + N}
+\end{eqnarray}
+
+\begin{eqnarray}
+\nonumber
+\hat{P(x_i | c)} = \frac{|D_{y, x_i}| + 1}{|D_c| + N_i}
+\end{eqnarray}
+
+<p>
+其中，N表示y所有的类别数，N<sub>i表示第i个属性所有的类别数。</sub>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> 半朴素贝叶斯</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+半朴素贝叶斯打破了变量之间相互独立的假定，同时提出了 <code>独依赖估计(One-Dependent Estimator)</code> 策略，即假设每个变量只和一个父属性有关，即：
+</p>
+
+\begin{eqnarray}
+\nonumber
+P(Y|X) \propto P(Y) \prod\limits_{i=1}^{d} P(x_i|Y, pa_i)
+\end{eqnarray}
+
+<p>
+其中pa<sub>i为x</sub><sub>i所依赖的父属性，该式求解方法与之前类似，关键是如何合理的得到pa</sub><sub>i，目前有如下几种方法：</sub>
+</p>
+
+<ol class="org-ol">
+<li><code>SPODE</code> (Super-Parent One-Dependent Estimator):假定所有属性都依赖于一个父属性（超父），通过交验证方法来确定该超父
+</li>
+<li><code>TAN</code> (Tree Augmented Naive Bayes):在最大加权生成树的基础上，通过以下步骤确定依赖关系：
+<ul class="org-ul">
+<li>计算任意两个属性之间的条件互信息I(x<sub>i</sub>, x<sub>j|Y</sub>)
+</li>
+<li>以属性为节点构建完全图，任意两个节点间边的权重设为该完全互信息
+</li>
+<li>构建此完全图的最大加权生成树，挑选根变量，将边变为有向边
+</li>
+<li>加入类别结点y，增加从y到每个属性的有向边
+</li>
+</ul>
+</li>
+<li><code>AODE</code> (Average ODE):将每个结点作为超父来构建SPODE，通过集成学习进行估计
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3"><span class="section-number-3">6.3</span> 贝叶斯网络</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+略
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> <span class="done DONE">DONE</span> EM算法</h2>
+<div class="outline-text-2" id="text-7">
+<ul class="org-ul">
+<li>State "DONE"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-17 周三 13:30]</span></span>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> 简介</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+由于实际观测中存在属性未知的情况，针对这种“未观测”变量，EM算法此时被用来对模型的“隐变量”进行有效的估计。
+</p>
+
+<p>
+EM算法是一种 <code>迭代式</code> 算法， 他的基本想法是：
+</p>
+<ol class="org-ol">
+<li>如果参数已知，则可以根据训练数据推断出最优隐变量（E步）
+</li>
+<li>如果隐变量的值已知，则可以方便的对参数进行极大似然估计（M步）
+</li>
+</ol>
+
+<p>
+EM算法交替上述两个步骤，直至收敛，得到最优隐变量和参数
+</p>
+
+<p>
+是一种 <code>非梯度</code> 的优化算法
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> <span class="done DONE">DONE</span> 集成学习</h2>
+<div class="outline-text-2" id="text-8">
+<ul class="org-ul">
+<li>State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-22 周一 16:29]</span></span>
+</li>
+<li>State "TODO"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-19 周五 10:54]</span></span>
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-8-1" class="outline-3">
+<h3 id="sec-8-1"><span class="section-number-3">8.1</span> 理论</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+(泛化能力弱 &lt;&#x2013;&gt; 偏差高、方差大)
+</p>
+
+<p>
+每个基分类器错误率为 epsilon，基分类器有如下两类：
+</p>
+<ul class="org-ul">
+<li>弱基分类器：偏差高（准确度低），方差小（抗过拟合，更简单）
+</li>
+<li>强基分类器：偏差低，方差大
+</li>
+</ul>
+
+<p>
+<code>假设基分类器错误率相互独立</code> ，由Hoeffding不等式可知，集成的错误率为：
+</p>
+
+
+\begin{eqnarray}
+\nonumber
+p(H(x) \neq f(x)) = \sum_{k=0}^{[T/2]} C_T^k (1 - \epsilon)^k \epsilon^{(1-k)} \le exp(-\frac{1}{2} T (1-2\epsilon)^2)
+
+\end{eqnarray}
+
+<p>
+所以当学习器够多时，错误率时接近于0的，但是注意前提！
+</p>
+
+<p>
+因此，问题的核心即是： <code>如何产生“好而不同”的个体学习器</code>
+</p>
+
+<p>
+目前集成学习可以分成如下两类
+</p>
+</div>
+
+<div id="outline-container-sec-8-1-1" class="outline-4">
+<h4 id="sec-8-1-1"><span class="section-number-4">8.1.1</span> Boosting方法</h4>
+<div class="outline-text-4" id="text-8-1-1">
+<p>
+<code>代表算法： AdaBoost, GBDT</code>
+</p>
+
+<p>
+bosting采用的是弱基分类器，主要关注降低偏差， 证明见：<a href="https://www.zhihu.com/question/29036379">https://www.zhihu.com/question/29036379</a>
+</p>
+
+<p>
+基本思想： 通过对之前训练集进行调整，使之前错分的样本更加受到关注，然后在训练下一个模型，知道学习器数目达到事先制定的值T，最终对T个基学习器进行加权结合。
+</p>
+
+<p>
+Boosting方法要求基学习器对特定数据分布（数据权重）进行学习，主要有两种方法：
+</p>
+<ul class="org-ul">
+<li>对于可以接受权重参数的基分类器，采用re-weighting方法，每次训练更新样本权重
+</li>
+<li>对于无法接受权重参数的基分类器，采用re-sampling方法，每次学习基于数据分布（权重）进行采样，用采样样本进行训练
+</li>
+</ul>
+
+<p>
+<code>re-weighting 和 re-sampling 对比</code>
+boosing每一轮都要检查当前分类器是否满足基本条件（比如检查是否比之前的更好），re-weighting如果不满足，则直接跳出，可能分类器数目未达到T，使效果不好；而re-sampling方法如果不满足，则可以重新抽样，再训练分类器，直至满足未知，因此更稳健。
+</p>
+</div>
+
+<div id="outline-container-sec-8-1-1-1" class="outline-5">
+<h5 id="sec-8-1-1-1"><span class="section-number-5">8.1.1.1</span> Adaboost算法</h5>
+<div class="outline-text-5" id="text-8-1-1-1">
+<p>
+<code>核心思想是让误分类的点权重变高，从而加大分错的惩罚</code>
+adaboost算法仅仅提供框架，伪代码如下
+</p>
+
+
+<div class="figure">
+<p><img src="pics/adaboost.png" alt="adaboost.png" />
+</p>
+</div>
+
+<p>
+优点：
+</p>
+<ol class="org-ol">
+<li>adaboost是一种有很高精度的分类器
+</li>
+<li>可以使用各种方法构建子分类器，adaboost算法提供的是框架
+</li>
+<li>当使用简单分类器时，计算出的结果是可以理解的。而且弱分类器构造极其简单
+</li>
+<li>简单，不用做特征筛选
+</li>
+<li>不用担心overfitting！
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-8-1-1-2" class="outline-5">
+<h5 id="sec-8-1-1-2"><span class="section-number-5">8.1.1.2</span> GBDT(Gradient Boosting Decision Tree)</h5>
+<div class="outline-text-5" id="text-8-1-1-2">
+<p>
+ref:
+<a href="https://www.jianshu.com/p/005a4e6ac775">https://www.jianshu.com/p/005a4e6ac775</a>
+<a href="https://www.zhihu.com/question/29036379">https://www.zhihu.com/question/29036379</a> （更为详细）
+</p>
+
+<p>
+理解如下概念：
+</p>
+<ol class="org-ol">
+<li>回归树       比如CART，以平方损失作为划分标准，在每一个连续值中迭代出最优划分，预测值为当前节点的均值
+</li>
+<li>提升树       当采用平方误差损失函数时，每一棵回归树学习的是之前所有树的结论和残差，提升树即是整个迭代过程生成的回归树的累加。
+</li>
+<li><code>梯度提升树GBDT</code>
+</li>
+</ol>
+
+<p>
+对于一般损失函数， <code>每一步优化没有那么容易？</code> 比如说绝对损失和Huber损失，针对这一问题，Freidman提出了梯度提升算法：
+</p>
+
+<p>
+用最速下降的近似方法，即利用损失函数的负梯度在当前模型的值，作为回归问题中提升树算法的残差的近似值，拟合一个回归树
+</p>
+
+
+<p>
+下式表明，残差事实上是最小均方损失的反向梯度：
+</p>
+\begin{eqnarray}
+\nonumber
+- \frac{\partial (\frac{1}{2} * (y - F_{i-1}(x))^2)}{\partial F(x)} = y - F_{i-1}(x)
+\end{eqnarray}
+
+
+<p>
+<code>步骤</code>
+</p>
+
+<p>
+1、初始化，估计使损失函数极小化的常数值，它是只有一个根节点的树，即gamma是一个常数值。
+2、
+（a）计算损失函数的负梯度在当前模型的值，将它作为残差的估计
+（b）估计回归树叶节点区域，以拟合残差的近似值
+（c）利用线性搜索估计叶节点区域的值，使损失函数极小化
+（d）更新回归树
+3、 得到输出的最终模型 f(x)
+</p>
+
+<p>
+伪代码如下：
+</p>
+
+
+<div class="figure">
+<p><img src="pics/gbdt.png" alt="gbdt.png" />
+</p>
+</div>
+
+
+<p>
+<code>可以证明， Gradient Boosting相当于二分类的Adaboost算法， 而指数损失仅可用于二分类的情况</code>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8-1-2" class="outline-4">
+<h4 id="sec-8-1-2"><span class="section-number-4">8.1.2</span> bagging</h4>
+<div class="outline-text-4" id="text-8-1-2">
+<p>
+<code>代表算法：随机森林</code>
+</p>
+
+<p>
+bagging通过随机生成多个互相之间尽可能有较大差异的分类器，同时保证每个分类器的效果，最终进行整合。
+</p>
+
+<p>
+算法复杂度为 T(O(N)+O(s)) 约等于O(N) N为样本总数， 非常高效，可并行
+</p>
+
+<p>
+可以通过 “袋外估计” 对泛化误差进行无偏的估计
+</p>
+
+<p>
+Bagging主要关注降低方差，基分类器应当为 <code>强基分类器（低偏差，高方差）</code>  因此在不剪枝决策树、神经网络等易受样本干扰的学习器上效果更为明显
+</p>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-8-1-3" class="outline-4">
+<h4 id="sec-8-1-3"><span class="section-number-4">8.1.3</span> 为什么说bagging减少variance，而boosting减少bias</h4>
+<div class="outline-text-4" id="text-8-1-3">
+<p>
+ref: <a href="https://www.zhihu.com/question/26760839">https://www.zhihu.com/question/26760839</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8-2" class="outline-3">
+<h3 id="sec-8-2"><span class="section-number-3">8.2</span> 相关包学习</h3>
+<div class="outline-text-3" id="text-8-2">
+</div><div id="outline-container-sec-8-2-1" class="outline-4">
+<h4 id="sec-8-2-1"><span class="section-number-4">8.2.1</span> GBDT</h4>
+<div class="outline-text-4" id="text-8-2-1">
+<p>
+sklearn下面
+如何调参：
+ref: <a href="http://www.alliedjeep.com/147311.htm">http://www.alliedjeep.com/147311.htm</a>
+</p>
+</div>
+</div>
+<div id="outline-container-sec-8-2-2" class="outline-4">
+<h4 id="sec-8-2-2"><span class="section-number-4">8.2.2</span> XGBoost</h4>
+<div class="outline-text-4" id="text-8-2-2">
+<p>
+<code>安装：</code> 直接pip whl文件安装，注意numpy需要mkl版本的，见 <a href="https://www.lfd.uci.edu/~gohlke/pythonlibs/#xgboost">https://www.lfd.uci.edu/~gohlke/pythonlibs/#xgboost</a>
+</p>
+
+<p>
+<code>与GBDT区别：</code>
+</p>
+
+<p>
+ref: <a href="http://blog.csdn.net/sb19931201/article/details/52557382">http://blog.csdn.net/sb19931201/article/details/52557382</a>
+</p>
+
+<p>
+1.传统GBDT以CART作为基分类器，xgboost还支持线性分类器，这个时候xgboost相当于带L1和L2正则化项的逻辑斯蒂回归（分类问题）或者线性回归（回归问题）。 —可以通过booster [default=gbtree]设置参数:gbtree: tree-based models/gblinear: linear models
+</p>
+
+<p>
+2.传统GBDT在优化时只用到一阶导数信息，xgboost则对代价函数进行了二阶泰勒展开，同时用到了一阶和二阶导数。顺便提一下，xgboost工具支持自定义代价函数，只要函数可一阶和二阶求导。 —对损失函数做了改进（泰勒展开，一阶信息g和二阶信息h,上一章节有做介绍）
+</p>
+
+<p>
+3.xgboost在代价函数里加入了正则项，用于控制模型的复杂度。正则项里包含了树的叶子节点个数、每个叶子节点上输出的score的L2模的平方和。从Bias-variance tradeoff角度来讲，正则项降低了模型variance，使学习出来的模型更加简单，防止过拟合，这也是xgboost优于传统GBDT的一个特性 
+—正则化包括了两个部分，都是为了防止过拟合，剪枝是都有的，叶子结点输出L2平滑是新增的。
+</p>
+
+<p>
+4.shrinkage and column subsampling —还是为了防止过拟合，论文2.3节有介绍，这里答主已概括的非常到位
+</p>
+
+<ol class="org-ol">
+<li>。。。
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> <span class="todo TODO">TODO</span> 支持向量机<code>[5/6]</code></h2>
+<div class="outline-text-2" id="text-9">
+<ul class="org-ul">
+<li>State "TODO"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-21 周日 15:09]</span></span>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-9-1" class="outline-3">
+<h3 id="sec-9-1"><span class="section-number-3">9.1</span> <span class="done DONE">DONE</span> 线性可分支持向量机与对偶方法</h3>
+<div class="outline-text-3" id="text-9-1">
+<p>
+线性可分支持向量机是指通过一个超平面可以完全将两个类别区分开（过于理想的情况，仅帮助推导与理解）
+</p>
+</div>
+
+<div id="outline-container-sec-9-1-1" class="outline-4">
+<h4 id="sec-9-1-1"><span class="section-number-4">9.1.1</span> 对偶问题</h4>
+<div class="outline-text-4" id="text-9-1-1">
+<p>
+对于上述优化，可以直接用凸二次规划的计算包来解，但是为了更高效，可以将其转为对偶问题来解：
+</p>
+
+<p>
+对上式每条约束添加拉格朗日乘子，得到拉格朗日函数：
+</p>
+
+\begin{eqnarray}
+L(w, b, \alpha) = \frac{1}{2}||w||^2 + \sum_{i=1}^N \alpha_i (1 - y ^{(i)} (w^T x ^{(i)} +b))
+\end{eqnarray}
+
+<p>
+分别对w和b求偏导，可以得到：
+</p>
+
+\begin{eqnarray}
+\nonumber
+w = \sum_{i=1}^N \alpha_i  y_i x_i \\
+\nonumber
+0 = \sum_{i=1}^N \alpha_i y_i
+\end{eqnarray}
+<p>
+将上式带入（1）式，将w和b消去，即可得到该问题的对偶问题：
+<img src="pics/svm_2.png" alt="svm_2.png" />
+</p>
+
+
+\begin{eqnarray}
+\nonumber
+&\min_{\alpha}& \frac{1}{2} \sum_{i=1}^N \sum_{j=1}^N \alpha_i \alpha_j y_i y_j x_i^T x_j - \sum_{i=1}^N \alpha_i \\
+\nonumber
+&s.t.& \ \sum_{i=1}^N \alpha_i y_i = 0 \\
+&\ & \alpha_i > 0, \ i = 1,2,...,N
+\end{eqnarray}
+
+<p>
+求解上述优化需要用到SMO(Sequential Minimal Optimization)算法，在这之前需要先了解KKT条件
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-9-1-2" class="outline-4">
+<h4 id="sec-9-1-2"><span class="section-number-4">9.1.2</span> KKT条件(Karush-Kuhn-Tucker, 库恩塔克条件)</h4>
+<div class="outline-text-4" id="text-9-1-2">
+<p>
+针对非等式约束的优化问题，我们将其写为：
+</p>
+
+\begin{eqnarray}
+\nonumber
+&\min& f(X)\\
+\nonumber
+&s.t.& h_j(X) = 0, j=1,2,...,p \\
+\nonumber
+& \ \ & g_k(X) \le 0, k = 1,2,...q
+\end{eqnarray}
+
+<p>
+其中p和q分别为等式和不等式约束的个数，则可以定义不等式约束下的拉格朗日函数L：
+</p>
+
+\begin{eqnarray}
+\nonumber
+L(X, \lambda, \alpha) = f(X) + \sum_{j=1}^p \lambda_j h_j(X) + \sum_{k=1}^q \alpha_k g_k(X)
+\end{eqnarray}
+
+<p>
+则KKT条
+件为：
+</p>
+\begin{eqnarray}
+\frac{\partial L}{\partial X} |_{X=X^*} = 0 \\
+\lambda_j \neq 0 \\
+\alpha_k \ge 0 \\
+\alpha_k g_k(X^*) =0 \\
+h_j(X^*) = 0 \\
+g_k(X^*) \le 0
+\end{eqnarray}
+
+<p>
+其中，(1)是对拉格朗日函数取极值时候带来的一个必要条件，(2)是拉格朗日系数约束（同等式情况），(3)是不等式约束情况，(4)是互补松弛条件，(5)、(6)是原约束条件。
+</p>
+
+
+<p>
+<code>在支持向量机中如何使用KKT条件</code>
+</p>
+
+<p>
+（这一块很多书上讲的都不是非常详细，所以需要自己理解）
+</p>
+
+<p>
+<code>注意</code> ：针对未对偶之前的优化函数，可以写成标准形式：
+</p>
+
+
+\begin{eqnarray}
+\nonumber
+&\min& \frac{1}{2} ||w||^2 \\
+\nonumber
+&s.t.& \ 1- y ^{(i)} (w^T x ^{(i)} +b) \le 0, \ i = 1,2,...,N
+\end{eqnarray}
+
+<p>
+对应KKT条件中的不等式约束 \(g_i(X) = 1 - y ^{(i)} (w^T x ^{(i)} + b)\) ，而 alpha<sub>i</sub> 即为其对偶问题的决策变量，因此有：
+</p>
+
+\begin{eqnarray}
+\alpha_i \ge 0 \\
+1 - y ^{(i)} (w^T x ^{(i)} + b) \le 0 \\
+\alpha_i (1 - y ^{(i)} (w^T x ^{(i)} + b)) = 0 
+\end{eqnarray}
+
+<p>
+上式反映出，如果 alpha<sub>1</sub> = 0，则意味着样本不会对f(X)有任何影响；如果alpha<sub>i</sub> &gt; 0， 则必有 \(y ^{(i)} (w^T x ^{(i)} + b) =1\) ,所对应的样本在最大间隔边界上（结合图想一想为什么），是一个支持向量。
+</p>
+
+<p>
+从而可以得到支持向量机的一个重要性质： <code>训练完成后，大部分训练样本都不需要保留，最后结果只和支持向量有关</code>
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-9-1-3" class="outline-4">
+<h4 id="sec-9-1-3"><span class="section-number-4">9.1.3</span> SMO算法(Sequential Minimal Optimization， 序列最小化）</h4>
+<div class="outline-text-4" id="text-9-1-3">
+<p>
+<code>坐标下降法</code> 
+</p>
+
+<p>
+一次优化一个变量，固定其他所有变量，找到决策变量下对应的最优解，然后再换其他变量作为优化变量，迭代至收敛
+</p>
+
+<p>
+<code>SMO算法</code>
+SMO算法的思路是，每次选择两个变量： alpha<sub>i</sub> 和 alpha<sub>j，</sub> 并固定其他参数，那么初始化后，SMO将重复如下步骤直至收敛：
+</p>
+<ol class="org-ol">
+<li>选取一对需要更新的变量 alpha<sub>i</sub>, alpha<sub>j</sub>
+</li>
+<li>固定alpha<sub>i</sub>, alpha<sub>j以外的参数，求解优化方程，获得更新后的alpha</sub><sub>i</sub>, alpha<sub>j</sub>
+</li>
+</ol>
+
+<p>
+<code>为什么高效</code>
+</p>
+
+<p>
+之所以说SMO高效，是因为优化两个参数的过程可以做到十分高效：
+</p>
+<ol class="org-ol">
+<li>首先，另 \(\alpha_i y_i + \alpha_j y_j = c, \alpha_i \ge 0, \alpha_j \ge 0\) ，其中 \(c = -\sum_{k \neq i,j} \alpha_k y_k\) ，满足对偶问题的零和约束
+</li>
+<li>将上市带入目标函数，消去 alpha<sub>j，只剩下alpha</sub><sub>i的单变量二次规划问题，且仅有一个非负约束，该二次规划有闭式解</sub>
+</li>
+</ol>
+
+<p>
+<code>与KKT条件的关系</code>
+</p>
+
+<p>
+当alpha<sub>i</sub>, alpha<sub>j</sub> 中至少有一个不满足KKT条件时，目标函数就会在迭代后减小，而为了使减少速度最快，其违背KKT条件的程度也要越大
+</p>
+
+<p>
+因此SMO采取了一个启发式的算法，是 <code>选取的两变量对应样本之间的间隔最大</code> ，这将会给目标函数带来更大的影响。
+</p>
+
+<p>
+<code>如何得到w和b</code>
+</p>
+
+<p>
+估计出所有的alpha之后，w很方便可以根据前文拉格朗日求导等于0后的公式得到，而b则是根据当前所有的支持向量分别求b后再平均得到：
+</p>
+
+\begin{eqnarray}
+\nonumber
+b = \frac{1}{|S|} \sum_{s \in S} (y_s - \sum_{i \in s} \alpha_i y_i x_i^T x_s)
+\end{eqnarray}
+
+<p>
+其中，S为所有的支持向量集合，判断样本是否为支持向量可以根据KKT条件的公式(2)
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-2" class="outline-3">
+<h3 id="sec-9-2"><span class="section-number-3">9.2</span> <span class="done DONE">DONE</span> 线性不可分支持向量机</h3>
+<div class="outline-text-3" id="text-9-2">
+<ul class="org-ul">
+<li>State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-18 周四 15:26]</span></span>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-9-2-1" class="outline-4">
+<h4 id="sec-9-2-1"><span class="section-number-4">9.2.1</span> 核函数</h4>
+<div class="outline-text-4" id="text-9-2-1">
+<p>
+当样本线性不可分时，考虑将其映射到高维空间 \(x \rightarrow \phi(x)\) ，但是随之而来的是复杂的计算量，因此引进了核函数：
+</p>
+
+<p>
+线性可分的情况下，无论是优化方程还是求w<sup>Tx时都要遇到求向量内积的情况，即</sup> $&phi;(x)<sup>T</sup> &phi;(x) $ ，因此可以设想一个函数：
+</p>
+
+\begin{eqnarray}
+\nonumber
+k(x_i, x_j) = <\phi(x_i), \phi(x_j)> = \phi(x_i)^T \phi(x_j)
+\end{eqnarray}
+
+<p>
+上述函数称为 <code>核函数</code> ，经证明，当k(·,·)是对称函数时，核矩阵K总是半正定的。换句话说，只要一个对称函数对应的核矩阵是半正定的，就可以作为核函数使用。
+</p>
+</div>
+
+<div id="outline-container-sec-9-2-1-1" class="outline-5">
+<h5 id="sec-9-2-1-1"><span class="section-number-5">9.2.1.1</span> 核函数的优势</h5>
+<div class="outline-text-5" id="text-9-2-1-1">
+<p>
+由于支持向量机中所有x的运算均是求内积，因此核函数在将数据映射到高维的同时，又避免了高维x的复杂计算，仅仅是在低纬度下计算内积。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-9-2-1-2" class="outline-5">
+<h5 id="sec-9-2-1-2"><span class="section-number-5">9.2.1.2</span> 哪些通用核函数</h5>
+<div class="outline-text-5" id="text-9-2-1-2">
+<ol class="org-ol">
+<li>多项式核：
+</li>
+</ol>
+
+\begin{eqnarray}
+\nonumber
+k(x_i, x_j) = (x_i^T x_j + 1)^d
+\end{eqnarray}
+
+<p>
+其中i，j表示第i，j个样本
+</p>
+
+<ol class="org-ol">
+<li>高斯核
+</li>
+</ol>
+
+\begin{eqnarray}
+\nonumber
+k(x_i, x_j) = exp(- \frac{||x_i - x_j||^2}{2 \sigma^2})
+\end{eqnarray}
+
+<p>
+其中, sigma为带宽
+</p>
+<ul class="org-ul">
+<li>高斯核会将原始空间映射为无穷维空间
+</li>
+<li>如果σ选得很大的话，高次特征上的权重实际上衰减得非常快，所以实际上（数值上近似一下）相当于一个低维的子空间；
+</li>
+<li>反过来，如果σ选得很小，则可以将任意的数据映射为线性可分——可能会出现非常严重的过拟合问题
+</li>
+
+<li>拉普拉斯核
+</li>
+</ul>
+
+\begin{eqnarray}
+\nonumber
+k(x_i, x_j) = exp(- \frac{||x_i - x_j||}{\sigma})
+\end{eqnarray}
+
+<p>
+σ&gt;0
+</p>
+
+<ol class="org-ol">
+<li>Sigmoid核
+</li>
+</ol>
+
+\begin{eqnarray}
+\nonumber
+k(x_i, x_j) = tanh(\beta x_i^T x_j + \theta)
+\end{eqnarray}
+
+<p>
+tanh为双曲线正切函数，β &gt;0, θ&lt;0
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-9-2-1-3" class="outline-5">
+<h5 id="sec-9-2-1-3"><span class="section-number-5">9.2.1.3</span> 如何选择核函数</h5>
+<div class="outline-text-5" id="text-9-2-1-3">
+<p>
+ref: <a href="https://www.zhihu.com/question/21883548">https://www.zhihu.com/question/21883548</a>
+</p>
+
+<p>
+（1）如果特征维数很高，往往线性可分（SVM解决非线性分类问题的思路就是将样本映射到更高维的特征空间中），可以采用LR或者线性核的SVM；
+（2）如果样本数量很多，由于求解最优化问题的时候，目标函数涉及两两样本计算内积，使用高斯核明显计算量会大于线性核，所以手动添加一些特征，使得线性可分，然后可以用LR或者线性核的SVM；
+（3）如果不满足上述两点，即特征维数少，样本数量正常，可以使用高斯核的SVM。
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-3" class="outline-3">
+<h3 id="sec-9-3"><span class="section-number-3">9.3</span> <span class="done DONE">DONE</span> 线性支持向量机(软间隔与正则化)</h3>
+<div class="outline-text-3" id="text-9-3">
+</div><div id="outline-container-sec-9-3-1" class="outline-4">
+<h4 id="sec-9-3-1"><span class="section-number-4">9.3.1</span> 软间隔</h4>
+<div class="outline-text-4" id="text-9-3-1">
+<p>
+当样本不一定线性可分，而是存在一些误分类样本时，需要引入 “软间隔” 的概念，即允许某些样本不满足约束：
+</p>
+
+\begin{eqnarray}
+\nonumber
+y_i (w^T_i +b) \ge 1
+\end{eqnarray}
+
+<p>
+于是，优化目标可以写成：
+</p>
+
+\begin{eqnarray}
+\nonumber
+\min \frac{1}{2} ||w||^2 + C \sum_{i=1}^N l_{0/1}(y_i(w^T x_i + b) - 1)
+\end{eqnarray}
+
+<p>
+其中，C&gt;0
+</p>
+
+<ul class="org-ul">
+<li>当C无穷大时，将迫使每个样本均满足 \(y_i (w^T_i +b) \ge 1\) 约束，于是其等价于一般形式
+</li>
+<li>当C取有限值时，将允许一些不满足的约束
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-9-3-2" class="outline-4">
+<h4 id="sec-9-3-2"><span class="section-number-4">9.3.2</span> 损失函数</h4>
+<div class="outline-text-4" id="text-9-3-2">
+<p>
+而l<sub>0/1</sub>为0/1损失函数，即函数值小于0时为1，否则为0。
+</p>
+
+<p>
+由于该函数性质非凸，非连续的性质不好，因此引入其他类型的损失函数：
+</p>
+
+<ol class="org-ol">
+<li>hinge损失: max(0, 1-x)
+</li>
+<li>指数损失: exp(-x)
+</li>
+<li>logistic损失: log(1+exp(-z))
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-9-3-3" class="outline-4">
+<h4 id="sec-9-3-3"><span class="section-number-4">9.3.3</span> 加入松弛变量</h4>
+<div class="outline-text-4" id="text-9-3-3">
+<p>
+引入松弛变量，原优化方程变为：
+</p>
+
+\begin{eqnarray}
+\nonumber
+&\min_{w,b,\zeta}& \frac{1}{2} ||w||^2 + C \sum_{i=1}^N \zeta_i \\
+&s.t.& y_i(w^T x_i + b) \ge 1 - \zeta_i \\
+&\ \ & \zeta_i \ge 0, \ i=1,2,...,N
+\end{eqnarray}
+
+<p>
+这就是常用的 <code>软间隔支持向量机</code>
+</p>
+
+<p>
+根据其拉格朗日函数以及偏导等于0，类似前文带入可以得到其对偶问题：
+</p>
+
+
+\begin{eqnarray}
+\nonumber
+&\min_{\alpha}& \frac{1}{2} \sum_{i=1}^N \sum_{j=1}^N \alpha_i \alpha_j y_i y_j x_i^T x_j - \sum_{i=1}^N \alpha_i \\
+\nonumber
+&s.t.& \ \sum_{i=1}^N \alpha_i y_i = 0 \\
+&\ & C> \alpha_i > 0, \ i = 1,2,...,N
+\end{eqnarray}
+
+<p>
+相对于线性可分支持向量机，其唯一区别就是多了一个 α 上界为C的约束
+</p>
+</div>
+
+<div id="outline-container-sec-9-3-3-1" class="outline-5">
+<h5 id="sec-9-3-3-1"><span class="section-number-5">9.3.3.1</span> KKT条件：</h5>
+<div class="outline-text-5" id="text-9-3-3-1">
+\begin{eqnarray}
+\nonumber
+\alpha_i \ge 0 \\
+\nonumber
+\mu_i \ge 0 \\
+\nonumber
+y_i f(x_i) - 1 + \zeta_i \ge 0 \\
+\nonumber
+\alpha_i (y_i f(x_i) - 1 + \zeta_i) = 0 \\
+\nonumber
+\zeta_i \ge 0 \\
+\nonumber
+\mu_i \zeta_i = 0 
+\end{eqnarray} 
+
+<p>
+<code>上述条件有着重要的意义：</code>
+</p>
+
+<ol class="org-ol">
+<li>α<sub>i</sub>=0时，样本不会在表示w的求和中出现，此时样本不会对 f(x<sub>i</sub>)有着任何影响，位于两个最大间隔（边界）之外，
+</li>
+<li>α<sub>i</sub>&gt;0时，必有 y<sub>i</sub> f(x<sub>i</sub>) = 1 - &zeta;<sub>i，则该样本是支持向量</sub>
+</li>
+</ol>
+<p>
+根据软间隔支持向量机拉格朗日函数对zeta求偏导后的结果：C = α<sub>i</sub>+mu<sub>i</sub>
+</p>
+<ol class="org-ol">
+<li>α<sub>i</sub>&lt;C时，mu<sub>i</sub>&gt;0，而根据最后一个KKT条件，zeta<sub>i</sub> = 0，所以样本刚好落在边界上，为支持向量
+</li>
+<li>α<sub>i</sub>=C时，mu<sub>I</sub>=0，此时zeta<sub>i</sub>&lt;=1，样本落在最大间隔（边界）内部
+</li>
+</ol>
+
+<p>
+以上在求解SMO算法时有着重要的意义
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-4" class="outline-3">
+<h3 id="sec-9-4"><span class="section-number-3">9.4</span> <span class="done DONE">DONE</span> 实现</h3>
+</div>
+
+<div id="outline-container-sec-9-5" class="outline-3">
+<h3 id="sec-9-5"><span class="section-number-3">9.5</span> <span class="todo TOLEARN">TOLEARN</span> 支持向量回归</h3>
+</div>
+</div>
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> 神经网络</h2>
+</div>
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> <span class="done DONE">DONE</span> 聚类算法<code>[2/2]</code></h2>
+<div class="outline-text-2" id="text-11">
+<ul class="org-ul">
+<li>State "DONE"       from "TODO"       <span class="timestamp-wrapper"><span class="timestamp">[2018-01-22 周一 21:20]</span></span>
+</li>
+<li>State "TODO"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-22 周一 16:32]</span></span>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-11-1" class="outline-3">
+<h3 id="sec-11-1"><span class="section-number-3">11.1</span> <span class="done DONE">DONE</span> Kmeans</h3>
+<div class="outline-text-3" id="text-11-1">
+<ul class="org-ul">
+<li>State "TODO"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-22 周一 16:31]</span></span>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-11-2" class="outline-3">
+<h3 id="sec-11-2"><span class="section-number-3">11.2</span> <span class="done DONE">DONE</span> 层次聚类</h3>
+<div class="outline-text-3" id="text-11-2">
+<ul class="org-ul">
+<li>State "TODO"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-22 周一 16:31]</span></span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> <span class="done DONE">DONE</span> 数值优化专题</h2>
+<div class="outline-text-2" id="text-12">
+<ul class="org-ul">
+<li>State "DONE"       from ""           <span class="timestamp-wrapper"><span class="timestamp">[2018-01-25 周四 19:11]</span></span>
+</li>
+</ul>
+<p>
+ref :
+</p>
+<ul class="org-ul">
+<li><a href="http://blog.csdn.net/fangqingan_java/article/details/46289691">http://blog.csdn.net/fangqingan_java/article/details/46289691</a>
+</li>
+<li><a href="http://www.hankcs.com/ml/l-bfgs.html">http://www.hankcs.com/ml/l-bfgs.html</a>
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-12-1" class="outline-3">
+<h3 id="sec-12-1"><span class="section-number-3">12.1</span> 预备知识</h3>
+<div class="outline-text-3" id="text-12-1">
+</div><div id="outline-container-sec-12-1-1" class="outline-4">
+<h4 id="sec-12-1-1"><span class="section-number-4">12.1.1</span> 损失函数</h4>
+<div class="outline-text-4" id="text-12-1-1">
+<p>
+损失函数用来描述模型的预测值和真实值的不一致程度，它是一个 <code>非负实值函数</code> ，一般要求对其求最小化，一般损失函数表示为：
+</p>
+
+\begin{equation}
+L(Y, f(x)) = \sum_{i=1}^N l(y_i, f(x_i))
+\end{equation}
+
+<p>
+<code>损失函数和代价函数的区别：</code>
+</p>
+
+<ul class="org-ul">
+<li>损失函数针对一个样本
+</li>
+<li>代价函数针对多个样本，且一般以平均损失的形式展现
+</li>
+</ul>
+
+<p>
+常见的损失函数有如下几种：
+</p>
+</div>
+
+<div id="outline-container-sec-12-1-1-1" class="outline-5">
+<h5 id="sec-12-1-1-1"><span class="section-number-5">12.1.1.1</span> 0-1损失(Binary Loss)</h5>
+<div class="outline-text-5" id="text-12-1-1-1">
+<ul class="org-ul">
+<li>y<sub>i</sub> = f(x<sub>i</sub>)时为1
+</li>
+<li>否则为0
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-12-1-1-2" class="outline-5">
+<h5 id="sec-12-1-1-2"><span class="section-number-5">12.1.1.2</span> 感知损失（Perceptron Loss）</h5>
+<div class="outline-text-5" id="text-12-1-1-2">
+<ul class="org-ul">
+<li>|y<sub>i</sub> - f(x<sub>i</sub>)| &gt; t 时为1
+</li>
+<li>否则为0
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-12-1-1-3" class="outline-5">
+<h5 id="sec-12-1-1-3"><span class="section-number-5">12.1.1.3</span> Hinge Loss</h5>
+<div class="outline-text-5" id="text-12-1-1-3">
+<p>
+Hinge 损失用来解决间隔最大化的问题，比如在svm中解决几何间隔最大化
+</p>
+
+<p>
+定义为 l<sub>i</sub> = max(0, 1 - y<sub>i</sub>*f(x<sub>i</sub>))     y<sub>i</sub> 为-1或+1
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-1-1-4" class="outline-5">
+<h5 id="sec-12-1-1-4"><span class="section-number-5">12.1.1.4</span> 对数损失</h5>
+<div class="outline-text-5" id="text-12-1-1-4">
+<p>
+在极大似然估计的情况下，由于是连乘的形式处理起来不方便，因此取对数，转为连加，比如logistic回归
+</p>
+
+<p>
+l<sub>i</sub> = y<sub>i</sub> * log(f(x<sub>i</sub>)) + (1-y<sub>i</sub>) * log(1 - f(x<sub>i</sub>))       y<sub>i为0或者1</sub>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-1-1-5" class="outline-5">
+<h5 id="sec-12-1-1-5"><span class="section-number-5">12.1.1.5</span> 平方损失</h5>
+<div class="outline-text-5" id="text-12-1-1-5">
+<p>
+不多解释
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-1-1-6" class="outline-5">
+<h5 id="sec-12-1-1-6"><span class="section-number-5">12.1.1.6</span> 绝对损失(Absolute Loss)</h5>
+<div class="outline-text-5" id="text-12-1-1-6">
+<p>
+l<sub>i</sub> = |y<sub>i</sub> - f(x<sub>i</sub>)|
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-1-1-7" class="outline-5">
+<h5 id="sec-12-1-1-7"><span class="section-number-5">12.1.1.7</span> 指数损失</h5>
+<div class="outline-text-5" id="text-12-1-1-7">
+<p>
+adaboost用的就是指数损失（推导暂时不要求掌握）
+</p>
+
+<p>
+<code>注意：指数损失必须是二分类问题</code>
+l<sub>i</sub> = exp(- y<sub>i</sub> * f(x<sub>i</sub>))       y<sub>i</sub> 为 -1 或 +1
+</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+<div id="outline-container-sec-12-1-2" class="outline-4">
+<h4 id="sec-12-1-2"><span class="section-number-4">12.1.2</span> 函数几个重要的点</h4>
+<div class="outline-text-4" id="text-12-1-2">
+</div><div id="outline-container-sec-12-1-2-1" class="outline-5">
+<h5 id="sec-12-1-2-1"><span class="section-number-5">12.1.2.1</span> 拐点</h5>
+<div class="outline-text-5" id="text-12-1-2-1">
+<p>
+二阶导数等于0，凹凸性改变
+</p>
+</div>
+</div>
+<div id="outline-container-sec-12-1-2-2" class="outline-5">
+<h5 id="sec-12-1-2-2"><span class="section-number-5">12.1.2.2</span> 极值点</h5>
+<div class="outline-text-5" id="text-12-1-2-2">
+<p>
+驻点要求一阶导数必须存在，而极值点对导数没有要求
+</p>
+</div>
+</div>
+<div id="outline-container-sec-12-1-2-3" class="outline-5">
+<h5 id="sec-12-1-2-3"><span class="section-number-5">12.1.2.3</span> 驻点</h5>
+<div class="outline-text-5" id="text-12-1-2-3">
+<p>
+一阶导数等于0，单调性改变
+</p>
+</div>
+</div>
+<div id="outline-container-sec-12-1-2-4" class="outline-5">
+<h5 id="sec-12-1-2-4"><span class="section-number-5">12.1.2.4</span> 鞍点（saddle point）</h5>
+<div class="outline-text-5" id="text-12-1-2-4">
+<p>
+目标函数在此点上的梯度（一阶导数）值为 0， 但从改点出发的一个方向是函数的极大值点，而在另一个方向是函数的极小值点。
+</p>
+
+<p>
+判断鞍点的一个充分条件是：函数在一阶导数为零处（驻点）的海塞矩阵为不定矩阵(特征值有正有负)。
+</p>
+
+<p>
+<code>补充</code>
+</p>
+
+<p>
+实对称矩阵正交相似于对角矩阵
+即与对角矩阵合同
+而对角矩阵的主对角线上的元素即A的特征值
+所以对称矩阵A正定 A的特征值都大于0
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-12-1-3" class="outline-4">
+<h4 id="sec-12-1-3"><span class="section-number-4">12.1.3</span> 梯度和海塞矩阵</h4>
+<div class="outline-text-4" id="text-12-1-3">
+<p>
+梯度是指原函数对参数的一阶偏导
+</p>
+
+<p>
+海塞矩阵是对参数的二阶偏导组合，为KxK维矩阵，K为参数个数
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2" class="outline-3">
+<h3 id="sec-12-2"><span class="section-number-3">12.2</span> 优化方法</h3>
+<div class="outline-text-3" id="text-12-2">
+</div><div id="outline-container-sec-12-2-1" class="outline-4">
+<h4 id="sec-12-2-1"><span class="section-number-4">12.2.1</span> 优化问题划分：</h4>
+<div class="outline-text-4" id="text-12-2-1">
+</div><div id="outline-container-sec-12-2-1-1" class="outline-5">
+<h5 id="sec-12-2-1-1"><span class="section-number-5">12.2.1.1</span> 凸优化</h5>
+<div class="outline-text-5" id="text-12-2-1-1">
+<ul class="org-ul">
+<li>什么是凸集
+</li>
+<li>什么是凸函数
+</li>
+<li>什么是凸优化
+</li>
+</ul>
+
+<p>
+<code>对于凸优化问题，任何局部最优解都是全局最优解！！</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2-1-2" class="outline-5">
+<h5 id="sec-12-2-1-2"><span class="section-number-5">12.2.1.2</span> 无约束最优化</h5>
+<div class="outline-text-5" id="text-12-2-1-2">
+<ul class="org-ul">
+<li>GD
+</li>
+<li>SGD
+</li>
+<li>TR 
+</li>
+<li>CG
+</li>
+<li>Newton
+</li>
+<li>BFGS
+</li>
+<li>L-BFGS
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2-1-3" class="outline-5">
+<h5 id="sec-12-2-1-3"><span class="section-number-5">12.2.1.3</span> 约束最优化</h5>
+<div class="outline-text-5" id="text-12-2-1-3">
+<ul class="org-ul">
+<li>KKT条件
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2-1-4" class="outline-5">
+<h5 id="sec-12-2-1-4"><span class="section-number-5">12.2.1.4</span> 局部最优化</h5>
+<div class="outline-text-5" id="text-12-2-1-4">
+<p>
+几个要记住的定理：
+<img src="pics/optimal.png" alt="optimal.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-12-2-2" class="outline-4">
+<h4 id="sec-12-2-2"><span class="section-number-4">12.2.2</span> 详细的优化方法：</h4>
+<div class="outline-text-4" id="text-12-2-2">
+</div><div id="outline-container-sec-12-2-2-1" class="outline-5">
+<h5 id="sec-12-2-2-1"><span class="section-number-5">12.2.2.1</span> 坐标下降</h5>
+<div class="outline-text-5" id="text-12-2-2-1">
+<p>
+变动一个参数，保持其余参数不变，找到该参数最优解，不断迭代至参数不变
+</p>
+
+<p>
+SMO算法是变动两个参数，固定其他，来求解
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2-2-2" class="outline-5">
+<h5 id="sec-12-2-2-2"><span class="section-number-5">12.2.2.2</span> 梯度下降</h5>
+<div class="outline-text-5" id="text-12-2-2-2">
+<p>
+参数每次迭代均按照该参数偏导的负数，乘一定步长作为增量
+</p>
+
+<p>
+证明 <code>梯度下降可以找到极小值</code> ：
+</p>
+
+<p>
+f(x)在点x的一阶泰勒展开为：
+</p>
+
+\begin{eqnarray}
+\nonumber
+f(x + \Delta x) &=& f(x) + \Delta x^T \frac{\partial f(x)}{\partial x} \\ 
+\nonumber
+f(x + \alpha p) &=& f(x) + \alpha * g(x) * p + o(\alpha * |p|) 
+\end{eqnarray}
+
+<p>
+而：
+</p>
+
+\begin{eqnarray}
+\nonumber
+g(x) * p = |g(x)| * |p| * cos \theta
+\end{eqnarray}
+
+<p>
+当 θ取180°时取最小值，且为负，保证了每次迭代f(x)都会减小。
+</p>
+
+<p>
+<code>如果是凸优化，根据定理，可以找到最小值</code>
+</p>
+
+<p>
+<code>在机器学习中的应用：</code>
+</p>
+
+<p>
+梯度下降针对的是求和形式的优化问题：
+</p>
+
+\begin{eqnarray}
+\nonumber
+f(w) = \sum_{i=1}^N f_i(w, x_i, y_i)
+\end{eqnarray}
+
+<p>
+提的下降形式为：
+</p>
+
+\begin{eqnarray}
+w_{t+1} = w_t - \eta_{t+1} \sum_{i=1}^N \nabla f_i(w_t, x_i, y_i) \tag{(1)}
+\end{eqnarray}
+
+<p>
+其中 w<sub>t，w</sub><sub>t+1</sub>，&nabla; f<sub>i</sub> 均为列向量，长度等于变量数，t为第t期的值，i为第i个样本，&nabla;<sub>f</sub><sub>i</sub>(w<sub>t</sub>, x<sub>i</sub>, y<sub>i</sub>)表示f在第i个样本下的梯度向量。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2-2-3" class="outline-5">
+<h5 id="sec-12-2-2-3"><span class="section-number-5">12.2.2.3</span> 随机梯度下降</h5>
+<div class="outline-text-5" id="text-12-2-2-3">
+<p>
+由于梯度下降需要计算每个样本的梯度向量，样本量大时非常复杂，因此引入梯度下降，每次只需随机抽取一个样本进行更新：
+</p>
+
+\begin{eqnarray}
+w_{t+1} = w_t - \eta_{t+1} \nabla f_i(w_t, x_i, y_i) \tag{(2)}
+\end{eqnarray}
+<p>
+其中i为从1到N中随机抽取的样本
+</p>
+
+<p>
+随机梯度下降提高了速度，但是降低了精度(极值处梯度不为0)。
+</p>
+
+<p>
+后来提出的 <code>SAG，SVRG，SDCA</code> 都是在降低方差，使其可以精确收敛
+</p>
+
+<p>
+“不在大型数据集上使用L-BFGS的原因之一是，在线算法可能收敛得更快。这里甚至有一个L-BFGS的在线学习算法，但据我所知，在大型数据集上它们都不如一些SGD的改进算法（包括 AdaGrad 或 AdaDelta）的表现好。”
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2-2-4" class="outline-5">
+<h5 id="sec-12-2-2-4"><span class="section-number-5">12.2.2.4</span> 共轭梯度法</h5>
+<div class="outline-text-5" id="text-12-2-2-4">
+<p>
+ref ： <a href="http://blog.csdn.net/lipengcn/article/details/52698895">http://blog.csdn.net/lipengcn/article/details/52698895</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2-2-5" class="outline-5">
+<h5 id="sec-12-2-2-5"><span class="section-number-5">12.2.2.5</span> 牛顿法</h5>
+<div class="outline-text-5" id="text-12-2-2-5">
+<p>
+梯度下降是进行一阶泰勒展开，而共轭梯度法则是进行二阶泰勒展开
+</p>
+
+
+\begin{eqnarray}
+\nonumber
+f(x + \Delta x) &=& f(x) + \Delta x^T \frac{\partial f(x)}{\partial x} + \frac{1}{2} \Delta x^T H_n \Delta x\\ 
+\end{eqnarray}
+
+<p>
+我们需要找一个 Delta x ，使得f(x)在x出最小，将上式对 Delta x求偏导，并且令他等于0，得到：
+</p>
+
+\begin{eqnarray}
+\nonumber
+\frac{\partial f(x + \Delta x )}{\partial \Delta x} = g_n + H_n \Delta x = 0 \\
+\nonumber
+\Delta x = - H^{-1}_n g_n
+\end{eqnarray}
+
+<p>
+所以牛顿法的迭代式为：
+</p>
+
+\begin{eqnarray}
+\nonumber
+x_{n+1} = x_n - \alpha (H_n^{-1} g_n)
+\end{eqnarray}
+
+<p>
+这其中牵扯到海塞矩阵以及其求逆的形式，如果数据维度过大，将导致难以存储和计算
+</p>
+
+<p>
+α为步长，应当越来越小，可以直接令其等于优化方程的值(backtracking line search)
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-12-2-2-6" class="outline-5">
+<h5 id="sec-12-2-2-6"><span class="section-number-5">12.2.2.6</span> 拟牛顿法</h5>
+<div class="outline-text-5" id="text-12-2-2-6">
+<p>
+由于维度过大时海塞矩阵的逆难以计算，拟牛顿法提出了一个对H<sup>-1</sup>的近似求法
+ref: <a href="http://www.hankcs.com/ml/l-bfgs.html">http://www.hankcs.com/ml/l-bfgs.html</a>
+</p>
+
+<p>
+<code>拟牛顿条件</code> 
+</p>
+
+\begin{eqnarray}
+\nonumber
+H_n (x_n - x_{n-1}) = (g_n - g_{n-1}) \\
+\nonumber
+H_n s_n = y_n \\
+\nonumber
+H_n^{-1} y_n = s_n
+\end{eqnarray}
+
+<p>
+其中g为梯度，H为海塞矩阵，他保证了H<sub>n+1</sub> 至少对x<sub>n</sub> - x<sub>n-1</sub>是近似海塞矩阵
+</p>
+
+<p>
+<code>对称性条件</code>
+海塞矩阵的近似也要是对称矩阵
+</p>
+</div>
+
+<ol class="org-ol"><li><a id="sec-12-2-2-6-1" name="sec-12-2-2-6-1"></a>BFGS<br  /><div class="outline-text-6" id="text-12-2-2-6-1">
+<p>
+可以推得：
+</p>
+
+\begin{eqnarray}
+\nonumber
+H_{n+1}^{-1} = (I - \rho_n y_n s_n^T) H_n^{-1} (I - \rho_n s_n y_n^T) + \rho_n s_n s_n^T, \qquad \rho_n = (y_n^T s_n)^{-1}
+\end{eqnarray}
+
+<p>
+<code>注意点</code>
+</p>
+<ol class="org-ol">
+<li>只要H<sub>n</sub><sup>-1</sup> 正定， H<sub>n+1</sub><sup>-1</sup>就一定正定，所以只需要选择一个H<sub>0</sub><sup>-1</sup>即可，甚至可以是单位矩阵
+</li>
+<li>H<sub>n+1</sub><sup>-1</sup>加上s<sub>n，y</sub><sub>n</sub> 可倒推出H<sub>n</sub><sup>-1</sup>
+</li>
+</ol>
+
+
+<div class="figure">
+<p><img src="pics/BFGS.png" alt="BFGS.png" />
+</p>
+</div>
+</div>
+</li>
+
+
+<li><a id="sec-12-2-2-6-2" name="sec-12-2-2-6-2"></a>L-BFGS<br  /><div class="outline-text-6" id="text-12-2-2-6-2">
+<p>
+BFGS仍然需要每次迭代 s<sub>n</sub>, y<sub>n</sub> 并没有减小内存的负担，而 Limit-BFGS 每次只适用最近的m个 s<sub>n</sub>, y<sub>n</sub> 因此只储存m个样本。
+</p>
+</div>
+</li></ol>
+</div>
+</div>
+</div>
+
+
+
+
+
+<div id="outline-container-sec-12-3" class="outline-3">
+<h3 id="sec-12-3"><span class="section-number-3">12.3</span> 程序编写</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> 神经网络与深度学习</h2>
+<div class="outline-text-2" id="text-13">
+</div><div id="outline-container-sec-13-1" class="outline-3">
+<h3 id="sec-13-1"><span class="section-number-3">13.1</span> 神经网络与深度学习简介</h3>
+<div class="outline-text-3" id="text-13-1">
+<ul class="org-ul">
+<li>神经网络无需赘述
+</li>
+<li>"深度学习"是为了让层数较多的多层神经网络可以训练，能够work而演化出来的一系列的 新的结构和新的方法。
+</li>
+</ul>
+
+<p>
+新的网络结构中最著名的就是CNN，它解决了传统较深的网络参数太多，很难训练的问题，使用了“局部感受野”和“权植共享”的概念，大大减少了网络参数的数量
+</p>
+
+<ul class="org-ul">
+<li>原来多层神经网络做的步骤是：特征映射到值。特征是人工挑选。
+</li>
+<li>深度学习做的步骤是 信号-&gt;特征-&gt;值。 特征是由网络自己选择。
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-13-2" class="outline-3">
+<h3 id="sec-13-2"><span class="section-number-3">13.2</span> 感知机学习</h3>
+<div class="outline-text-3" id="text-13-2">
+<p>
+感知机是一个模仿神经元的模型
+</p>
+
+<p>
+[此处有图(自己想象)]
+</p>
+
+<p>
+接受多个输入（x1，x2，x3&#x2026;），产生一个输出（output），超参数为阈值，待估参数为每个x的权重
+</p>
+
+<p>
+当加权和大于阈值时，信号激活，输出1，否则输出0
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-13-3" class="outline-3">
+<h3 id="sec-13-3"><span class="section-number-3">13.3</span> 一般神经网络</h3>
+<div class="outline-text-3" id="text-13-3">
+<p>
+实际决策中，模型要复杂得多，由多个感知机组成，可能是多层的结构，甚至有多个输出。
+</p>
+
+<p>
+神经网络需要在给定输入和输出下，估计出每个神经元最优的权重向量w和阈值b(-threshold)
+</p>
+
+<p>
+但是，如果每个神经元输出结果是0或者1，将会使结果过于敏感，因此要通过sigmoid函数将其转为连续输出
+</p>
+</div>
+
+<div id="outline-container-sec-13-3-1" class="outline-4">
+<h4 id="sec-13-3-1"><span class="section-number-4">13.3.1</span> 激活函数</h4>
+<div class="outline-text-4" id="text-13-3-1">
+<ol class="org-ol">
+<li>sigmoid
+</li>
+<li>tanh
+</li>
+<li>修正线性单元(Rectified linear unit，ReLU）
+</li>
+</ol>
+
+<p>
+ReLU(x) = 
+</p>
+<ul class="org-ul">
+<li>0, if x &lt;= 0
+</li>
+<li>x, if x &gt; 0
+</li>
+</ul>
+
+<p>
+<code>起到单侧抑制的作用</code>
+<code>由于非负区间的梯度为常数，因此不存在梯度消失问题(Vanishing Gradient Problem)</code>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-13-4" class="outline-3">
+<h3 id="sec-13-4"><span class="section-number-3">13.4</span> BP反向传播网络</h3>
+<div class="outline-text-3" id="text-13-4">
+<p>
+ref : <a href="http://blog.csdn.net/u014303046/article/details/78200010">http://blog.csdn.net/u014303046/article/details/78200010</a>
+</p>
+
+<p>
+<code>损失函数和代价函数区别</code> 
+</p>
+
+<ul class="org-ul">
+<li>损失函数主要指的是对于单个样本的损失或误差； 
+</li>
+<li>代价函数表示多样本同时输入模型的时候总体的误差——每个样本误差的和然后取平均值。
+</li>
+</ul>
+
+<p>
+<code>什么是反向传播网络</code>
+</p>
+<ul class="org-ul">
+<li>后项传播（正向），估计出神经元误差
+</li>
+<li>前向传播（反向），估计出参数
+</li>
+</ul>
+
+<p>
+<code>优点和不足</code>
+残差传播到最前面的层已经变得很小，会出现梯度扩散，影响精度
+</p>
+</div>
+
+<div id="outline-container-sec-13-4-1" class="outline-4">
+<h4 id="sec-13-4-1"><span class="section-number-4">13.4.1</span> 推导</h4>
+<div class="outline-text-4" id="text-13-4-1">
+<p>
+<code>牢记四个公式以及其推导过程</code>
+</p>
+
+
+<p>
+<code>单样本情况下：</code>
+</p>
+
+<p>
+定义l为神经网络层编号，j为神经元编号，z为线性值，a为激活值，sigmoid(z)=a
+</p>
+
+<p>
+那么，如果需要为第l层的第j个神经元的线性值添加一个扰动 \(\Delta z_j^{[l]}\) ，需要使得最后的损失函数尽可能的变小，那么需要在其负梯度上进行，我们定义这个梯度为其误差 :
+</p>
+
+\begin{eqnarray}
+\nonumber
+\delta_j^{[l]} = \frac{\partial L(a, y)}{\partial z_j^{[l]}}
+\end{eqnarray}
+</div>
+
+<div id="outline-container-sec-13-4-1-1" class="outline-5">
+<h5 id="sec-13-4-1-1"><span class="section-number-5">13.4.1.1</span> 公式一：输出层误差</h5>
+<div class="outline-text-5" id="text-13-4-1-1">
+\begin{eqnarray}
+\nonumber
+\delta_j^{[l]} = \frac{\partial L }{\partial a_j^{[l]}} Sigmoid^{-1} (z_j^{[l]})
+\end{eqnarray}
+
+<p>
+证明：
+</p>
+
+
+<div class="figure">
+<p><img src="pics/bp_equ_1.png" alt="bp_equ_1.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-13-4-1-2" class="outline-5">
+<h5 id="sec-13-4-1-2"><span class="section-number-5">13.4.1.2</span> 公式二：隐含层误差</h5>
+<div class="outline-text-5" id="text-13-4-1-2">
+\begin{eqnarray}
+\nonumber
+\delta_j^{[l]} = \sum_k w_{kj}^{[l+1]} \delta_k^{[l+1]} Sigmoid^{-1} (z_j^{[l]})
+\end{eqnarray}
+
+<p>
+w<sub>kj</sub><sup>[l]</sup> 表示第l-1层的第j个神经元指向第l层的第k个神经元的权重
+</p>
+
+<p>
+证明：
+<img src="pics/bp_equ_2.png" alt="bp_equ_2.png" />
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-13-4-1-3" class="outline-5">
+<h5 id="sec-13-4-1-3"><span class="section-number-5">13.4.1.3</span> 公式三：参数变化率，即w和b的梯度</h5>
+<div class="outline-text-5" id="text-13-4-1-3">
+\begin{eqnarray}
+\nonumber
+\frac{\partial L}{\partial b_j^{[l]}} &=& \delta _j^{[l]} \\
+\nonumber
+\frac{\partial L}{\partial w_{jk}^{[l]}} &=& a_k^{[l-1]} \delta _j^{[l]}
+\end{eqnarray}
+
+<p>
+证明：
+<img src="pics/bp_equ_3.png" alt="bp_equ_3.png" />
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-13-4-1-4" class="outline-5">
+<h5 id="sec-13-4-1-4"><span class="section-number-5">13.4.1.4</span> 公式四：参数更新规则</h5>
+<div class="outline-text-5" id="text-13-4-1-4">
+<p>
+以 α 为步长，负梯度为方向迭代，公式略
+</p>
+
+<p>
+<code>多样本情况下:</code>
+</p>
+
+<p>
+n表示第l层神经元个数，m为样本数
+</p>
+<ul class="org-ul">
+<li>每一层的误差不再是一个n维的向量，而是一个nxm的矩阵
+</li>
+<li>更新b的时候要对每一层的误差矩阵求行均值
+</li>
+<li>得到的w依然是 nxn 的矩阵
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-13-4-2" class="outline-4">
+<h4 id="sec-13-4-2"><span class="section-number-4">13.4.2</span> 实现</h4>
+</div>
+</div>
+
+
+<div id="outline-container-sec-13-5" class="outline-3">
+<h3 id="sec-13-5"><span class="section-number-3">13.5</span> 卷积神经网络</h3>
+<div class="outline-text-3" id="text-13-5">
+<p>
+ref: <a href="http://blog.csdn.net/aws3217150/article/details/46405095">http://blog.csdn.net/aws3217150/article/details/46405095</a>
+</p>
+
+
+<p>
+要点：
+</p>
+<ol class="org-ol">
+<li>主要用在图像识别问题上
+</li>
+<li>自带正则化功能，大大减少了参数数目，因此减少了过拟合的程度
+</li>
+</ol>
+</div>
+
+<div id="outline-container-sec-13-5-1" class="outline-4">
+<h4 id="sec-13-5-1"><span class="section-number-4">13.5.1</span> 卷积</h4>
+<div class="outline-text-4" id="text-13-5-1">
+<p>
+卷积通过核矩阵，将一个较大的矩阵进行缩减
+</p>
+
+
+<div class="figure">
+<p><img src="pics/convolved.png" alt="convolved.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>如果原始矩阵不仅有长度、宽度，还有深度，则每一深度进行累加（比如：彩图深度为3）
+</li>
+<li>如果有多个核函数，每个核函数分别计算
+</li>
+<li>每个核函数总能得到一个 NxN 的卷积特征
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-13-5-1-1" class="outline-5">
+<h5 id="sec-13-5-1-1"><span class="section-number-5">13.5.1.1</span> 卷积中的超参数：</h5>
+<div class="outline-text-5" id="text-13-5-1-1">
+<ol class="org-ol">
+<li>补充0的长度P，一个是为了使图片的形状更方便我们进行卷积，另一个是因为它可以提高识别表现(详细原因请参考cs231n的课程)，比如5x5的图，P=2时得到7x7的图
+</li>
+<li>核函数的大小和数量
+</li>
+<li>步长 Stride，卷积中默认卷积核一次移动一个单位，其实可以移动Stride单位
+</li>
+</ol>
+
+<p>
+假设图片宽度为W， 卷积核宽度为F， 步长为S，补0参数P，输出卷积特征的宽度为H，则有：
+</p>
+
+\begin{eqnarray}
+\nonumber
+H = (W - F + 2P) / S + 1
+\end{eqnarray}
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-13-5-2" class="outline-4">
+<h4 id="sec-13-5-2"><span class="section-number-4">13.5.2</span> 池化(Pooling)</h4>
+<div class="outline-text-4" id="text-13-5-2">
+<p>
+pooling是一个采样过程，一般采取max-pooling
+</p>
+
+
+<div class="figure">
+<p><img src="pics/pooling.png" alt="pooling.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-13-5-3" class="outline-4">
+<h4 id="sec-13-5-3"><span class="section-number-4">13.5.3</span> 全连接</h4>
+<div class="outline-text-4" id="text-13-5-3">
+<p>
+和一般人工神经网络一样
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-13-5-4" class="outline-4">
+<h4 id="sec-13-5-4"><span class="section-number-4">13.5.4</span> 卷积层参数的确定</h4>
+<div class="outline-text-4" id="text-13-5-4">
+<p>
+<code>共享权重</code>
+</p>
+
+<p>
+同一个卷积核，核上每个元素的权重都一样，即如果是5x5的卷积核，则一个核一共只需估计5x5+1=26个参数（1位bias项）
+</p>
+
+<p>
+例：
+卷积特征 96x96x10（10个核）
+-&gt; 经过2x2，步长为2的池化后，得到48x48x10个特征
+-&gt; 再经过 5x5，步长为1，16个卷积核进行卷积，得到(5x5x10+1)x16=4016个参数，输出特征为44x44x16
+-&gt; 再pooling，得到22x22x16个输出特征
+-&gt; 此时，全连接到100个神经元的隐含层，需要的参数为：(22x22x16+1)*100=774500
+</p>
+
+<p>
+最后得到的参数=774500 + 4016 + 隐含层到输出层的参数
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-13-6" class="outline-3">
+<h3 id="sec-13-6"><span class="section-number-3">13.6</span> 循环神经网络(Recurrent Neural Network)</h3>
+<div class="outline-text-3" id="text-13-6">
+<p>
+ref：
+    <a href="https://zybuluo.com/hanbingtao/note/541458">https://zybuluo.com/hanbingtao/note/541458</a>
+    <a href="https://zhuanlan.zhihu.com/p/24720659">https://zhuanlan.zhihu.com/p/24720659</a>
+</p>
+
+<p>
+<code>以层的概念理解神经网络结构，而不是节点</code>
+</p>
+</div>
+
+<div id="outline-container-sec-13-6-1" class="outline-4">
+<h4 id="sec-13-6-1"><span class="section-number-4">13.6.1</span> 单向循环神经网络</h4>
+<div class="outline-text-4" id="text-13-6-1">
+
+<div class="figure">
+<p><img src="pics/rnn_1.png" alt="rnn_1.png" />
+</p>
+</div>
+
+<p>
+中间的隐含层为循环层，循环层每一个节点的值不仅受与其连接的x的影响，还和上一个循环层节点的影响。
+</p>
+
+\begin{eqnarray}
+\nonumber
+o_t = g(V_{s_t}) \\
+\nonumber
+s_t = f(Ux_t + W _{t-1}) 
+\end{eqnarray}
+
+<p>
+其中每个循环层神经元的 W, V, U 都是完全一样的，这是循环神经网络的 <code>共享权重</code> 特征，是递归网络相对于前馈网络而言最为突出的优势。
+</p>
+
+<p>
+<code>时间结构共享是递归网络的核心中的核心。</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-13-6-2" class="outline-4">
+<h4 id="sec-13-6-2"><span class="section-number-4">13.6.2</span> 双向循环神经网络</h4>
+<div class="outline-text-4" id="text-13-6-2">
+<p>
+上述神经网络方向是 S<sub>t-1</sub> 到 S<sub>t</sub> ，而我们还可以加入一个反向的循环层
+</p>
+
+
+<div class="figure">
+<p><img src="pics/rnn_2.png" alt="rnn_2.png" />
+</p>
+</div>
+
+<p>
+此时需要同时保存两个层：
+</p>
+
+\begin{eqnarray}
+\nonumber
+o_t = g(V_{t} + V_{t}^') \\
+\end{eqnarray}
+</div>
+</div>
+
+<div id="outline-container-sec-13-6-3" class="outline-4">
+<h4 id="sec-13-6-3"><span class="section-number-4">13.6.3</span> 训练方法：BPTT</h4>
+<div class="outline-text-4" id="text-13-6-3">
+<p>
+见：<a href="https://zybuluo.com/hanbingtao/note/541458">https://zybuluo.com/hanbingtao/note/541458</a>
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-13-6-4" class="outline-4">
+<h4 id="sec-13-6-4"><span class="section-number-4">13.6.4</span> softmax 层</h4>
+<div class="outline-text-4" id="text-13-6-4">
+<p>
+ref： <a href="https://www.zhihu.com/question/23765351">https://www.zhihu.com/question/23765351</a>
+</p>
+
+\begin{eqnarray}
+\nonumber
+S_i = \frac{e^{V_i}}{\sum_j e^{v_j}}
+\end{eqnarray}
+
+<p>
+其中V<sub>i表示V中第i个元素，Softmax即是该元素的指数，和所有元素指数和的比值</sub>
+</p>
+
+
+<div class="figure">
+<p><img src="pics/rnn_5.png" alt="rnn_5.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-13-6-5" class="outline-4">
+<h4 id="sec-13-6-5"><span class="section-number-4">13.6.5</span> 优缺点</h4>
+<div class="outline-text-4" id="text-13-6-5">
+<p>
+优点：
+</p>
+<ol class="org-ol">
+<li>解决时序问题
+</li>
+<li>共享权重
+</li>
+</ol>
+
+<p>
+缺点：
+</p>
+<ol class="org-ol">
+<li>时序过长时出现梯度爆炸和梯度消失问题
+</li>
+</ol>
+
+<p>
+<code>什么是梯度爆炸和梯度消失</code>
+</p>
+
+
+<div class="figure">
+<p><img src="pics/run_3.png" alt="run_3.png" />
+</p>
+</div>
+
+<p>
+当t-k很大时，误差将极快的收敛到0或者无穷大
+</p>
+
+<p>
+如何解决：长短时记忆网络（LTSM）和Gated Recurrent Unit（GRU）
+</p>
+</div>
+</div>
+
+
+
+
+
+<div id="outline-container-sec-13-6-6" class="outline-4">
+<h4 id="sec-13-6-6"><span class="section-number-4">13.6.6</span> 输入与输出</h4>
+<div class="outline-text-4" id="text-13-6-6">
+<p>
+<code>方式：</code>
+</p>
+
+
+<div class="figure">
+<p><img src="pics/rnn_4.png" alt="rnn_4.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>many to one：常用在情感分析中，将一句话关联到一个情感向量上去。
+</li>
+<li>many to many：第一个many to many在DNN-HMM语音识别框架中常有用到
+</li>
+<li>many to many(variable length)：第二个many to many常用在机器翻译两个不同语言时。
+</li>
+</ul>
+
+<p>
+<code>类型</code>
+</p>
+
+<p>
+与其他前馈网络不同，该网络必须包含时间参数
+输入张量形状：(time<sub>steps</sub>, n<sub>samples</sub>, dim<sub>input</sub>)
+输出张量形状：(time<sub>steps</sub>, n<sub>samples</sub>, dim<sub>output</sub>)
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-13-7" class="outline-3">
+<h3 id="sec-13-7"><span class="section-number-3">13.7</span> 递归神经网络(Recursive Neural Network)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="__">了解</span></span></h3>
+<div class="outline-text-3" id="text-13-7">
+<p>
+ref: <a href="https://zybuluo.com/hanbingtao/note/626300">https://zybuluo.com/hanbingtao/note/626300</a>
+</p>
+
+<p>
+循环神经网络将句子看成一个序列，然而很多时候句子是有结构的（语法树：树状结构）
+</p>
+
+<p>
+需要更多人工标注的语料
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-13-8" class="outline-3">
+<h3 id="sec-13-8"><span class="section-number-3">13.8</span> LSTM</h3>
+<div class="outline-text-3" id="text-13-8">
+<p>
+为了解决循环神经网络（以后默认RNN为循环神经网络）存在的梯度爆炸和梯度消失的问题，LSTM(Long Short Term Memory Network, LSTM)被提出来
+</p>
+
+<p>
+LSTM在循环层中不仅存储原来的状态 h<sub>t</sub> 还存储一个长期的状态 c<sub>t</sub> (单元状态)，如下图所示
+</p>
+
+
+<div class="figure">
+<p><img src="pics/LSTM_0.png" alt="LSTM_0.png" />
+</p>
+</div>
+
+<p>
+其中每一个状态都是向量。
+</p>
+
+<p>
+<code>LSTM的关键，就是怎样控制长期状态c</code>
+</p>
+
+<p>
+为此，LSTM提出门(gate)的概念，类似阀门，可以控制只让一部分的状态进来，门事实上是一个全连接层，输入一个向量，输出一个0到1之间的实数等长向量，用我们要控制的向量乘以门得到的结果向量，就可以达到控制的目的。
+</p>
+
+<p>
+LSTM有三个门：
+</p>
+
+<ul class="org-ul">
+<li>遗忘门：它决定了上一时刻的单元状态 c<sub>t-1</sub> 有多少保留到当前时刻单元状态 c<sub>t</sub>
+</li>
+<li>输入门：它决定了当前时刻网络的输入 x<sub>t</sub> 有多少保存到单元状态 c<sub>t</sub>
+</li>
+<li>输出门：它决定了当前时刻的单元状态 c<sub>t</sub> 有多少输出到循环层节点的输出值 h<sub>t</sub>
+</li>
+</ul>
+
+<p>
+总体流程如下图：（非常关键）
+</p>
+
+
+<div class="figure">
+<p><img src="pics/LSTM_1.png" alt="LSTM_1.png" />
+</p>
+</div>
+
+<p>
+上图解释如下：
+</p>
+
+<ol class="org-ol">
+<li>首先，输入 x<sub>t</sub> 经过变换：
+</li>
+</ol>
+
+\begin{eqnarray}
+\nonumber
+f_t = \sigma (W_f [h_{t-1}, x_t] + b_f)
+\end{eqnarray}
+
+<p>
+得到遗忘门向量，作用于 c<sub>t-1</sub>上（直接按元素乘以 c<sub>t-1</sub>)
+</p>
+
+<ol class="org-ol">
+<li>再将 x<sub>t</sub> 经过输入门的变化（公式类似），得到输入门向量 i<sub>t</sub> ， <code>输入门是作用在当前的单元状态 c'_t 上的</code>
+</li>
+
+<li>计算用于描绘当前输入的单元状态 c'<sub>t</sub> ，根据上一次的输出 h<sub>t-1</sub> 和这次的输入 x<sub>t，得到结果后乘以输入门，达到控制效果，然后加到经过遗忘门后的上一期单元状态中，得到更新后当期单元状态</sub> c<sub>t</sub> ，可输出为 c<sub>t</sub> 。由于遗忘门的控制，它可以保存很久很久之前的信息，由于输入门的控制，它又可以避免当前无关紧要的内容进入记忆。
+</li>
+
+<li>计算 h<sub>t</sub> 的输出门 O<sub>t</sub> ，它控制了长期记忆对当前输出的影响。
+</li>
+<li>得到LSTM最终输出，它是由输出门和单元状态共同确定的：
+</li>
+</ol>
+
+\begin{eqnarray}
+\nonumber
+h_t = O_t \odot tanh(c_t)
+\end{eqnarray}
+</div>
+</div>
+
+
+<div id="outline-container-sec-13-9" class="outline-3">
+<h3 id="sec-13-9"><span class="section-number-3">13.9</span> 实现</h3>
+<div class="outline-text-3" id="text-13-9">
+</div><div id="outline-container-sec-13-9-1" class="outline-4">
+<h4 id="sec-13-9-1"><span class="section-number-4">13.9.1</span> 方案1. win10 tensorflow 安装</h4>
+<div class="outline-text-4" id="text-13-9-1">
+<p>
+ref:
+<a href="http://blog.csdn.net/weixin_36368407/article/details/54177380">http://blog.csdn.net/weixin_36368407/article/details/54177380</a>
+</p>
+</div>
+
+<div id="outline-container-sec-13-9-1-1" class="outline-5">
+<h5 id="sec-13-9-1-1"><span class="section-number-5">13.9.1.1</span> Cuda &amp; cudnn</h5>
+</div>
+
+<div id="outline-container-sec-13-9-1-2" class="outline-5">
+<h5 id="sec-13-9-1-2"><span class="section-number-5">13.9.1.2</span> TensorFlow</h5>
+</div>
+</div>
+
+<div id="outline-container-sec-13-9-2" class="outline-4">
+<h4 id="sec-13-9-2"><span class="section-number-4">13.9.2</span> 方案2. 基于theano的Keras win10 安装</h4>
+<div class="outline-text-4" id="text-13-9-2">
+<p>
+<a href="http://blog.csdn.net/circle2015/article/details/54235127">http://blog.csdn.net/circle2015/article/details/54235127</a>
+</p>
+
+<ol class="org-ol">
+<li>安装 mingw
+</li>
+</ol>
+
+<div class="org-src-container">
+
+<pre class="src src-bash">conda install mingw libpython
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>pip install theano
+</li>
+<li>pip install keras
+</li>
+<li>主文件夹中找到 .keras的配置文件，修改默认后台为theano
+</li>
+<li>配置theano
+</li>
+</ol>
+
+<p>
+c://Users//ray//.theanorc.txt 文件，里面加入theano的配置项
+</p>
+<pre class="example">
+[global]
+floatX=float32
+device=cpu
+[blas]
+ldflags=-LC:\\Users\\yangr\\Documents\\OpenBLAS\\bin -LC:\\Users\\yangr\\Documents\\OpenBLAS\\lib -lopenblas
+[gcc]  
+cxxflags=-IC:\\Users\\yangr\\Anaconda3\\MinGW
+</pre>
+
+<p>
+其中openBlas加速库要提前下载：
+</p>
+<ol class="org-ol">
+<li>下载openblas库<a href="http://sourceforge.net/projects/openblas/files/v0.2.14">http://sourceforge.net/projects/openblas/files/v0.2.14</a>
+</li>
+<li>下载mingw64 <a href="http://sourceforge.net/projects/openblas/files/v0.2.14/mingw64_dll.zip/download">http://sourceforge.net/projects/openblas/files/v0.2.14/mingw64_dll.zip/download</a> ，并将其添加到openblas/bin/
+</li>
+<li>路径输入至.theanorc.txt
+</li>
+</ol>
+
+<p>
+<code>如果遇到问题</code>
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">File "E:\Things_Installed_Here\Anaconda_Py\envs\Py341\lib\site-packages\theano-0.7.0-py3.4.egg\theano\gof\cmodule.py", line 331, in dlimport
+    rval = __import__(module_name, {}, {}, [module_name])
+ImportError: DLL load failed: The specified module could not be found.
+</pre>
+</div>
+
+<p>
+则如下操作：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-bash">$ conda remove mingw
+$ conda install m2w64-toolchain
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-13-9-3" class="outline-4">
+<h4 id="sec-13-9-3"><span class="section-number-4">13.9.3</span> Keras Tips</h4>
+<div class="outline-text-4" id="text-13-9-3">
+</div><div id="outline-container-sec-13-9-3-1" class="outline-5">
+<h5 id="sec-13-9-3-1"><span class="section-number-5">13.9.3.1</span> 自定义 metrics 性能评估函数</h5>
+<div class="outline-text-5" id="text-13-9-3-1">
+<div class="org-src-container">
+
+<pre class="src src-python">import keras.backend as K
+def f1_score(y_true, y_pred):
+
+    # Count positive samples.
+    c1 = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    c2 = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    c3 = K.sum(K.round(K.clip(y_true, 0, 1)))
+
+    # If there are no true samples, fix the F1 score at 0.
+    if c3 == 0:
+        return 0
+
+    # How many selected items are relevant?
+    precision = c1 / c2
+
+    # How many relevant items are selected?
+    recall = c1 / c3
+
+    # Calculate f1_score
+    f1_score = 2 * (precision * recall) / (precision + recall)
+    return f1_score
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-13-9-4" class="outline-4">
+<h4 id="sec-13-9-4"><span class="section-number-4">13.9.4</span> Experiment 1. 信贷违约预测模型</h4>
+</div>
+
+<div id="outline-container-sec-13-9-5" class="outline-4">
+<h4 id="sec-13-9-5"><span class="section-number-4">13.9.5</span> Experiment 2. 一个简单的缺失语言自动补全</h4>
+</div>
+
+
+<div id="outline-container-sec-13-9-6" class="outline-4">
+<h4 id="sec-13-9-6"><span class="section-number-4">13.9.6</span> Experiment 3. 手写数字识别</h4>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> 工具</h2>
+<div class="outline-text-2" id="text-14">
+<ul class="org-ul">
+<li>storm
+</li>
+<li>Flink
+</li>
+<li>elasticsearch
+</li>
+<li>kafka
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: 杨 睿</p>
+<p class="date">Created: 2018-02-28 周三 15:40</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

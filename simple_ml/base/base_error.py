@@ -62,6 +62,8 @@ class CrossValidationTypeError(TypeError):
 class FilterTypeError(TypeError):
     pass
 
+class EmbeddedTypeError(TypeError):
+    pass
 
 class LabelTypeError(TypeError):
     pass

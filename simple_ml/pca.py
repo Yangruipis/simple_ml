@@ -18,6 +18,7 @@ class PCA(BaseTransform):
         self._top_n_index = None
 
     def fit(self, x, y=None):
+        # self._init(x, y)
         self._variable_num = x.shape[1]
         if self.top_n > self._variable_num:
             raise TopNTooLargeError

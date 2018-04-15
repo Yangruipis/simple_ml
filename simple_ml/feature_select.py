@@ -7,7 +7,7 @@ filter方法进行特征选择
 from collections import Counter
 import numpy as np
 from minepy import MINE
-from simple_ml.base.base_enum import FilterType, LabelType
+from simple_ml.base.base_enum import FilterType, LabelType, EmbeddedType
 from simple_ml.base.base_error import *
 from simple_ml.base.base import BaseTransform
 
@@ -61,41 +61,17 @@ class Filter(BaseTransform):
 
         self._selectIds = np.array(list(zip(*pair))[0][:self.top_k])
 
-    @staticmethod
-    def _check_label_type(y):
-        count = dict(Counter(y))
-        if len(count) == 2:
-            return LabelType.binary
-        elif len(count) > len(y)/2:
-            return LabelType.continuous
-        else:
-            return LabelType.multiclass
-
-    def _check(self, x, y):
-        if x.shape[0] == y.shape[0]:
-            raise SampleNumberMismatchError
-        if len(y.shape) == 1:
-            raise LabelTypeError
-        self.label_type = self._check_label_type(y)
-        self.x = x
-        self.y = y
-        self.sample_num = x.shape[0]
-        self.variable_num = x.shape[1]
-        if self.top_k < self.variable_num:
-            raise ValueBoundaryError
-        self._selectIds = np.zeros(self.top_k)
-
     def fit(self, x, y=None):
         """
         返回当前选择x的列编号
         - 输入x要么是连续，要么是0-1，不存在多分类
         - 输入y可以使连续，0-1或是多分类
         """
-        self._check(x, y)
+        self._init(x, y)
         if self.filterType == FilterType.var:
             self._var_select()
         elif self.filterType == FilterType.corr:
-            if self.label_type == LabelType.multiclass:
+            if self.label_type == LabelType.multi_class:
                 raise LabelTypeError
             self._corr_select()
         elif self.filterType == FilterType.chi2:
@@ -112,6 +88,31 @@ class Filter(BaseTransform):
         self.fit(x, y)
         return self.transform(x)
 
-class Enmbedded(BaseTransform):
 
-    pass
+class Embedded(BaseTransform):
+
+    def __init__(self, top_k, embedded_type=EmbeddedType.Lasso):
+        super(Embedded, self).__init__()
+        self.embedded_type = embedded_type
+        self.top_k = top_k
+        self.model = None
+
+    def fit(self, x, y):
+        if self.embedded_type == EmbeddedType.Lasso:
+            from simple_ml.logistic import Lasso
+            self.model = Lasso()
+        elif self.embedded_type == EmbeddedType.GBDT:
+            from simple_ml.ensemble import BaseGBDT
+            self.model = BaseGBDT()
+        else:
+            raise EmbeddedTypeError
+
+        self.model.fit(x, y)
+        self.selected_feature_id = self.model.feature_select(self.top_k)
+
+    def transform(self, x):
+        return x[:, self.selected_feature_id]
+
+    def fit_transform(self, x, y):
+        self.fit(x, y)
+        return self.transform(x)

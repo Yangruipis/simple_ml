@@ -42,3 +42,7 @@ class ClassifierType(Enum):
     SVM = 2
     NB = 3
     KNN = 4
+
+class EmbeddedType(Enum):
+    GBDT = 0
+    Lasso = 1

@@ -6,7 +6,7 @@
 """
 
 from simple_ml.base.base_error import *
-from simple_ml.base.base import BaseClassifier
+from simple_ml.base.base import BaseClassifier, BaseFeatureSelect
 from simple_ml.base.base_enum import LabelType
 from simple_ml.helper import classify_plot
 from simple_ml.score import *
@@ -14,6 +14,8 @@ import scipy.optimize as so
 
 
 class BaseLogisticRegression(BaseClassifier):
+
+    __doc__ = "Logistic Regression"
 
     def __init__(self, tol=0.01, step=0.01, threshold=0.5, has_intercept=True):
         """
@@ -109,14 +111,16 @@ class BaseLogisticRegression(BaseClassifier):
     def classify_plot(self, x, y):
         if self.has_intercept:
             x = self._add_ones(x)
-        classify_plot(self.new(), self.x[:], self.y[:], x, y, title='My Logistic Regression')
+        classify_plot(self.new(), self.x[:], self.y[:], x, y, title=self.__doc__)
 
     @classmethod
     def new(cls):
         # 返回当前类的新的实例，由于该类是超类，因此用classmethod，无论是什么类调用，返回的都是该类本身
         return cls()
 
-class Lasso(BaseLogisticRegression):
+class Lasso(BaseLogisticRegression, BaseFeatureSelect):
+
+    __doc__ = "Lasso Regression"
 
     def __init__(self, tol=0.01, lamb=0.1, step=0.01, threshold=0.5, has_intercept=True):
         """
@@ -167,8 +171,24 @@ class Lasso(BaseLogisticRegression):
             loss = self._loss_function_value(w_0)
         return w_0, _min
 
+    def feature_select(self, top_n):
+        if top_n > self.variable_num:
+            raise TopNTooLargeError
+        if self.w is None:
+            raise ModelNotFittedError
+        if self.has_intercept:
+            w = self.w[1:]
+        else:
+            w = self.w
+        if len(w[w!=0]) <= top_n:
+            return np.arange(w.shape[0])[w!=0]
+        else:
+            return w.argsort()[-top_n:][::-1]
+
 
 class Ridge(Lasso):
+
+    __doc__ = "Ridge Regression"
 
     def __init__(self, tol=0.01, lamb=0.1, step=0.01, threshold=0.5, has_intercept=True):
         """

@@ -2,8 +2,8 @@
 
 from simple_ml.base.base_enum import ClassifierType, LabelType
 from simple_ml.base.base_error import *
-from .score import *
-from simple_ml.base.base import BaseClassifier
+from simple_ml.score import *
+from simple_ml.base.base import BaseClassifier, BaseFeatureSelect
 
 
 class BaseAdaBoost(BaseClassifier):
@@ -103,7 +103,7 @@ class CART(BaseClassifier):
         self._init(x, y)
         for i in self.feature_type:
             if i == LabelType.continuous:
-                raise FeatureTypeError
+                raise FeatureTypeError("GBDT暂时只支持离散特征")
         self.importance = np.zeros(self.variable_num)
         root = TreeNode(np.arange(self.sample_num))
         self.root = self._gen_tree(root)
@@ -178,7 +178,7 @@ class CART(BaseClassifier):
         return self._find_leaf_node(x, self.root)
 
 
-class BaseGBDT(BaseClassifier):
+class BaseGBDT(BaseClassifier, BaseFeatureSelect):
     """
     1. $F_0(x) = argmin_\rho \sum _{i=1}^N L(y_i, \rho)$
     2. For $m = 1$ to $M$ do:
@@ -219,6 +219,11 @@ class BaseGBDT(BaseClassifier):
         return self.importance
 
     def feature_select(self, top_n):
+        """
+        特征选择
+        :param top_n: 前几个特征
+        :return:      选的特征的下标
+        """
         if self.importance is None:
             raise ModelNotFittedError
         if top_n > self.variable_num:

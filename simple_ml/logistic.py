@@ -16,6 +16,13 @@ import scipy.optimize as so
 class BaseLogisticRegression(BaseClassifier):
 
     def __init__(self, tol=0.01, step=0.01, threshold=0.5, has_intercept=True):
+        """
+        不包含惩罚项的Logistic回归
+        :param tol:            误差容忍度，越大时收敛越快，但是越不精确
+        :param step:           步长，梯度下降的参数
+        :param threshold:      决策阈值，当得到的概率大于等于阈值时输出1，否则输出0
+        :param has_intercept:  是否包含截距项
+        """
         super(BaseLogisticRegression, self).__init__()
         self.tol = tol
         self.step = step
@@ -93,20 +100,33 @@ class BaseLogisticRegression(BaseClassifier):
     def score(self, x, y):
         # predict_prob = self._predict(x)
         predict_y = self.predict(x)
-        return classify_precision(predict_y, y)
+        return classify_f1(predict_y, y)
 
     def auc_plot(self, x, y):
         predict_y = self.predict_prob(x)
         classify_roc_plot(predict_y, y)
 
     def classify_plot(self, x, y):
-        x = self._add_ones(x)
-        classify_plot(self, self.x, self.y, x, y, title='My Logistic Regression')
+        if self.has_intercept:
+            x = self._add_ones(x)
+        classify_plot(self.new(), self.x[:], self.y[:], x, y, title='My Logistic Regression')
 
+    @classmethod
+    def new(cls):
+        # 返回当前类的新的实例，由于该类是超类，因此用classmethod，无论是什么类调用，返回的都是该类本身
+        return cls()
 
 class Lasso(BaseLogisticRegression):
 
     def __init__(self, tol=0.01, lamb=0.1, step=0.01, threshold=0.5, has_intercept=True):
+        """
+        包含L1惩罚项的Logistic回归
+        :param tol:            误差容忍度，越大时收敛越快，但是越不精确
+        :param lamb            lambda，即惩罚项前面的参数，越大越不容易过拟合，但是偏差也越大
+        :param step:           步长，梯度下降的参数
+        :param threshold:      决策阈值，当得到的概率大于等于阈值时输出1，否则输出0
+        :param has_intercept:  是否包含截距项
+        """
         super(Lasso, self).__init__(tol, step, threshold, has_intercept)
         self.lamb = lamb
 
@@ -151,6 +171,14 @@ class Lasso(BaseLogisticRegression):
 class Ridge(Lasso):
 
     def __init__(self, tol=0.01, lamb=0.1, step=0.01, threshold=0.5, has_intercept=True):
+        """
+        包含L2惩罚项的Logistic回归
+        :param tol:            误差容忍度，越大时收敛越快，但是越不精确
+        :param lamb            lambda，即惩罚项前面的参数，越大越不容易过拟合，但是偏差也越大
+        :param step:           步长，梯度下降的参数
+        :param threshold:      决策阈值，当得到的概率大于等于阈值时输出1，否则输出0
+        :param has_intercept:  是否包含截距项
+        """
         super(Ridge, self).__init__(tol, lamb, step, threshold, has_intercept)
 
     def _loss_function_value(self, w):

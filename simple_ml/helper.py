@@ -9,11 +9,13 @@ import numpy as np
 from simple_ml.pca import PCA
 
 
-def train_test_split(x, y, test_size=0.3):
+def train_test_split(x, y, test_size=0.3, seed=None):
+    if seed:
+        np.random.seed(seed)
     id_list = np.arange(x.shape[0])
     id_train = np.random.choice(id_list, int(len(id_list)*(1-test_size)), replace=False)
     id_test = np.array([i for i in id_list if i not in id_train])
-    return x[id_train, :], y[id_train, :], x[id_test, :], y[id_test, :]
+    return x[id_train, :], y[id_train], x[id_test, :], y[id_test]
 
 
 def cross_validation(model, x, y, method=CrossValidationType.holdout, test_size=0.3, cv=5):
@@ -93,9 +95,10 @@ def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title
     cm_bright = plt.cm.RdBu   # ListedColormap(['#FF0000', '#29A086', '#0000FF'])
     ax = plt.subplot(1, 2, 1)
     # Plot the training points
-    ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(y_train), cmap=cm_bright)
+    p1 = ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(y_train), cmap=cm_bright)
     # and testing points
-    ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
+    p2 = ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
+    ax.legend([p1, p2], ['train', 'test'])
     ax.set_xlim(xx.min(), xx.max())
     ax.set_ylim(yy.min(), yy.max())
     ax.set_xticks(())
@@ -113,16 +116,16 @@ def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title
     ax.contourf(xx, yy, z, cmap=cm, alpha=.8)
 
     # Plot also the training points
-    ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(model.y), cmap=cm_bright)
+    p3 = ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(model.y), cmap=cm_bright)
     # and testing points
-    ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
-
+    p4 = ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
+    ax.legend([p3, p4], ['train', 'test'])
     ax.set_xlim(xx.min(), xx.max())
     ax.set_ylim(yy.min(), yy.max())
     ax.set_xticks(())
     ax.set_yticks(())
     ax.set_title(title)
-    ax.text(xx.max() - .3, yy.min() + .3, ('%.2f' % score).lstrip('0'),
+    ax.text(xx.max() - .3, yy.min() + .3, ('%.4f' % score).lstrip('0'),
             size=15, horizontalalignment='right')
 
     plt.show()

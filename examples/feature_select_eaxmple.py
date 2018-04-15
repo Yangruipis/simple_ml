@@ -8,16 +8,16 @@ def wine_example():
     x = x[(y == 0) | (y == 1)]
     y = y[(y == 0) | (y == 1)]
 
-    filter = Filter(FilterType.corr, 3)
-    x_filter = filter.fit_transform(x, y)
+    _filter = Filter(FilterType.corr, 3)
+    x_filter = _filter.fit_transform(x, y)
     print(x_filter.shape)
 
-    filter = Filter(FilterType.var, 3)
-    x_filter = filter.fit_transform(x, y)
+    _filter = Filter(FilterType.var, 3)
+    x_filter = _filter.fit_transform(x, y)
     print(x_filter.shape)
 
-    filter = Filter(FilterType.entropy, 3)
-    x_filter = filter.fit_transform(x, y)
+    _filter = Filter(FilterType.entropy, 3)
+    x_filter = _filter.fit_transform(x, y)
     print(x_filter.shape)
 
     embedded = Embedded(3, EmbeddedType.Lasso)

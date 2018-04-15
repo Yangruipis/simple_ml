@@ -96,17 +96,17 @@ def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title
     colors = ['#67001F', '#053061', '#29A086', '#0000FF']
     ax = plt.subplot(1, 2, 1)
 
-    for id, i in enumerate(np.unique(y_train)):
-        ax.scatter(x_train[y_train==i, 0], x_train[y_train==i, 1], c=colors[id], label="train, y=%s" % i)
+    for idx, i in enumerate(np.unique(y_train)):
+        ax.scatter(x_train[y_train == i, 0], x_train[y_train == i, 1], c=colors[idx], label="train, y=%s" % int(i))
 
-    for id, i in enumerate(np.unique(y_test)):
-        ax.scatter(x_test[y_test == i, 0], x_test[y_test == i, 1], c=colors[id], label="test , y=%s" % i, alpha=0.6)
+    for idx, i in enumerate(np.unique(y_test)):
+        ax.scatter(x_test[y_test == i, 0], x_test[y_test == i, 1], c=colors[idx], label="test , y=%s" % int(i),
+                   alpha=0.6)
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0), ncol=2)
 
     # p1 = ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(y_train), cmap=cm_bright, label=transform_y(y_train))
     # p2 = ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
     # ax.legend([p1, p2], ['train', 'test'])
-
 
     ax.set_xlim(xx.min(), xx.max())
     ax.set_ylim(yy.min(), yy.max())
@@ -124,11 +124,12 @@ def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title
     z = z.reshape(xx.shape)
     ax.contourf(xx, yy, z, cmap=cm, alpha=.8)
 
-    for id, i in enumerate(np.unique(y_train)):
-        ax.scatter(x_train[y_train == i, 0], x_train[y_train == i, 1], c=colors[id], label="train, y=%s" % i)
+    for idx, i in enumerate(np.unique(y_train)):
+        ax.scatter(x_train[y_train == i, 0], x_train[y_train == i, 1], c=colors[idx], label="train, y=%s" % int(i))
 
-    for id, i in enumerate(np.unique(y_test)):
-        ax.scatter(x_test[y_test == i, 0], x_test[y_test == i, 1], c=colors[id], label="test , y=%s" % i, alpha=0.6)
+    for idx, i in enumerate(np.unique(y_test)):
+        ax.scatter(x_test[y_test == i, 0], x_test[y_test == i, 1], c=colors[idx], label="test , y=%s" % int(i),
+                   alpha=0.6)
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0), ncol=2)    # , mode="expand", borderaxespad=0.)
 
     # p3 = ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(model.y), cmap=cm_bright)

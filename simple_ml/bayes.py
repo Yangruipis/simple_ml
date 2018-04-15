@@ -8,7 +8,6 @@ from simple_ml.helper import classify_plot
 from simple_ml.score import *
 
 
-
 class BaseNaiveBayes(BaseClassifier):
 
     def __init__(self):

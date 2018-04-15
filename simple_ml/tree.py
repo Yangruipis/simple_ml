@@ -3,8 +3,8 @@
 from simple_ml.base.base_error import *
 from simple_ml.base.base import BaseClassifier
 from simple_ml.base.base_enum import LabelType
-from .classify_plot import classify_plot
-from .score import *
+from simple_ml.helper import classify_plot
+from simple_ml.score import *
 
 
 class TreeNode:

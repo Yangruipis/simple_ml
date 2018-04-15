@@ -93,7 +93,7 @@ TODO list:
 - [ ] update Readme
 - [ ] setup.py
 - [ ] examples
-- [x] get more data
+- [x] get more datasets
 
 # 特征工程<a id="sec-1" name="sec-1"></a>
 

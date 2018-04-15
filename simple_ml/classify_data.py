@@ -1,30 +1,46 @@
 
-from sklearn import datasets
-from sklearn.preprocessing import StandardScaler
+import numpy as np
+import os
+# 获取该文件的绝对路径
+PATH = os.path.split(os.path.realpath(__file__))[0]
 
+#__dir__ = ["./", "./simple_ml/", "../"]
 
 def get_iris():
-    iris = datasets.load_iris()
-    x = iris.data
-    y = iris.target
+    x, y = load("/data_sets/iris.txt")
     return x, y
 
 
 def get_wine():
-    wine = datasets.load_wine()
-    standard = StandardScaler()
 
-    x = wine.data
-    y = wine.target
-    x = standard.fit_transform(x)
+    x, y = load("/data_sets/wine.txt")
     return x, y
 
 
-def get_moon(samples):
-    moons = datasets.make_moons(samples)
-    return moons[0], moons[1]
+def get_moon():
+    x, y = load("/data_sets/moon_200.txt")
+    return x, y
 
 
-if __name__ == '__main__':
-    x, y = get_wine()
-    print(x, y)
+def get_circle():
+    x, y = load("/data_sets/circle_200.txt")
+    return x, y
+
+
+def dump(x, y, path):
+    with open(PATH + path, 'w') as f:
+        f.write("%s,%s\n" % (x.shape[0], x.shape[1]))
+        for line in x:
+            f.write(",".join([str(i) for i in line]) + "\n")
+        f.write(",".join([str(i) for i in y]) + "\n")
+
+
+def load(path):
+    x = []
+    y = None
+    with open(PATH + path, "r") as f:
+        m, n = list(map(int, f.readline().strip().split(",")))
+        for i in range(m):
+          x.append(list(map(float, f.readline().strip().split(","))))
+        y = list(map(float, f.readline().strip().split(",")))
+    return np.array(x), np.array(y)

@@ -97,6 +97,8 @@ TODO list:
 
 # 特征工程<a id="sec-1" name="sec-1"></a>
 
+[![Join the chat at https://gitter.im/simple_ml/Lobby](https://badges.gitter.im/simple_ml/Lobby.svg)](https://gitter.im/simple_ml/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## 特征预处理<a id="sec-1-1" name="sec-1-1"></a>
 
 ### PCA降维<a id="sec-1-1-1" name="sec-1-1-1"></a>

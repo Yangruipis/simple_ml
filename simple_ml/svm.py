@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.base.base_enum import KernelType
+from simple_ml.base.base_enum import KernelType, LabelType
 from simple_ml.base.base_error import *
 from simple_ml.base.base import BaseClassifier
 from simple_ml.helper import  classify_plot
@@ -8,6 +8,8 @@ from simple_ml.score import *
 
 
 class BaseSVM(BaseClassifier):
+
+    __doc__ = "Support Vector Machine"
 
     def __init__(self, c, tol, precision, max_iter, kernel_type, **kwargs):
         """
@@ -38,20 +40,22 @@ class BaseSVM(BaseClassifier):
 
     def _check_kernel(self, kwargs_dict):
         if self.kernel_type == KernelType.gassian or self.kernel_type == KernelType.laplace:
-            if 'sigma' in kwargs_dict:
+            if 'sigma' not in kwargs_dict:
                 raise KernelMissParameterError("高斯核或拉普拉斯核必须申明带宽sigma参数, sigma>0")
             self.sigma = kwargs_dict['sigma']
         elif self.kernel_type == KernelType.polynomial:
-            if 'd' in kwargs_dict:
+            if 'd' not in kwargs_dict:
                 raise KernelMissParameterError("多项式核必须申明幂指数d参数, d>=1")
             self.d = kwargs_dict['d']
         elif self.kernel_type == KernelType.sigmoid:
-            if 'beta' in kwargs_dict:
+            if 'beta' not in kwargs_dict:
                 raise KernelMissParameterError("sigmoid核必须申明beta参数, beta>0")
-            if 'theta' in kwargs_dict:
+            if 'theta' not in kwargs_dict:
                 raise KernelMissParameterError("sigmoid核必须申明theta参数, theta<0")
             self.beta = kwargs_dict['beta']
             self.theta = kwargs_dict['theta']
+        elif self.kernel_type == KernelType.linear:
+            pass
         else:
             raise KernelTypeError
 
@@ -63,6 +67,10 @@ class BaseSVM(BaseClassifier):
         self.alphas = np.zeros(self.sample_num)
         self.kernel_mat = None
 
+    @staticmethod
+    def _adj_y(y):
+        return np.array([i if i == 1 else -1 for i in y])
+
     def fit(self, x, y):
         """
         两种求解方法：
@@ -70,6 +78,10 @@ class BaseSVM(BaseClassifier):
             2. 二次优化求解QP方法（调用python cvxopt包，参考http://tullo.ch/articles/svm-py/）
         """
         self._init(x, y)
+        if self.label_type != LabelType.binary:
+            raise LabelTypeError("SVM 暂时只支持二分类问题")
+        self.y = self._adj_y(self.y)
+
         self.clear()
         # self._clear()
         # 事先计算出核函数矩阵，避免高维下的计算问题
@@ -272,7 +284,7 @@ class BaseSVM(BaseClassifier):
         """
         根据输入的矩阵和行向量，计算kernel值
         """
-        if x_mat.shape[1] == len(x_vector):
+        if x_mat.shape[1] != len(x_vector):
             raise FeatureNumberMismatchError
         if kernel_type == KernelType.linear:
             return np.dot(x_mat, x_vector.reshape(-1, 1)).ravel()
@@ -294,10 +306,12 @@ class BaseSVM(BaseClassifier):
         return kernel_vector
 
     def score(self, x, y):
+        y = self._adj_y(y)
         y_predict = self.predict(x)
         y_predict_binary = np.array([0 if i == -1 else i for i in y_predict])
-        y_true_binary = np.array([0 if i == -1 else i for i in self.y])
+        y_true_binary = np.array([0 if i == -1 else i for i in y])
         return classify_f1(y_predict_binary, y_true_binary)
 
     def classify_plot(self, x, y):
-        classify_plot(self, self.x, self.y, x, y, title='My Support Vector Machine')
+        y = self._adj_y(y)
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)

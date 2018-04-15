@@ -8,24 +8,28 @@ PATH = os.path.split(os.path.realpath(__file__))[0]
 
 def get_iris():
     x, y = load("/data_sets/iris.txt")
-    return x, y
+    return x, np.array(y, dtype='int')
 
 
 def get_wine():
 
     x, y = load("/data_sets/wine.txt")
-    return x, y
+    return x, np.array(y, dtype='int')
 
 
 def get_moon():
     x, y = load("/data_sets/moon_200.txt")
-    return x, y
+    return x, np.array(y, dtype='int')
 
 
 def get_circle():
     x, y = load("/data_sets/circle_200.txt")
-    return x, y
+    return x, np.array(y, dtype='int')
 
+
+def get_watermelon():
+    x, y = load("/data_sets/watermelon.txt")
+    return x, np.array(y, dtype='int')
 
 def dump(x, y, path):
     with open(PATH + path, 'w') as f:

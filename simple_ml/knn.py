@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 
-from simple_ml.base.base_enum import DisType
+from simple_ml.base.base_enum import DisType, LabelType
 from simple_ml.base.base_error import *
 from simple_ml.base.base import BaseClassifier
 from simple_ml.helper import classify_plot
@@ -9,6 +9,8 @@ from .score import *
 
 
 class BaseKnn(BaseClassifier):
+
+    __doc__ = "K Nearest Neighbor(s)"
 
     def __init__(self, k=1, distance_type=DisType.Eculidean):
         super(BaseKnn, self).__init__()
@@ -31,7 +33,7 @@ class BaseKnn(BaseClassifier):
         if self.x is None:
             raise ModelNotFittedError
         dist_func = self._get_dist_func(self.dist_type)
-        return list(map(lambda i: self._predict_single_sample(i, self.k, dist_func), x))
+        return np.array(list(map(lambda i: self._predict_single_sample(i, self.k, dist_func), x)))
 
     def _predict_single_sample(self, x, k, dist_func):
         sim_list = list(map(lambda i: dist_func(x, i), self.x))
@@ -61,16 +63,16 @@ class BaseKnn(BaseClassifier):
 
     def score(self, x, y):
         y_predict = self.predict(x)
-        count_dict = dict(Counter(y_predict))
-        if len(count_dict) <= 2:
-            # binary classifyn
+        if self.label_type == LabelType.binary:
             f1_score = classify_f1(y_predict, y)
-        else:
+        elif self.label_type == LabelType.multi_class:
             f1_score = classify_f1_macro(y_predict, y)
+        else:
+            raise LabelTypeError
         return f1_score
 
     def classify_plot(self, x, y):
-        classify_plot(self, self.x, self.y, x, y, title='My kNN')
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
 
 
 class Node:
@@ -86,10 +88,10 @@ class Node:
         self.sample_ids = sample_ids
 
 
-class MyKDTree(BaseKnn):
+class KDTree(BaseKnn):
 
     def __init__(self, k=5, dist_type=DisType.Eculidean):
-        super(MyKDTree, self).__init__(k, dist_type)
+        super(KDTree, self).__init__(k, dist_type)
 
     @staticmethod
     def _choose_split_feature(x, ids):

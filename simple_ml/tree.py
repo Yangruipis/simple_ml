@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from collections import Counter
 from simple_ml.base.base_error import *
 from simple_ml.base.base import BaseClassifier
 from simple_ml.base.base_enum import LabelType
@@ -7,99 +8,299 @@ from simple_ml.helper import classify_plot
 from simple_ml.score import *
 
 
-class TreeNode:
+class BinaryTreeNode:
 
-    def __init__(self, left=None, right=None, dataId=None, left_featureId=None, value=None):
-        if dataId == None:
+    def __init__(self, left=None, right=None, dataId=None, featureId=None, value=None, leaf_label=None):
+        if dataId is None:
             dataId = []
-        if left_featureId == None:
-            left_featureId = []
         self.left = left
         self.right = right
         self.dataId = dataId
-        self.leftFeatureId = left_featureId
+        self.featureID = featureId
         self.value = value
+        self.leaf_label = leaf_label
 
 
-class RegressionTree(BaseClassifier):
+class MultiTreeNode:
 
-    def __init__(self, min_leaf_samples=1):
-        super(RegressionTree, self).__init__()
-        self.min_leaf_samples = min_leaf_samples
+    def __init__(self, child=None, dataId=None, featureId=None, value=None, leaf_label=None):
+        if dataId is None:
+            dataId = []
+        self.child = child
+        self.dataId = dataId
+        self.featureID = featureId
+        self.value = value
+        self.leaf_label = leaf_label
+
+
+class ID3(BaseClassifier):
+
+    __doc__ = "ID3 Decision Tree"
+
+    def __init__(self, max_depth=None, min_samples_leaf=3):
+        """
+        决策树ID3算法
+        :param max_depth:        树最大深度
+        :param min_samples_leaf: 叶子节点最大样本数（最好是奇数，用以投票）
+        """
+        super(ID3, self).__init__()
+        self.max_depth = max_depth if max_depth is not None else np.inf
+        self.min_samples_leaf = min_samples_leaf
+        self.root = None
 
     def fit(self, x, y):
         self._init(x, y)
-        self._fit()
+        if self.label_type != LabelType.binary and self.label_type != LabelType.multi_class:
+            raise LabelTypeError("ID3算法只支持离散标签")
+        if LabelType.continuous in self.feature_type:
+            raise FeatureTypeError("ID3算法只支持离散特征")
 
-    def _fit(self):
-        self.root = self._gen_tree(TreeNode(None, None, list(range(self.x.shape[0])), list(range(self.x.shape[1])),
-                                            None))
+        self.root = self._gen_tree(MultiTreeNode(dataId=np.arange(self.x.shape[0])), 0)
 
-    def _gen_tree(self, input_node=None):
-        if len(input_node.dataId) <= self.min_leaf_samples:
-            return TreeNode(None, None, input_node.dataId, [], np.mean(self.y[input_node.dataId]))
+    def _gen_tree(self, node: MultiTreeNode, depth) -> MultiTreeNode:
+        if depth >= self.max_depth or len(node.dataId) <= self.min_samples_leaf:
+            node.leaf_label = np.argmax(np.bincount(self.y[node.dataId]))
+            return node
 
-        best_split = self._get_best_split(input_node.dataId, input_node.leftFeatureId)
-        input_node.leftFeatureId.remove(best_split[1])
-        new_left_feature_id = input_node.leftFeatureId.copy()
-        input_node.value = best_split[2]
-        if input_node.left is None:
-            left_node = TreeNode(None, None, best_split[3], new_left_feature_id, None)
-            input_node.left = self._gen_tree(left_node)
-        if input_node.right is None:
-            right_node = TreeNode(None, None, best_split[4], new_left_feature_id, None)
-            input_node.right = self._gen_tree(right_node)
-        return input_node
+        split_feature = self._get_best_split(node.dataId)
+        feature = self.x[node.dataId, split_feature]
+        nodes = []
+        for value in np.unique(feature):
+            new_node = MultiTreeNode(None, node.dataId[feature == value], split_feature, value)
+            new_node = self._gen_tree(new_node, depth + 1)
+            nodes.append(new_node)
+        node.child = nodes
+        return node
 
-    def _get_best_split(self, data_id, left_feature_id):
-        best_split = (np.Inf, None, None, None, None)
-        for featureId in left_feature_id:
-            unique_values = np.unique(self.x[:, featureId])
-            for value in unique_values:
-                le_data_id, ge_data_id = self._data_split(self.x, data_id, featureId, value)
-                sum_sse = RegressionTree._get_sum_sse(self.y[le_data_id], self.y[ge_data_id])
-                if sum_sse < best_split[0]:
-                    best_split = (sum_sse, featureId, value, le_data_id, ge_data_id)
-        return best_split
-
-    @staticmethod
-    def _data_split(x, data_id, feature_id, value):
-        is_le_value = x[:, feature_id] <= value
-        is_ge_value = np.logical_not(is_le_value)
-        le_data_id = np.intersect1d(np.arange(x.shape[0])[is_le_value], data_id)
-        ge_data_id = np.intersect1d(np.arange(x.shape[0])[is_ge_value], data_id)
-        return le_data_id, ge_data_id
-
-    @staticmethod
-    def _get_sum_sse(ly, ry):
-        return RegressionTree._get_sse(ly) + RegressionTree._get_sse(ry)
+    def _get_best_split(self, dataID):
+        data = self.x[dataID]
+        y = self.y[dataID]
+        best_split_feature = None
+        y_entropy = self._get_entropy(y)
+        _max_gain = -np.inf
+        for i in range(data.shape[1]):
+            unique = np.unique(data[:, i])
+            if len(unique) <= 1:
+                continue
+            entropy = 0
+            for feature_value in unique:
+                y_temp = y[data[:, i] == feature_value]
+                entropy += len(y_temp) / len(dataID) * self._get_entropy(y_temp)
+            gain = y_entropy - entropy
+            if gain > _max_gain:
+                _max_gain = gain
+                best_split_feature = i
+        return best_split_feature
 
     @staticmethod
-    def _get_sse(y):
-        return np.sum(list(map(lambda x: (x-np.mean(y))**2, y)))
+    def _get_entropy(arr):
+        count = Counter(arr)
+        s = 0
+        for i in count:
+            p = count[i] / len(arr)
+            s += -p * np.log(p)
+        return s
 
     def predict(self, x):
-        return self._predict(self.root, x, list(range(self.x.shape[1])))
+        if self.root is None:
+            raise ModelNotFittedError
+        return np.array([self._predict_single(i, self.root) for i in x])
 
-    def _predict(self, node, x, total_feature):
-        if node.left is None and node.right is None:
-            return node.value
+    def _predict_single(self, x, node: MultiTreeNode):
+        if node.leaf_label is not None:
+            return node.leaf_label
 
-        which_feature = list(set(total_feature) - set(node.leftFeatureId))[0]
-        if x[which_feature] <= node.value:
-            return self._predict(node.left, x, node.leftFeatureId)
-        else:
-            return self._predict(node.right, x, node.leftFeatureId)
+        for child_node in node.child:
+            feature_id = child_node.featureID
+            value = child_node.value
+            if x[feature_id] == value:
+                return self._predict_single(x, child_node)
+        return np.random.choice(self.y, 1)
 
     def score(self, x, y):
         y_predict = self.predict(x)
-        if self.label_type == LabelType.multi_class:
+        return classify_f1(y_predict, y)
+
+
+class CART(BaseClassifier):
+
+    __doc__ = "Classify and Regression Tree"
+
+    def __init__(self, max_depth=10, min_samples_leaf=3):
+        """
+        分类回归树
+        :param max_depth:        树最大深度
+        :param min_samples_leaf: 叶子节点最大样本数（最好是奇数，用以投票）
+        """
+        super(CART, self).__init__()
+        self.max_depth = max_depth if max_depth is not None else np.inf
+        self.min_samples_leaf = min_samples_leaf
+        self.root = None
+
+    def fit(self, x, y):
+        self._init(x, y)
+        self.root = self._gen_tree(BinaryTreeNode(None, None, np.arange(self.x.shape[0])), 1)
+
+    def _gen_tree(self, node: BinaryTreeNode, depth) -> BinaryTreeNode:
+        if depth >= self.max_depth or len(node.dataId) <= self.min_samples_leaf:
+            # 获取相应的标签
+            if len(node.dataId) != 0 :
+                if self.label_type == LabelType.continuous:
+                    node.leaf_label = np.mean(self.y[node.dataId])
+                else:
+                    node.leaf_label = np.argmax(np.bincount(self.y[node.dataId]))
+            else:
+                # 防止出现样本量为0时返回nan的情况，此时temp是一个数组
+                temp = self.y[self.x[:, node.featureID] == node.value]
+                if len(temp) == 0:
+                    node.leaf_label = np.random.choice(self.y, 1)[0]
+                else:
+                    node.leaf_label = np.argmax(np.bincount(temp))
+            return node
+
+        best_split = self._get_best_split(node.dataId)
+        if best_split[0] is None:
+            if self.label_type == LabelType.continuous:
+                node.leaf_label = np.mean(self.y[node.dataId])
+            else:
+                node.leaf_label = np.argmax(np.bincount(self.y[node.dataId]))
+            return node
+
+        feature_arr = self.x[node.dataId, best_split[0]]
+        if best_split[2]:
+            left = BinaryTreeNode(None, None, node.dataId[feature_arr <= best_split[1]], best_split[0], best_split[1])
+            right = BinaryTreeNode(None, None, node.dataId[feature_arr > best_split[1]], best_split[0], best_split[1])
+        else:
+            left = BinaryTreeNode(None, None, node.dataId[feature_arr == best_split[1]], best_split[0], best_split[1])
+            right = BinaryTreeNode(None, None, node.dataId[feature_arr != best_split[1]], best_split[0], best_split[1])
+        node.left = self._gen_tree(left, depth + 1)
+        node.right = self._gen_tree(right, depth + 1)
+        return node
+
+    def _get_best_split(self, dataID):
+        x = self.x[dataID]
+        y = self.y[dataID]
+        best_split = (None, None, None)     # (特征，取值，连续还是离散)
+        error = np.inf
+        if self.label_type == LabelType.continuous:
+            for i in range(x.shape[1]):
+                feature_arr = x[:, i]
+                if self.feature_type[i] == LabelType.continuous:
+                    # 如果特征为连续型
+                    low, high = min(feature_arr), max(feature_arr)
+                    step = (high - low) / (self.sample_num // 4)
+                    low += step
+                    while low < high:
+                        temp_error = self._get_sum_sse(y, feature_arr, low)
+                        low += step
+                        if temp_error < error:
+                            error = temp_error
+                            best_split = (i, low, True)
+                else:
+                    # 如果特征为离散值
+                    for f in np.unique(feature_arr):
+                        temp_error = self._get_sum_sse(y, feature_arr, f, False)
+                        if temp_error < error:
+                            error = temp_error
+                            best_split = (i, f, False)
+        else:
+            for i in range(x.shape[1]):
+                feature_arr = x[:, i]
+                if self.feature_type[i] == LabelType.continuous:
+                    # 如果特征为连续型
+                    low, high = min(feature_arr), max(feature_arr)
+                    step = (high - low) / (self.sample_num // 2)
+                    while low < high:
+                        temp_error = self._get_conditional_gini(y, feature_arr, low)
+                        low += step
+                        if temp_error < error:
+                            error = temp_error
+                            best_split = (i, low, True)
+                else:
+                    # 如果特征为离散值
+                    for f in np.unique(feature_arr):
+                        temp_error = self._get_conditional_gini(y, feature_arr, f, False)
+                        if temp_error < error:
+                            error = temp_error
+                            best_split = (i, f, False)
+        return best_split
+
+
+    def _get_conditional_gini(self, y, arr, value, continuous=True):
+        if continuous:
+            y_left = y[arr <= value]
+            y_right = y[arr > value]
+        else:
+            y_left = y[arr == value]
+            y_right = y[arr != value]
+        entropy = self._get_gini(y_left) * len(y_left) + self._get_gini(y_right) * len(y_right)
+        return entropy / len(arr)
+
+    @staticmethod
+    def _get_gini(arr):
+        count = Counter(arr)
+        s = 0
+        for i in count:
+            s += (count[i] / len(arr))**2
+        return  1 - s
+
+    def _get_sum_sse(self, y, arr, value, continuous=True):
+        if continuous:
+            y_left = y[arr <= value]
+            y_right = y[arr > value]
+        else:
+            y_left = y[arr == value]
+            y_right = y[arr != value]
+
+        # 用样本数加权，防止样本越多损失越大
+        return self._get_sse(y_left) + self._get_sse(y_right)
+
+    @staticmethod
+    def _get_sse(y):
+        return np.sum(np.square(y - np.mean(y)))
+
+    def predict(self, x):
+        if self.root is None:
+            raise ModelNotFittedError
+        try:
+            return np.array([self._predict_single(i, self.root) for i in x])
+        except:
+            pass
+
+    def _predict_single(self, x, node: BinaryTreeNode):
+        if node.leaf_label is not None:
+            if isinstance(node.leaf_label, np.ndarray) and len(node.leaf_label) == 0:
+                return np.random.choice(self.y, 1)[0]
+            return node.leaf_label
+
+        feature = node.left.featureID
+        if self.feature_type[feature] == LabelType.continuous:
+            if x[feature] <= node.left.value:
+                return self._predict_single(x, node.left)
+            else:
+                return self._predict_single(x, node.right)
+        else:
+            if x[feature] == node.left.value:
+                return self._predict_single(x, node.left)
+            else:
+                return self._predict_single(x, node.right)
+
+    def score(self, x, y):
+        y_predict = self.predict(x)
+        if self.label_type == LabelType.continuous:
+            return regression_r2(y_predict, y)
+        elif self.label_type == LabelType.multi_class:
             return classify_f1_macro(y_predict, y)
         else:
             return classify_f1(y_predict, y)
 
+    def classify_plot(self, x, y):
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
+
 
 class BaseRandomForest(BaseClassifier):
+
+    __doc__ = "Random Forest"
 
     def __init__(self, m, tree_num=200):
         super(BaseRandomForest, self).__init__()
@@ -109,13 +310,12 @@ class BaseRandomForest(BaseClassifier):
 
     def fit(self, x, y):
         self._init(x, y)
-        if self.m <= self.variable_num:
+        if self.m > self.variable_num:
             raise ValueBoundaryError
         self._fit()
 
     def _fit(self):
-        from sklearn.tree import DecisionTreeClassifier
-        self.forest = [DecisionTreeClassifier() for i in range(self.tree_num)]
+        self.forest = [CART() for i in range(self.tree_num)]
         self.feature_list = []
         for i, tree in enumerate(self.forest):
             random_x, random_y, select_features = self._sample_from_x(i)   # 默认以当前树的编号作为随机种子，使每次运行时抽样结果完全一致
@@ -142,13 +342,13 @@ class BaseRandomForest(BaseClassifier):
         return self._vote(predict_results_mat)
 
     def _vote(self, result):
-        if result.shape[0] == self.tree_num:
+        if result.shape[0] != self.tree_num:
             raise TreeNumberMismatchError
         voted_result = list(map(self._one_vote, result.T))
         return np.array(voted_result)
 
     def _one_vote(self, result):
-        if len(result) == self.tree_num:
+        if len(result) != self.tree_num:
             raise TreeNumberMismatchError
         count = Counter(result)
         return max(count, key=count.get)
@@ -161,4 +361,8 @@ class BaseRandomForest(BaseClassifier):
             return classify_f1_micro(y_predict, y)
 
     def classify_plot(self, test_x, test_y):
-        classify_plot(self, self.x, self.y, test_x, test_y, title='My Random Forest')
+        classify_plot(self.new(1, 1), self.x, self.y, test_x, test_y, title=self.__doc__)
+
+    @classmethod
+    def new(cls, *args):
+        return cls(*args)

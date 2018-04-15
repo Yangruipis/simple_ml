@@ -8,7 +8,7 @@ from simple_ml.base.base_enum import DisType
 from simple_ml.base.base_error import *
 
 
-class MyKMeans(object):
+class KMeans(object):
 
     def __init__(self, k, dis_type=DisType.Eculidean, d=1):
         self.k = k
@@ -75,7 +75,7 @@ class MyKMeans(object):
             center_update_point = center_point
             for i, x in enumerate(self.x):
                 self._judge_single_sample(i, x, center_point)
-            print(self._labels)
+            # print(self._labels)
             center_point = self._get_new_center(center_point)
 
     @property
@@ -93,7 +93,7 @@ class ClusterNode(object):
         self.distance = distance
 
 
-class MyHierarchical(object):
+class Hierarchical(object):
 
     def __init__(self, dis_type=DisType.Eculidean, d=1):
         self.disType = dis_type
@@ -199,16 +199,16 @@ class MyHierarchical(object):
     @staticmethod
     def _recursion(node, threshold, clusters_list):
         if node.left is None or node.right is None:
-            clusters_list.append(node.idxs)
+            clusters_list.append(node.ids)
             return
 
         if node.distance < threshold:
             # 此时跳出，并且记录当前的节点
-            clusters_list.append(node.idxs)
+            clusters_list.append(node.ids)
             return
 
-        MyHierarchical._recursion(node.left, threshold, clusters_list)
-        MyHierarchical._recursion(node.right, threshold, clusters_list)
+        Hierarchical._recursion(node.left, threshold, clusters_list)
+        Hierarchical._recursion(node.right, threshold, clusters_list)
 
     @property
     def labels(self):
@@ -219,4 +219,4 @@ class MyHierarchical(object):
         return self.root.distance
 
 if __name__ == '__main__':
-    km = MyKMeans(10)
+    km = KMeans(10)

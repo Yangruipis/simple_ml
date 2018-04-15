@@ -4,6 +4,7 @@ from simple_ml.base.base_enum import ClassifierType, LabelType
 from simple_ml.base.base_error import *
 from simple_ml.score import *
 from simple_ml.base.base import BaseClassifier, BaseFeatureSelect
+from simple_ml.helper import classify_plot
 
 
 class BaseAdaBoost(BaseClassifier):
@@ -15,6 +16,7 @@ class BaseAdaBoost(BaseClassifier):
         self.clf_list = []
         self.alpha = np.ones(self.nums)
         self._init_classifier()
+        self.current_clf_num = 0
 
     def _init_classifier(self):
         if self.classifier == ClassifierType.LR:
@@ -30,46 +32,62 @@ class BaseAdaBoost(BaseClassifier):
     def fit(self, x, y):
         self._init(x, y)
         self.weights = np.array([1 / self.sample_num for i in range(self.sample_num)])
+        self.current_clf_num = 0
         for m in range(self.nums):
             clf = self.clf_list[m]
             clf.fit(x, y, sample_weight=self.weights)
             y_pred = clf.predict(x)
             e, alpha = self._update_alpha(y_pred, y)
-            if e < 0.5:
-                break
+
+            # TODO: 这儿有问题，每一次效果没有变的更好，考虑用resample做
 
             self.alpha[m] = alpha
             self._update_weight(y_pred, y, alpha)
             print("Model %s fitted" % m)
+            self.current_clf_num += 1
+            if e < 0.1:
+                break
 
     def predict(self, x):
         if x.shape[1] != self.variable_num:
             raise FeatureNumberMismatchError
-        res = np.ones(x.shape[0])
-        for m, clf in enumerate(self.clf_list):
-            res = res + self.alpha[m] * clf.predict(x)
-        func = np.vectorize(lambda j: 1 if j > 0.5 else 0)
+        res = np.zeros(x.shape[0])
+        for m in range(self.current_clf_num):
+            clf = self.clf_list[m]
+            predict = clf.predict(x)
+            predict = self._adj_y(predict)
+            res += self.alpha[m] * predict
+        func = np.vectorize(lambda j: 1 if j > 0 else 0)
         return func(res)
+
+    @staticmethod
+    def _adj_y(y):
+        return np.array([i if i == 1 else -1 for i in y])
 
     def _update_weight(self, y_p, y_t, alpha):
         # 通过这一步将分错的样本权值调高，分对的样本权值调低，必须是1或者-1
+        y_p = self._adj_y(y_p)
+        y_t = self._adj_y(y_t)
         temp = np.exp(- alpha * np.multiply(y_p, y_t))
         self.weights = np.multiply(temp, self.weights)
         self.weights = self.weights / np.sum(self.weights)
 
     @staticmethod
     def _update_alpha(y_pred, y_true):
-        true_pred_count = 0
+        false_pred_count = 0
         for i in range(len(y_pred)):
-            if y_pred[i] == y_true[i]:
-                true_pred_count += 1
-        e = true_pred_count / len(y_pred)
-        alpha = 0.5 * np.log((1 - e) / e)
+            if y_pred[i] != y_true[i]:
+                false_pred_count += 1
+        e = false_pred_count / len(y_pred)
+        alpha = 0.5 * np.log((1 - e) / max(e, 1e-10))
         return e, alpha
 
     def score(self, x, y):
         y_pred = self.predict(x)
         return classify_f1(y_pred, y)
+
+    def classify_plot(self, x, y):
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
 
 
 class TreeNode:

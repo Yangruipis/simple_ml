@@ -71,7 +71,7 @@ class BaseClassifier(object):
             count = np.unique(feature)
             if len(count) == 2:
                 res.append(LabelType.binary)
-            elif len(count) > len(feature) // 2:
+            elif len(count) > len(feature) // 4:
                 res.append(LabelType.continuous)
             else:
                 res.append(LabelType.multi_class)

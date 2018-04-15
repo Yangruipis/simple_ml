@@ -94,6 +94,7 @@ TODO list:
 - [ ] setup.py
 - [ ] examples
 - [x] get more datasets
+- [ ] regression plot
 
 # 特征工程<a id="sec-1" name="sec-1"></a>
 

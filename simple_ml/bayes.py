@@ -7,8 +7,9 @@ from simple_ml.base.base import BaseClassifier
 from simple_ml.helper import classify_plot
 from simple_ml.score import *
 
-
 class BaseNaiveBayes(BaseClassifier):
+
+    __doc__ = "Naive Bayes Classifier"
 
     def __init__(self):
         super(BaseNaiveBayes, self).__init__()
@@ -85,10 +86,13 @@ class BaseNaiveBayes(BaseClassifier):
             return classify_f1_macro(y_predict, y)
 
     def classify_plot(self, x, y):
-        classify_plot(self, self.x, self.y, x, y, title='My Naive Bayes')
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
+
 
 
 class BaseBayesMinimumError(BaseClassifier):
+
+    __doc__ = "Bayes Minimum Error"
 
     def __init__(self):
         super(BaseBayesMinimumError, self).__init__()
@@ -149,10 +153,12 @@ class BaseBayesMinimumError(BaseClassifier):
             return classify_f1_macro(y_predict, y)
 
     def classify_plot(self, x, y):
-        classify_plot(self, self.x, self.y, x, y, title='My Bayes Minimum Error')
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
 
 
-class MyBayesMinimumRisk(BaseBayesMinimumError):
+class BayesMinimumRisk(BaseBayesMinimumError):
+
+    __doc__ = "Bayes Minimum Risk"
 
     def __init__(self, cost_mat):
         """
@@ -164,14 +170,14 @@ class MyBayesMinimumRisk(BaseBayesMinimumError):
                    3. 每一行，每一列的类别必须按照数值从小到大的顺序排列，
                       比如第i行表示在np.unique(y)中第i个label
         """
-        super(MyBayesMinimumRisk, self).__init__()
+        super(BayesMinimumRisk, self).__init__()
         self.cost_mat = cost_mat
 
     def fit(self, x, y):
         label_num = len(np.unique(y))
         if self.cost_mat.shape[0] != label_num or self.cost_mat.shape[1] != label_num:
             raise CostMatMismatchError
-        super(MyBayesMinimumRisk, self).fit(x, y)
+        super(BayesMinimumRisk, self).fit(x, y)
 
     def _predict_single(self, x):
         prob = self._get_probability(x)

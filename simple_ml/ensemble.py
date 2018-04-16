@@ -8,10 +8,12 @@ from simple_ml.helper import classify_plot
 from simple_ml.tree import CART
 
 
-class BaseAdaBoost(BaseClassifier):
+class AdaBoost(BaseClassifier):
+
+    __doc__ = "AdaBoost Classifier"
 
     def __init__(self, classifier=ClassifierType.LR, nums=10):
-        super(BaseAdaBoost, self).__init__()
+        super(AdaBoost, self).__init__()
         self.classifier = classifier
         self.nums = nums
         self.clf_list = []
@@ -26,9 +28,19 @@ class BaseAdaBoost(BaseClassifier):
         elif self.classifier == ClassifierType.KNN:
             from simple_ml.knn import KNN
             self.clf_list = [KNN() for i in range(self.nums)]
+        elif self.classifier == ClassifierType.CART:
+            from simple_ml.tree import CART
+            self.clf_list = [CART() for i in range(self.nums)]
+        elif self.classifier == ClassifierType.SVM:
+            from simple_ml.svm import SVM
+            self.clf_list = [SVM() for i in range(self.nums)]
+        elif self.classifier == ClassifierType.NB:
+            from simple_ml.bayes import NaiveBayes
+            self.clf_list = [NaiveBayes() for i in range(self.nums)]
         else:
-            # TODO coming soon
-            pass
+            raise ClassifierTypeError("暂不支持的分类器，你想你也可以自己添加（先找到我哦）")
+
+
 
     def _re_sample(self, x, y, weight):
         """

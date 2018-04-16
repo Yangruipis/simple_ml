@@ -47,6 +47,10 @@ class FeatureTypeError(TypeError):
     pass
 
 
+class ClassifierTypeError(TypeError):
+    pass
+
+
 class LabelArrayTypeError(TypeError):
     pass
 

@@ -92,7 +92,7 @@ TODO list:
 - [x] add GBDT feature select
 - [ ] update Readme
 - [ ] setup.py
-- [ ] examples
+- [x] examples
 - [x] get more datasets
 - [ ] regression plot
 - [ ] kd_tree

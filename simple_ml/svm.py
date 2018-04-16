@@ -11,7 +11,7 @@ class SVM(BaseClassifier):
 
     __doc__ = "Support Vector Machine"
 
-    def __init__(self, c, tol, precision, max_iter, kernel_type, **kwargs):
+    def __init__(self, c=0.1, tol=0.001, precision=0.01, max_iter=100, kernel_type=KernelType.linear, **kwargs):
         """
         可变参数kwargs存储核函数的参数
         param:

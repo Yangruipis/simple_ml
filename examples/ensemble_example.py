@@ -6,25 +6,42 @@ from simple_ml.helper import train_test_split
 
 
 def moon_example():
+    """
+    AdaBoost的例子，以月亮数据集为例
+    :return:
+    """
     x, y = get_moon()
     x = x[(y == 0) | (y == 1)]
     y = y[(y == 0) | (y == 1)]
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
-    ada = BaseAdaBoost(classifier=ClassifierType.LR)
+    # 采用Logistic回归作为子分类器的AdaBoost
+    ada = AdaBoost(classifier=ClassifierType.LR)
     ada.fit(x_train, y_train)
     print(ada.score(x_test, y_test))
     ada.classify_plot(x_test, y_test)
 
-    ada = BaseAdaBoost(classifier=ClassifierType.KNN)
+    # 采用KNN作为子分类器的AdaBoost
+    ada = AdaBoost(classifier=ClassifierType.KNN)
+    ada.fit(x_train, y_train)
+    print(ada.score(x_test, y_test))
+    ada.classify_plot(x_test, y_test)
+
+    # 采用CART树为子分类器的AdaBoost
+    ada = AdaBoost(classifier=ClassifierType.CART)
     ada.fit(x_train, y_train)
     print(ada.score(x_test, y_test))
     ada.classify_plot(x_test, y_test)
 
 
 def watermelon_example():
+    """
+    GBDT的例子，以西瓜数据集为例
+    GBDT暂时只支持回归操作，不支持分类
+    :return:
+    """
     x, y = get_watermelon()
-    y = x[:, -1]    # y为连续标签
+    y = x[:, -1]     # y为连续标签
     x = x[:, :-1]    # x为离散标签
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 

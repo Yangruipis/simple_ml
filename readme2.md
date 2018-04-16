@@ -49,7 +49,7 @@ print(cart.predict(x_test))
 >>> np.array([1,1])
 ```
 
-`./simple_ml/example`文件夹中提供了大多数方法的使用范例，更详细的用法见 [帮助手册 manual.md](./manual.md)
+`./simple_ml/examples`文件夹中提供了大多数方法的使用范例，更详细的用法见 [帮助手册 manual.md](./manual.md)
 
 # 它能做什么
 
@@ -71,9 +71,27 @@ print(cart.predict(x_test))
 ### 1. 特征
 
 ### 2. 分类和回归
+
+#### 2.1 二分类
+`simple_ml`提供了非常多的二分类方法，以[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)为例（见`./simple_ml/examples`），分类效果和方法名称见下图。
 ![pic1](./doc/imgs/wine.jpg)
 
+#### 2.2 多分类
+
+`simple_ml`暂时只提供了一些多分类算法，见下图，同样是[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)，后面作者将会进行补充。
+
+![pic2](./doc/imgs/wine2.jpg)
+
+#### 2.3 回归
+
+`simple_ml`提供了`CART`、`GBDT`这两种回归方法，后面将加入`SVR`
+
+
 ### 3. 聚类
+
+
+`注:`以上所有图均为simple_ml直出（需要matplotlib）
+
 
 # 为什么会有这个项目 & 致谢
 
@@ -98,9 +116,10 @@ print(cart.predict(x_test))
 - [x] other feature select method to add
 - [x] lasso and Ridge
 - [x] add GBDT feature select
-- [ ] update Readme
+- [x] update Readme
 - [ ] setup.py
 - [x] examples
 - [x] get more datasets
 - [ ] regression plot
 - [ ] kd_tree
+- [ ] Support Machine Regression

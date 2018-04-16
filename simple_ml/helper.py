@@ -58,7 +58,7 @@ def transform_y(y):
         return y
 
 
-def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title="",compare=True, px=100):
+def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title="",compare=False, px=100):
     """
     注意：
     - 该画图方法是在内部训练进行画图，如果特征大于2，则降至2维再进行训练，而不是先训练后作图，因为要对图上每一个二维点都进行预测

@@ -17,8 +17,8 @@ def ID3_example():
 def wine_example():
     x, y = get_wine()
 
-    x = x[(y == 0) | (y == 1)]
-    y = y[(y == 0) | (y == 1)]
+    #x = x[(y == 0) | (y == 1)]
+    #y = y[(y == 0) | (y == 1)]
 
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
@@ -39,8 +39,8 @@ def wine_example():
 def random_forest_example():
     x, y = get_wine()
 
-    x = x[(y == 0) | (y == 1)]
-    y = y[(y == 0) | (y == 1)]
+    # x = x[(y == 0) | (y == 1)]
+    # y = y[(y == 0) | (y == 1)]
 
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
@@ -52,5 +52,5 @@ def random_forest_example():
 
 if __name__ == '__main__':
     # ID3_example()
-    wine_example()
+    # wine_example()
     random_forest_example()

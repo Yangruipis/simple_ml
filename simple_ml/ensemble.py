@@ -2,9 +2,10 @@
 
 from simple_ml.base.base_enum import ClassifierType, LabelType
 from simple_ml.base.base_error import *
+from simple_ml.base.base import *
 from simple_ml.score import *
-from simple_ml.base.base import BaseClassifier, BaseFeatureSelect
 from simple_ml.helper import classify_plot
+from simple_ml.tree import CART
 
 
 class BaseAdaBoost(BaseClassifier):
@@ -26,8 +27,12 @@ class BaseAdaBoost(BaseClassifier):
             from sklearn.neighbors import KNeighborsClassifier
             self.clf_list = [KNeighborsClassifier() for i in range(self.nums)]
         else:
-            #TODO coming soon
+            # TODO coming soon
             pass
+
+    # TODO: resample
+    def _re_sample(self):
+        pass
 
     def fit(self, x, y):
         self._init(x, y)
@@ -36,13 +41,14 @@ class BaseAdaBoost(BaseClassifier):
         for m in range(self.nums):
             clf = self.clf_list[m]
             clf.fit(x, y, sample_weight=self.weights)
-            y_pred = clf.predict(x)
-            e, alpha = self._update_alpha(y_pred, y)
+            y_predict = clf.predict(x)
+            e, alpha = self._update_alpha(y_predict, y)
+            # print(sum(y_pred != y) / float(len(y)))
 
             # TODO: 这儿有问题，每一次效果没有变的更好，考虑用resample做
 
             self.alpha[m] = alpha
-            self._update_weight(y_pred, y, alpha)
+            self._update_weight(y_predict, y, alpha)
             print("Model %s fitted" % m)
             self.current_clf_num += 1
             if e < 0.1:
@@ -72,154 +78,132 @@ class BaseAdaBoost(BaseClassifier):
         self.weights = np.multiply(temp, self.weights)
         self.weights = self.weights / np.sum(self.weights)
 
-    @staticmethod
-    def _update_alpha(y_pred, y_true):
-        false_pred_count = 0
-        for i in range(len(y_pred)):
-            if y_pred[i] != y_true[i]:
-                false_pred_count += 1
-        e = false_pred_count / len(y_pred)
-        alpha = 0.5 * np.log((1 - e) / max(e, 1e-10))
+    def _update_alpha(self, y_predict, y_true):
+        e = np.sum(self.weights[y_predict != y_true]) / np.sum(self.weights)
+        alpha = 0.5 * np.log((1 - e) / max(float(e), 1e-10))
         return e, alpha
 
     def score(self, x, y):
-        y_pred = self.predict(x)
-        return classify_f1(y_pred, y)
+        y_predict = self.predict(x)
+        return classify_f1(y_predict, y)
 
     def classify_plot(self, x, y):
         classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
 
 
-class TreeNode:
+class GBDTTreeNode(BinaryTreeNode):
 
-    def __init__(self, sample_id):
-        self.feature_id = None
-        self.feature_value = None
-        self.sample_id = sample_id
-        self.score = None
-        self.left = None
-        self.right = None
-
-
-class LeafNode(TreeNode):
-
-    def __init__(self, y_predict, sample_id):
-        super(LeafNode, self).__init__(sample_id)
-        self.y_predict = y_predict
-        self.gamma = None    # GBDT需要记录的元素，当是回归树（平方损失）时，等于y_predict
+    def __init__(self, left=None, right=None, data_id=None, feature_id=None, value=None, leaf_label=None):
+        super(GBDTTreeNode, self).__init__(left, right, data_id, feature_id, value, leaf_label)
+        # gamma: GBDT需要记录的元素，当是回归树（平方损失）时，等于y_predict
+        # 只有叶节点需要记录
+        # gama反映的是这个叶子节点最优的预测值
+        self.gamma = None
 
 
-class CART(BaseClassifier):
+class CARTForGBDT(CART):
 
-    def __init__(self):
-        super(CART, self).__init__()
+    __doc__ = "CART For GBDT"
+
+    def __init__(self, max_depth=4, min_samples_leaf=10):
+        super(CARTForGBDT, self).__init__(max_depth, min_samples_leaf)
         self.leaf_node_list = []
-        self.root = None
         self.importance = None
 
     def fit(self, x, y):
         self._init(x, y)
-        for i in self.feature_type:
-            if i == LabelType.continuous:
-                raise FeatureTypeError("GBDT暂时只支持离散特征")
         self.importance = np.zeros(self.variable_num)
-        root = TreeNode(np.arange(self.sample_num))
-        self.root = self._gen_tree(root)
+        self.root = self._gen_tree(GBDTTreeNode(None, None, np.arange(self.x.shape[0])), 1)
 
-    def _gen_tree(self, node: TreeNode):
-        best = self._get_best_divide(node.sample_id)
-
-        if best[0] == -1:
-            y_predict = np.mean(self.y[node.sample_id])
-            leaf_node = LeafNode(y_predict, node.sample_id)
-            leaf_node.feature_id = node.feature_id
-            leaf_node.feature_value = node.feature_value
-            leaf_node.gamma = y_predict
-            self.leaf_node_list.append(leaf_node)
-            return leaf_node
-
-        feature_id = best[0]
-        self.importance[feature_id] += best[1]
-        column_data = self.x[:, feature_id]
-        feature_values = np.unique(column_data)
-
-        left_sample_id = node.sample_id[column_data[node.sample_id] == feature_values[0]]
-        right_sample_id = node.sample_id[column_data[node.sample_id] == feature_values[1]]
-
-        left_node = TreeNode(left_sample_id)
-        right_node = TreeNode(right_sample_id)
-
-        left_node.feature_id = feature_id
-        left_node.feature_value = feature_values[0]
-
-        right_node.feature_id = feature_id
-        right_node.feature_value = feature_values[1]
-
-        node.left = self._gen_tree(left_node)
-        node.right = self._gen_tree(right_node)
-
-        return node
-
-    def _get_best_divide(self, sample_id):
-        best = (-1, np.inf)
-        for i in range(self.variable_num):
-            column_data = self.x[sample_id, i]
-            value = np.unique(column_data)
-            if len(value) == 1:
-                continue
-            residual_square = 0
-            for v in value:
-                temp = self.y[sample_id][column_data == v]
-                residual_square += np.sum(np.square(temp - np.mean(temp)))
-            if residual_square < best[1]:
-                best = (i, residual_square)
-        return best
-
-    def _find_leaf_node(self, x, node: TreeNode):
-        if isinstance(node, LeafNode):
+    def _gen_tree(self, node: GBDTTreeNode, depth):
+        if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
+            # 获取相应的标签
+            if len(node.data_id) != 0:
+                if self.label_type == LabelType.continuous:
+                    node.leaf_label = np.mean(self.y[node.data_id])
+                else:
+                    node.leaf_label = np.argmax(np.bincount(self.y[node.data_id]))
+            else:
+                # 防止出现样本量为0时返回nan的情况，此时temp是一个数组
+                temp = self.y[self.x[:, node.feature_id] == node.value]
+                if len(temp) == 0:
+                    node.leaf_label = np.random.choice(self.y, 1)[0]
+                else:
+                    node.leaf_label = np.random.choice(temp, 1)[0]
+            node.gamma = node.leaf_label    # 当平方损失时，gamma就等于y_predict
+            self.leaf_node_list.append(node)
             return node
 
-        left_node = node.left
-        right_node = node.right
-        feature_id = left_node.feature_id
-        left_value = left_node.feature_value
-        right_value = right_node.feature_value
+        best_split = self._get_best_split(node.data_id)
+        if best_split[0] is None:
+            if self.label_type == LabelType.continuous:
+                node.leaf_label = np.mean(self.y[node.data_id])
+            else:
+                node.leaf_label = np.argmax(np.bincount(self.y[node.data_id]))
+            node.gamma = node.leaf_label
+            self.leaf_node_list.append(node)
+            return node
 
-        if x[feature_id] == left_value:
-            return self._find_leaf_node(x, left_node)
-        elif x[feature_id] == right_value:
-            return self._find_leaf_node(x, right_node)
+        # 非叶子节点带来的误差的减小做为该特征的重要性
+        self.importance[best_split[0]] += best_split[3]
 
-    def find_leaf_node(self, x):
-        if not self.root:
-            raise ModelNotFittedError
-        return self._find_leaf_node(x, self.root)
+        feature_arr = self.x[node.data_id, best_split[0]]
+        if best_split[2]:
+            left = GBDTTreeNode(None, None, node.data_id[feature_arr <= best_split[1]], best_split[0], best_split[1])
+            right = GBDTTreeNode(None, None, node.data_id[feature_arr > best_split[1]], best_split[0], best_split[1])
+        else:
+            left = GBDTTreeNode(None, None, node.data_id[feature_arr == best_split[1]], best_split[0], best_split[1])
+            right = GBDTTreeNode(None, None, node.data_id[feature_arr != best_split[1]], best_split[0], best_split[1])
+        node.left = self._gen_tree(left, depth + 1)
+        node.right = self._gen_tree(right, depth + 1)
+        return node
+
+    def _predict_single(self, x, node: GBDTTreeNode):
+        if node.leaf_label is not None:
+            return node.gamma
+
+        feature = node.left.feature_id
+        if self.feature_type[feature] == LabelType.continuous:
+            if x[feature] <= node.left.value:
+                return self._predict_single(x, node.left)
+            else:
+                return self._predict_single(x, node.right)
+        else:
+            if x[feature] == node.left.value:
+                return self._predict_single(x, node.left)
+            else:
+                return self._predict_single(x, node.right)
 
 
-class BaseGBDT(BaseClassifier, BaseFeatureSelect):
-    """
-    1. $F_0(x) = argmin_\rho \sum _{i=1}^N L(y_i, \rho)$
-    2. For $m = 1$ to $M$ do:
-    3. $\qquad \tilde y_i = -[{\partial L(y,F(x_i)) \over \partial F(x_i)}]_{F(x) = F_{m-1}(x)}, i = 1, N$
-    4. $\qquad \{R_{jm}\}_1^J = J-terminal\, node\, tree(\{ \tilde y_i, x_i \}_i^N)$
-    5. $\qquad \gamma_{jm} = argmin_\gamma \sum_{x_i\in R_{jm}} L(y_i, F_{m-1}(x_i) + \gamma)$
-    6. $\qquad F_m(x) = F_{m-1}(x) + \sum_{j=1}^J \gamma_{jm}I(x \in R_{jm})$
-    7. endFor
-    endAlgorighm
+class GBDT(BaseClassifier, BaseFeatureSelect):
 
-    - 特征只支持0-1
-    - label只支持连续值
-    """
+    __doc__ = "GBDT Regression"
 
-    def __init__(self, nums=10):
-        super(BaseGBDT, self).__init__()
+    def __init__(self, nums=10, learning_rate=1):
+        """
+        1. $F_0(x) = argmin_\rho \sum _{i=1}^N L(y_i, \rho)$
+        2. For $m = 1$ to $M$ do:
+        3. $\qquad \tilde y_i = -[{\partial L(y,F(x_i)) \over \partial F(x_i)}]_{F(x) = F_{m-1}(x)}, i = 1, N$
+        4. $\qquad \{R_{jm}\}_1^J = J-terminal\, node\, tree(\{ \tilde y_i, x_i \}_i^N)$
+        5. $\qquad \gamma_{jm} = argmin_\gamma \sum_{x_i\in R_{jm}} L(y_i, F_{m-1}(x_i) + \gamma)$
+        6. $\qquad F_m(x) = F_{m-1}(x) + \sum_{j=1}^J \gamma_{jm}I(x \in R_{jm})$
+        7. endFor
+        end Algorighm
+        - 特征只支持0-1
+        - label支持连续值和离散值
+        """
+        super(GBDT, self).__init__()
         self.nums = nums
+        self.learning_rate = learning_rate
         self.F = []
-        self.Trees = [CART() for i in range(nums)]
+        self.Trees = [CARTForGBDT() for i in range(nums)]
         self.importance = None
 
     def fit(self, x, y):
         self._init(x, y)
+        if self.label_type != LabelType.continuous:
+            raise LabelTypeError("GBDT暂时只支持连续标签")
+
         self._init_f0()
         temp = []
         for m in range(self.nums):
@@ -249,27 +233,26 @@ class BaseGBDT(BaseClassifier, BaseFeatureSelect):
         return self.importance.argsort()[-top_n:][::-1]
 
     def predict(self, x):
-        res = [self._predict_single(i) for i in x]
+        res = np.zeros(x.shape[0]) + self.F[0][0]
+        for m in range(self.nums):
+            tree = self.Trees[m]
+            res += self.learning_rate * tree.predict(x)
         return np.array(res)
 
     def score(self, x, y):
-        pass
+        y_predict = self.predict(x)
+        if self.label_type == LabelType.continuous:
+            return regression_r2(y_predict, y)
+        else:
+            raise LabelTypeError
 
-    def _predict_single(self, x):
-        res = self.F[0][0]    # 初始值为训练集y的均值
-        for m in range(self.nums):
-            tree = self.Trees[m]
-            res_predict = tree.find_leaf_node(x).gamma
-            res += res_predict
-        return res
-
-    def _update_f(self, tree: CART):
+    def _update_f(self, tree: CARTForGBDT):
         leaf_node_list = tree.leaf_node_list
         f = np.zeros(self.sample_num)
         for leaf_node in leaf_node_list:
-            f[leaf_node.sample_id] = leaf_node.gamma
+            f[leaf_node.data_id] = leaf_node.gamma
 
-        f += 1 * self.F[-1]
+        f += self.learning_rate * self.F[-1]
         self.F.append(f)
 
     def _get_residual(self, m):

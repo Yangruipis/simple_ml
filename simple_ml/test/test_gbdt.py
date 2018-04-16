@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import unittest
-from simple_ml.ensemble import CART, BaseGBDT
+from simple_ml.ensemble import CART2, GBDT
 from simple_ml.base.base_error import *
 import numpy as np
 
@@ -22,7 +22,7 @@ class TESTGBDT(unittest.TestCase):
         np.random.seed(918)
         x = np.random.rand(10, 5)
         y = np.random.rand(10)
-        cart = CART()
+        cart = CART2()
         self.assertRaises(FeatureTypeError, cart.fit, x, y)
 
         x = np.random.choice([0, 1], 50).reshape(10, 5)
@@ -35,7 +35,7 @@ class TESTGBDT(unittest.TestCase):
         np.random.seed(918)
         x = np.random.choice([0, 1], 50).reshape(10, 5)
         y = np.random.rand(10)
-        gbdt = BaseGBDT()
+        gbdt = GBDT()
         gbdt.fit(x, y)
         predict = gbdt.predict(x)
         self.assertArrayAlmostEqual(predict, y)
@@ -47,7 +47,7 @@ class TESTGBDT(unittest.TestCase):
                       [0, 1, 0],
                       [0, 1, 1]])
         y = np.array([0.85, 0.91, 0.2, 0.15])
-        gbdt = BaseGBDT()
+        gbdt = GBDT()
         gbdt.fit(x, y)
         selected = gbdt.feature_select(1)
         self.assertEqual(len(selected), 1)

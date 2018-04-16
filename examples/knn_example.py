@@ -12,7 +12,7 @@ def wine_example():
     # y = y[(y == 0) | (y == 1)]
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
-    knn = BaseKnn()
+    knn = KNN()
     knn.fit(x_train, y_train)
     print(knn.score(x_test, y_test))
     knn.classify_plot(x_test, y_test)

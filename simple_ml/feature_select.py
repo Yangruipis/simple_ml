@@ -102,8 +102,8 @@ class Embedded(BaseTransform):
             from simple_ml.logistic import Lasso
             self.model = Lasso()
         elif self.embedded_type == EmbeddedType.GBDT:
-            from simple_ml.ensemble import BaseGBDT
-            self.model = BaseGBDT()
+            from simple_ml.ensemble import GBDT
+            self.model = GBDT()
         else:
             raise EmbeddedTypeError
 

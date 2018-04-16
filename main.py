@@ -12,7 +12,7 @@
 from simple_ml.knn import *
 from simple_ml.classify_data import get_iris
 
-knn_test = BaseKnn(K=3,distance_type=DisType.CosSim)
+knn_test = KNN(K=3, distance_type=DisType.CosSim)
 X, y = get_iris()
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.3)
 

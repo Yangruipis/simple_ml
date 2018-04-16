@@ -267,10 +267,10 @@ def regression_rmsel(y_predict, y_true):
 
 def regression_r2(y_predict, y_true):
     _check_input(y_predict, y_true)
-    y_hat = np.mean(y_true)
-    sst = np.sum(list(map(lambda x: (x-y_hat)**2, y_true)))
-    ssr = np.sum(list(map(lambda x: (y_hat-x)**2, y_predict)))
-    return ssr/sst
+    y_bar = np.mean(y_true)
+    sse = np.sum(np.square(y_predict - y_true))
+    ssr = np.sum(list(map(lambda x: (y_bar - x)**2, y_predict)))
+    return ssr/(ssr+sse)
 
 
 def regression_median_absolute_error(y_predict, y_true):

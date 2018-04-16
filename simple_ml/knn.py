@@ -8,12 +8,12 @@ from simple_ml.helper import classify_plot
 from .score import *
 
 
-class BaseKnn(BaseClassifier):
+class KNN(BaseClassifier):
 
     __doc__ = "K Nearest Neighbor(s)"
 
     def __init__(self, k=1, distance_type=DisType.Eculidean):
-        super(BaseKnn, self).__init__()
+        super(KNN, self).__init__()
         self.k = k
         self.dist_type = distance_type
         self.x = None
@@ -88,7 +88,7 @@ class Node:
         self.sample_ids = sample_ids
 
 
-class KDTree(BaseKnn):
+class KDTree(KNN):
 
     def __init__(self, k=5, dist_type=DisType.Eculidean):
         super(KDTree, self).__init__(k, dist_type)

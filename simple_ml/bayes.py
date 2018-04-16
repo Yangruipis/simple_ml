@@ -7,12 +7,12 @@ from simple_ml.base.base import BaseClassifier
 from simple_ml.helper import classify_plot
 from simple_ml.score import *
 
-class BaseNaiveBayes(BaseClassifier):
+class NaiveBayes(BaseClassifier):
 
     __doc__ = "Naive Bayes Classifier"
 
     def __init__(self):
-        super(BaseNaiveBayes, self).__init__()
+        super(NaiveBayes, self).__init__()
         self.is_feature_binary = []
         self.prob_array = None
 

@@ -71,7 +71,7 @@ class BaseClassifier(object):
             count = np.unique(feature)
             if len(count) == 2:
                 res.append(LabelType.binary)
-            elif len(count) > len(feature) // 4:
+            elif len(count) > len(feature) // 2:
                 res.append(LabelType.continuous)
             else:
                 res.append(LabelType.multi_class)
@@ -181,3 +181,28 @@ class BaseFeatureSelect():
     @abstractmethod
     def feature_select(self, top_n):
         pass
+
+
+class BinaryTreeNode:
+
+    def __init__(self, left=None, right=None, data_id=None, feature_id=None, value=None, leaf_label=None):
+        if data_id is None:
+            data_id = []
+        self.left = left
+        self.right = right
+        self.data_id = data_id
+        self.feature_id = feature_id
+        self.value = value
+        self.leaf_label = leaf_label
+
+
+class MultiTreeNode:
+
+    def __init__(self, child=None, data_id=None, feature_id=None, value=None, leaf_label=None):
+        if data_id is None:
+            data_id = []
+        self.child = child
+        self.data_id = data_id
+        self.feature_id = feature_id
+        self.value = value
+        self.leaf_label = leaf_label

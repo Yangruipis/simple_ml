@@ -7,7 +7,7 @@ from simple_ml.helper import  classify_plot
 from simple_ml.score import *
 
 
-class BaseSVM(BaseClassifier):
+class SVM(BaseClassifier):
 
     __doc__ = "Support Vector Machine"
 
@@ -26,7 +26,7 @@ class BaseSVM(BaseClassifier):
                         laplace(需提供参数：sigma)
                         sigmoid(需提供参数：beta, theta)
         """
-        super(BaseSVM, self).__init__()
+        super(SVM, self).__init__()
         self.c = c
         self.tol = tol
         self.precision = precision

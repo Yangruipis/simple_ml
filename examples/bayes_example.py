@@ -26,7 +26,7 @@ def wine_example():
     bmr.classify_plot(x_test, y_test)
 
     # 朴素贝叶斯
-    nb = BaseNaiveBayes()
+    nb = NaiveBayes()
     nb.fit(x_train, y_train)
     nb.predict(x_test)
     print(nb.score(x_test, y_test))
@@ -54,7 +54,7 @@ def moon_example():
     bmr.classify_plot(x_test, y_test)
 
     # 朴素贝叶斯
-    nb = BaseNaiveBayes()
+    nb = NaiveBayes()
     nb.fit(x_train, y_train)
     nb.predict(x_test)
     print(nb.score(x_test, y_test))

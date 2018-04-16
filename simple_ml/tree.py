@@ -2,35 +2,10 @@
 
 from collections import Counter
 from simple_ml.base.base_error import *
-from simple_ml.base.base import BaseClassifier
+from simple_ml.base.base import BaseClassifier, BinaryTreeNode, MultiTreeNode
 from simple_ml.base.base_enum import LabelType
 from simple_ml.helper import classify_plot
 from simple_ml.score import *
-
-
-class BinaryTreeNode:
-
-    def __init__(self, left=None, right=None, dataId=None, featureId=None, value=None, leaf_label=None):
-        if dataId is None:
-            dataId = []
-        self.left = left
-        self.right = right
-        self.dataId = dataId
-        self.featureID = featureId
-        self.value = value
-        self.leaf_label = leaf_label
-
-
-class MultiTreeNode:
-
-    def __init__(self, child=None, dataId=None, featureId=None, value=None, leaf_label=None):
-        if dataId is None:
-            dataId = []
-        self.child = child
-        self.dataId = dataId
-        self.featureID = featureId
-        self.value = value
-        self.leaf_label = leaf_label
 
 
 class ID3(BaseClassifier):
@@ -55,26 +30,26 @@ class ID3(BaseClassifier):
         if LabelType.continuous in self.feature_type:
             raise FeatureTypeError("ID3算法只支持离散特征")
 
-        self.root = self._gen_tree(MultiTreeNode(dataId=np.arange(self.x.shape[0])), 0)
+        self.root = self._gen_tree(MultiTreeNode(data_id=np.arange(self.x.shape[0])), 0)
 
     def _gen_tree(self, node: MultiTreeNode, depth) -> MultiTreeNode:
-        if depth >= self.max_depth or len(node.dataId) <= self.min_samples_leaf:
-            node.leaf_label = np.argmax(np.bincount(self.y[node.dataId]))
+        if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
+            node.leaf_label = np.argmax(np.bincount(self.y[node.data_id]))
             return node
 
-        split_feature = self._get_best_split(node.dataId)
-        feature = self.x[node.dataId, split_feature]
+        split_feature = self._get_best_split(node.data_id)
+        feature = self.x[node.data_id, split_feature]
         nodes = []
         for value in np.unique(feature):
-            new_node = MultiTreeNode(None, node.dataId[feature == value], split_feature, value)
+            new_node = MultiTreeNode(None, node.data_id[feature == value], split_feature, value)
             new_node = self._gen_tree(new_node, depth + 1)
             nodes.append(new_node)
         node.child = nodes
         return node
 
-    def _get_best_split(self, dataID):
-        data = self.x[dataID]
-        y = self.y[dataID]
+    def _get_best_split(self, data_id):
+        data = self.x[data_id]
+        y = self.y[data_id]
         best_split_feature = None
         y_entropy = self._get_entropy(y)
         _max_gain = -np.inf
@@ -85,7 +60,7 @@ class ID3(BaseClassifier):
             entropy = 0
             for feature_value in unique:
                 y_temp = y[data[:, i] == feature_value]
-                entropy += len(y_temp) / len(dataID) * self._get_entropy(y_temp)
+                entropy += len(y_temp) / len(data_id) * self._get_entropy(y_temp)
             gain = y_entropy - entropy
             if gain > _max_gain:
                 _max_gain = gain
@@ -111,7 +86,7 @@ class ID3(BaseClassifier):
             return node.leaf_label
 
         for child_node in node.child:
-            feature_id = child_node.featureID
+            feature_id = child_node.feature_id
             value = child_node.value
             if x[feature_id] == value:
                 return self._predict_single(x, child_node)
@@ -126,7 +101,7 @@ class CART(BaseClassifier):
 
     __doc__ = "Classify and Regression Tree"
 
-    def __init__(self, max_depth=10, min_samples_leaf=3):
+    def __init__(self, max_depth=10, min_samples_leaf=5):
         """
         分类回归树
         :param max_depth:        树最大深度
@@ -142,47 +117,48 @@ class CART(BaseClassifier):
         self.root = self._gen_tree(BinaryTreeNode(None, None, np.arange(self.x.shape[0])), 1)
 
     def _gen_tree(self, node: BinaryTreeNode, depth) -> BinaryTreeNode:
-        if depth >= self.max_depth or len(node.dataId) <= self.min_samples_leaf:
+        if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
             # 获取相应的标签
-            if len(node.dataId) != 0 :
+            if len(node.data_id) != 0 :
                 if self.label_type == LabelType.continuous:
-                    node.leaf_label = np.mean(self.y[node.dataId])
+                    node.leaf_label = np.mean(self.y[node.data_id])
                 else:
-                    node.leaf_label = np.argmax(np.bincount(self.y[node.dataId]))
+                    node.leaf_label = np.argmax(np.bincount(self.y[node.data_id]))
             else:
                 # 防止出现样本量为0时返回nan的情况，此时temp是一个数组
-                temp = self.y[self.x[:, node.featureID] == node.value]
+                temp = self.y[self.x[:, node.feature_id] == node.value]
                 if len(temp) == 0:
                     node.leaf_label = np.random.choice(self.y, 1)[0]
                 else:
                     node.leaf_label = np.argmax(np.bincount(temp))
             return node
 
-        best_split = self._get_best_split(node.dataId)
+        best_split = self._get_best_split(node.data_id)
         if best_split[0] is None:
             if self.label_type == LabelType.continuous:
-                node.leaf_label = np.mean(self.y[node.dataId])
+                node.leaf_label = np.mean(self.y[node.data_id])
             else:
-                node.leaf_label = np.argmax(np.bincount(self.y[node.dataId]))
+                node.leaf_label = np.argmax(np.bincount(self.y[node.data_id]))
             return node
 
-        feature_arr = self.x[node.dataId, best_split[0]]
+        feature_arr = self.x[node.data_id, best_split[0]]
         if best_split[2]:
-            left = BinaryTreeNode(None, None, node.dataId[feature_arr <= best_split[1]], best_split[0], best_split[1])
-            right = BinaryTreeNode(None, None, node.dataId[feature_arr > best_split[1]], best_split[0], best_split[1])
+            left = BinaryTreeNode(None, None, node.data_id[feature_arr <= best_split[1]], best_split[0], best_split[1])
+            right = BinaryTreeNode(None, None, node.data_id[feature_arr > best_split[1]], best_split[0], best_split[1])
         else:
-            left = BinaryTreeNode(None, None, node.dataId[feature_arr == best_split[1]], best_split[0], best_split[1])
-            right = BinaryTreeNode(None, None, node.dataId[feature_arr != best_split[1]], best_split[0], best_split[1])
+            left = BinaryTreeNode(None, None, node.data_id[feature_arr == best_split[1]], best_split[0], best_split[1])
+            right = BinaryTreeNode(None, None, node.data_id[feature_arr != best_split[1]], best_split[0], best_split[1])
         node.left = self._gen_tree(left, depth + 1)
         node.right = self._gen_tree(right, depth + 1)
         return node
 
-    def _get_best_split(self, dataID):
-        x = self.x[dataID]
-        y = self.y[dataID]
-        best_split = (None, None, None)     # (特征，取值，连续还是离散)
+    def _get_best_split(self, data_id):
+        x = self.x[data_id]
+        y = self.y[data_id]
+        best_split = (None, None, None, None)     # (特征，取值，连续还是离散, error减小)
         error = np.inf
         if self.label_type == LabelType.continuous:
+            y_error = self._get_sse(y)
             for i in range(x.shape[1]):
                 feature_arr = x[:, i]
                 if self.feature_type[i] == LabelType.continuous:
@@ -195,15 +171,16 @@ class CART(BaseClassifier):
                         low += step
                         if temp_error < error:
                             error = temp_error
-                            best_split = (i, low, True)
+                            best_split = (i, low, True, y_error - error)
                 else:
                     # 如果特征为离散值
                     for f in np.unique(feature_arr):
                         temp_error = self._get_sum_sse(y, feature_arr, f, False)
                         if temp_error < error:
                             error = temp_error
-                            best_split = (i, f, False)
+                            best_split = (i, f, False, y_error - error)
         else:
+            y_error = self._get_gini(y)
             for i in range(x.shape[1]):
                 feature_arr = x[:, i]
                 if self.feature_type[i] == LabelType.continuous:
@@ -215,14 +192,14 @@ class CART(BaseClassifier):
                         low += step
                         if temp_error < error:
                             error = temp_error
-                            best_split = (i, low, True)
+                            best_split = (i, low, True, y_error - error)
                 else:
                     # 如果特征为离散值
                     for f in np.unique(feature_arr):
                         temp_error = self._get_conditional_gini(y, feature_arr, f, False)
                         if temp_error < error:
                             error = temp_error
-                            best_split = (i, f, False)
+                            best_split = (i, f, False, y_error - error)
         return best_split
 
 
@@ -262,18 +239,14 @@ class CART(BaseClassifier):
     def predict(self, x):
         if self.root is None:
             raise ModelNotFittedError
-        try:
-            return np.array([self._predict_single(i, self.root) for i in x])
-        except:
-            pass
+        return np.array([self._predict_single(i, self.root) for i in x])
+
 
     def _predict_single(self, x, node: BinaryTreeNode):
         if node.leaf_label is not None:
-            if isinstance(node.leaf_label, np.ndarray) and len(node.leaf_label) == 0:
-                return np.random.choice(self.y, 1)[0]
             return node.leaf_label
 
-        feature = node.left.featureID
+        feature = node.left.feature_id
         if self.feature_type[feature] == LabelType.continuous:
             if x[feature] <= node.left.value:
                 return self._predict_single(x, node.left)
@@ -298,12 +271,12 @@ class CART(BaseClassifier):
         classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
 
 
-class BaseRandomForest(BaseClassifier):
+class RandomForest(BaseClassifier):
 
     __doc__ = "Random Forest"
 
     def __init__(self, m, tree_num=200):
-        super(BaseRandomForest, self).__init__()
+        super(RandomForest, self).__init__()
         self.m = m
         self.tree_num = tree_num
         self.forest = None

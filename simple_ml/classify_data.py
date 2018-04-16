@@ -11,8 +11,12 @@ def get_iris():
     return x, np.array(y, dtype='int')
 
 
-def get_wine():
+def get_watermelon():
+    x, y = load("/data_sets/watermelon.txt")
+    return x, np.array(y, dtype='int')
 
+
+def get_wine():
     x, y = load("/data_sets/wine.txt")
     return x, np.array(y, dtype='int')
 
@@ -27,9 +31,10 @@ def get_circle():
     return x, np.array(y, dtype='int')
 
 
-def get_watermelon():
-    x, y = load("/data_sets/watermelon.txt")
+def get_hastie_10_2():
+    x, y = load("/data_sets/hastie_10_2.txt")
     return x, np.array(y, dtype='int')
+
 
 def dump(x, y, path):
     with open(PATH + path, 'w') as f:

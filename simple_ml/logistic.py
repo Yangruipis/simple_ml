@@ -13,7 +13,7 @@ from simple_ml.score import *
 import scipy.optimize as so
 
 
-class BaseLogisticRegression(BaseClassifier):
+class LogisticRegression(BaseClassifier):
 
     __doc__ = "Logistic Regression"
 
@@ -25,7 +25,7 @@ class BaseLogisticRegression(BaseClassifier):
         :param threshold:      决策阈值，当得到的概率大于等于阈值时输出1，否则输出0
         :param has_intercept:  是否包含截距项
         """
-        super(BaseLogisticRegression, self).__init__()
+        super(LogisticRegression, self).__init__()
         self.tol = tol
         self.step = step
         self.has_intercept = has_intercept
@@ -52,7 +52,7 @@ class BaseLogisticRegression(BaseClassifier):
         return np.column_stack((np.ones(x.shape[0]), x))
 
     def _init(self, x, y):
-        super(BaseLogisticRegression, self)._init(x, y)
+        super(LogisticRegression, self)._init(x, y)
         if self.has_intercept:
             self.x = self._add_ones(self.x)
             self.variable_num += 1
@@ -118,7 +118,7 @@ class BaseLogisticRegression(BaseClassifier):
         # 返回当前类的新的实例，由于该类是超类，因此用classmethod，无论是什么类调用，返回的都是该类本身
         return cls()
 
-class Lasso(BaseLogisticRegression, BaseFeatureSelect):
+class Lasso(LogisticRegression, BaseFeatureSelect):
 
     __doc__ = "Lasso Regression"
 

@@ -38,13 +38,13 @@ def random_forest_example():
 
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
-    rf = BaseRandomForest(4, 50)
+    rf = RandomForest(4, 50)
     rf.fit(x_train, y_train)
     print(rf.score(x_test, y_test))
     rf.classify_plot(x_test, y_test)
 
 
 if __name__ == '__main__':
-    # ID3_example()
-    # CART_example()
+    ID3_example()
+    CART_example()
     random_forest_example()

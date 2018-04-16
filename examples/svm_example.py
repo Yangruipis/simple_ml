@@ -16,7 +16,7 @@ def iris_example():
 
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
-    mysvm = BaseSVM(0.6, 0.001, 0.00001, 50, KernelType.linear)
+    mysvm = SVM(0.6, 0.001, 0.00001, 50, KernelType.linear)
     mysvm.fit(x_train, y_train)
     print(mysvm.alphas, mysvm.b)
     print(mysvm.predict(x_train))
@@ -34,7 +34,7 @@ def iris_example2():
 
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
-    mysvm = BaseSVM(0.6, 0.001, 0.00001, 50, KernelType.linear)
+    mysvm = SVM(0.6, 0.001, 0.00001, 50, KernelType.linear)
     mysvm.fit(x_train, y_train)
     print(mysvm.alphas, mysvm.b)
     print(mysvm.predict(x_train))
@@ -51,26 +51,26 @@ def moon_example():
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
     # sigma设置的比较小，会过拟合
-    mysvm = BaseSVM(0.6, 0.001, 0.00001, 50, KernelType.gassian, sigma=0.5)
+    mysvm = SVM(0.6, 0.001, 0.00001, 50, KernelType.gassian, sigma=0.5)
     mysvm.fit(x_train, y_train)
     print(mysvm.alphas, mysvm.b)
     print(mysvm.predict(x_train))
     mysvm.classify_plot(x_test, y_test)
 
     # sigma设置的比较大，会欠拟合
-    mysvm = BaseSVM(0.6, 0.001, 0.00001, 50, KernelType.gassian, sigma=1)
+    mysvm = SVM(0.6, 0.001, 0.00001, 50, KernelType.gassian, sigma=1)
     mysvm.fit(x_train, y_train)
     print(mysvm.alphas, mysvm.b)
     print(mysvm.predict(x_train))
     mysvm.classify_plot(x_test, y_test)
 
-    mysvm = BaseSVM(0.6, 0.001, 0.00001, 50, KernelType.laplace, sigma=1)
+    mysvm = SVM(0.6, 0.001, 0.00001, 50, KernelType.laplace, sigma=1)
     mysvm.fit(x_train, y_train)
     print(mysvm.alphas, mysvm.b)
     print(mysvm.predict(x_train))
     mysvm.classify_plot(x_test, y_test)
 
-    mysvm = BaseSVM(0.6, 0.001, 0.00001, 50, KernelType.sigmoid, beta=1, theta=-1)
+    mysvm = SVM(0.6, 0.001, 0.00001, 50, KernelType.sigmoid, beta=1, theta=-1)
     mysvm.fit(x_train, y_train)
     print(mysvm.alphas, mysvm.b)
     print(mysvm.predict(x_train))

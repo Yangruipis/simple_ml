@@ -1,8 +1,9 @@
 
 
-
+![](./doc/imgs/logo.png)
 
 Simple Meachine Learning
+
 一个简单的机器学习算法实现
 
 ![](https://img.shields.io/npm/l/express.svg)  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806)](https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade) [![Join the chat at https://gitter.im/simple_ml/Lobby](https://badges.gitter.im/simple_ml/Lobby.svg)](https://gitter.im/simple_ml/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -73,14 +74,24 @@ print(cart.predict(x_test))
 ### 2. 分类和回归
 
 #### 2.1 二分类
-`simple_ml`提供了非常多的二分类方法，以[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)为例（见`./simple_ml/examples`），分类效果和方法名称见下图。
-![pic1](./doc/imgs/wine.jpg)
+`simple_ml`提供了非常多的二分类方法，以[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)为例（见`./simple_ml/examples`），分类效果和方法名称见图1。
+
+<center>
+<img src="./doc/imgs/wine.jpg"  />
+
+图 1. 二分类效果图
+</center>
 
 #### 2.2 多分类
 
 `simple_ml`暂时只提供了一些多分类算法，见下图，同样是[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)，后面作者将会进行补充。
 
-![pic2](./doc/imgs/wine2.jpg)
+<center>
+<img src="./doc/imgs/wine2.jpg" width="75%" height="75%" />
+
+图 2. 多分类效果图
+</center>
+
 
 #### 2.3 回归
 
@@ -95,9 +106,9 @@ print(cart.predict(x_test))
 
 # 为什么会有这个项目 & 致谢
 
-作者本科在上海一个双非商科院校读统计，而后保研失败继续在本校读经济，从大二开始接触机器学习，以及编程相关知识（我的轨迹：stata->R->C#->python)，对数据和编程非常感兴趣，基本上一路走过来全靠自学。
+作者本科在上海一个双非商科院校读统计，而后保研失败继续在本校读经济，从大二开始接触机器学习，以及编程相关知识（stata->R->C#->python)，对数据和编程非常感兴趣，基本上一路走过来全靠自学。
 
-而现在找工作的路磕磕绊绊（个人能力+非科班非211非985），有可能以后也不会从事算法工程师相关工作，但是总想留下一点东西，尤其是即将毕业之际。以后看起来可能非常可笑吧，不过总归是曾经的轨迹。
+而现在找工作的路磕磕绊绊（个人能力不够+非科班非211非985），有可能以后也不会从事算法工程师相关工作，但是总想留下一点东西，尤其是即将毕业之际。以后看起来可能非常可笑吧，不过总归是曾经的轨迹。
 
 作者在接下来的一年找工作的同时，将尽全力维护该项目，不断更新和修改，热烈欢迎任何贡献和讨论。
 

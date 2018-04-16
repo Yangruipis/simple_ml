@@ -22,6 +22,7 @@ Simple Meachine Learning
 - windows or Linux
 - numpy
 - matplotlib
+
 `强烈推荐Anaconda环境`
 
 **终端安装**
@@ -38,6 +39,7 @@ pip install setup.py
 # 一个简单的例子，用CART树进行二分类
 from simple_ml.tree import CART
 import numpy as np
+
 X = np.array([[1,1.1],
               [1,2.0],
               [0,3.0],
@@ -49,7 +51,7 @@ x_test = np.array([[1,2],[3,4]])
 print(cart.predict(x_test))
 ```
 ```python
->>> np.array([1,1])
+Out[1]: np.array([1,1])
 ```
 
 `./simple_ml/examples`文件夹中提供了大多数方法的使用范例，更详细的用法见 [帮助手册 manual.md](./manual.md)
@@ -102,6 +104,7 @@ print(cart.predict(x_test))
 
 ### 3. 聚类
 
+`simple_ml`提供了`K-means聚类`和`层次聚类`两种聚类方法
 
 `注:`以上所有图均为simple_ml直出（需要matplotlib）
 

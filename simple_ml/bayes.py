@@ -85,8 +85,8 @@ class NaiveBayes(BaseClassifier):
         else:
             return classify_f1_macro(y_predict, y)
 
-    def classify_plot(self, x, y):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
+    def classify_plot(self, x, y, title=""):
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__ + title)
 
 
 
@@ -152,8 +152,8 @@ class BaseBayesMinimumError(BaseClassifier):
         else:
             return classify_f1_macro(y_predict, y)
 
-    def classify_plot(self, x, y):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
+    def classify_plot(self, x, y, title=""):
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__+title)
 
 
 class BayesMinimumRisk(BaseBayesMinimumError):

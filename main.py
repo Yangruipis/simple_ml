@@ -1,21 +1,13 @@
 # -*- coding:utf-8 -*-
 
-# from simple_ml.bp_network import *
-# from simple_ml.knn import *
-# from simple_ml.cluster import *
-# from simple_ml.logistic import *
-# from simple_ml.naive_bayes import *
-# from simple_ml.svm import *
-# from simple_ml.tree import *
 
-
-from simple_ml.knn import *
-from simple_ml.classify_data import get_iris
-
-knn_test = KNN(K=3, distance_type=DisType.CosSim)
-X, y = get_iris()
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.3)
-
-knn_test.fit(X_train, y_train)
-print(knn_test.predict(X_test))
-print(knn_test.score(X_test, y_test))
+from simple_ml.tree import CART
+import numpy as np
+X = np.array([[1,1.1],
+              [1,2.0],
+              [0,3.0],
+              [0,2.2]])
+y = np.array([1,1,0,0])
+cart = CART(min_samples_leaf=1)
+cart.fit(X, y)
+print(cart.predict(np.array([[1,2], [3,4]])))

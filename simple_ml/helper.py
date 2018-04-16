@@ -58,7 +58,7 @@ def transform_y(y):
         return y
 
 
-def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title="", px=100):
+def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title="",compare=False, px=100):
     """
     注意：
     - 该画图方法是在内部训练进行画图，如果特征大于2，则降至2维再进行训练，而不是先训练后作图，因为要对图上每一个二维点都进行预测
@@ -94,54 +94,81 @@ def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title
     cm = plt.cm.RdBu
     cm_bright = plt.cm.RdBu   # ListedColormap(['#FF0000', '#29A086', '#0000FF'])
     colors = ['#67001F', '#053061', '#29A086', '#0000FF']
-    ax = plt.subplot(1, 2, 1)
+    if compare:
+        ax = plt.subplot(1, 2, 1)
 
-    for idx, i in enumerate(np.unique(y_train)):
-        ax.scatter(x_train[y_train == i, 0], x_train[y_train == i, 1], c=colors[idx], label="train, y=%s" % int(i))
+        for idx, i in enumerate(np.unique(y_train)):
+            ax.scatter(x_train[y_train == i, 0], x_train[y_train == i, 1], c=colors[idx], label="train, y=%s" % int(i))
 
-    for idx, i in enumerate(np.unique(y_test)):
-        ax.scatter(x_test[y_test == i, 0], x_test[y_test == i, 1], c=colors[idx], label="test , y=%s" % int(i),
-                   alpha=0.6)
-    ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0), ncol=2)
+        for idx, i in enumerate(np.unique(y_test)):
+            ax.scatter(x_test[y_test == i, 0], x_test[y_test == i, 1], c=colors[idx], label="test , y=%s" % int(i),
+                       alpha=0.6)
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0), ncol=2)
 
-    # p1 = ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(y_train), cmap=cm_bright, label=transform_y(y_train))
-    # p2 = ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
-    # ax.legend([p1, p2], ['train', 'test'])
+        # p1 = ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(y_train), cmap=cm_bright, label=transform_y(y_train))
+        # p2 = ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
+        # ax.legend([p1, p2], ['train', 'test'])
 
-    ax.set_xlim(xx.min(), xx.max())
-    ax.set_ylim(yy.min(), yy.max())
-    ax.set_xticks(())
-    ax.set_yticks(())
+        ax.set_xlim(xx.min(), xx.max())
+        ax.set_ylim(yy.min(), yy.max())
+        ax.set_xticks(())
+        ax.set_yticks(())
 
-    ax = plt.subplot(1, 2, 2)
+        ax = plt.subplot(1, 2, 2)
 
-    # Plot the decision boundary. For that, we will assign a color to each
-    # point in the mesh [x_min, m_max]x[y_min, y_max].
-    z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+        # Plot the decision boundary. For that, we will assign a color to each
+        # point in the mesh [x_min, m_max]x[y_min, y_max].
+        z = model.predict(np.c_[xx.ravel(), yy.ravel()])
 
-    # Put the result into a color plot
-    z = transform_y(z)
-    z = z.reshape(xx.shape)
-    ax.contourf(xx, yy, z, cmap=cm, alpha=.8)
+        # Put the result into a color plot
+        z = transform_y(z)
+        z = z.reshape(xx.shape)
+        ax.contourf(xx, yy, z, cmap=cm, alpha=.8)
 
-    for idx, i in enumerate(np.unique(y_train)):
-        ax.scatter(x_train[y_train == i, 0], x_train[y_train == i, 1], c=colors[idx], label="train, y=%s" % int(i))
+        for idx, i in enumerate(np.unique(y_train)):
+            ax.scatter(x_train[y_train == i, 0], x_train[y_train == i, 1], c=colors[idx], label="train, y=%s" % int(i))
 
-    for idx, i in enumerate(np.unique(y_test)):
-        ax.scatter(x_test[y_test == i, 0], x_test[y_test == i, 1], c=colors[idx], label="test , y=%s" % int(i),
-                   alpha=0.6)
-    ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0), ncol=2)    # , mode="expand", borderaxespad=0.)
+        for idx, i in enumerate(np.unique(y_test)):
+            ax.scatter(x_test[y_test == i, 0], x_test[y_test == i, 1], c=colors[idx], label="test , y=%s" % int(i),
+                       alpha=0.6)
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0), ncol=2)    # , mode="expand", borderaxespad=0.)
 
-    # p3 = ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(model.y), cmap=cm_bright)
-    # p4 = ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
-    # ax.legend([p3, p4], ['train', 'test'])
+        # p3 = ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(model.y), cmap=cm_bright)
+        # p4 = ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
+        # ax.legend([p3, p4], ['train', 'test'])
 
-    ax.set_xlim(xx.min(), xx.max())
-    ax.set_ylim(yy.min(), yy.max())
-    ax.set_xticks(())
-    ax.set_yticks(())
-    ax.set_title(title)
-    ax.text(xx.max() - .3, yy.min() + .3, ('%.4f' % score).lstrip('0'),
-            size=15, horizontalalignment='right')
+        ax.set_xlim(xx.min(), xx.max())
+        ax.set_ylim(yy.min(), yy.max())
+        ax.set_xticks(())
+        ax.set_yticks(())
+        ax.set_title(title)
+        ax.text(xx.max() - .3, yy.min() + .3, ('%.4f' % score).lstrip('0'),
+                size=15, horizontalalignment='right')
 
-    plt.show()
+        plt.show()
+    else:
+        figure = plt.figure(figsize=(3, 6))
+        ax = figure.add_subplot(111)
+        z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+
+        z = transform_y(z)
+        z = z.reshape(xx.shape)
+        ax.contourf(xx, yy, z, cmap=cm, alpha=.8)
+
+        for idx, i in enumerate(np.unique(y_train)):
+            ax.scatter(x_train[y_train == i, 0], x_train[y_train == i, 1], c=colors[idx], label="train, y=%s" % int(i))
+
+        for idx, i in enumerate(np.unique(y_test)):
+            ax.scatter(x_test[y_test == i, 0], x_test[y_test == i, 1], c=colors[idx], label="test , y=%s" % int(i),
+                       alpha=0.6)
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0), ncol=2)  # , mode="expand", borderaxespad=0.)
+
+        ax.set_xlim(xx.min(), xx.max())
+        ax.set_ylim(yy.min(), yy.max())
+        ax.set_xticks(())
+        ax.set_yticks(())
+        ax.set_title(title)
+        ax.text(xx.max() - .3, yy.min() + .3, ('%.4f' % score).lstrip('0'),
+                size=15, horizontalalignment='right')
+
+        plt.show()

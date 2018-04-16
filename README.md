@@ -96,7 +96,6 @@ TODO list:
 - [x] get more datasets
 - [ ] regression plot
 - [ ] kd_tree
-- [ ] weighted logistic
 
 # 特征工程<a id="sec-1" name="sec-1"></a>
 

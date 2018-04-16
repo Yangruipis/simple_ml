@@ -17,7 +17,7 @@ class LogisticRegression(BaseClassifier):
 
     __doc__ = "Logistic Regression"
 
-    def __init__(self, tol=0.01, step=0.01, threshold=0.5, has_intercept=True):
+    def __init__(self, tol=0.01, step=0.01, threshold=0.5, has_intercept=True, sample_weights=None):
         """
         不包含惩罚项的Logistic回归
         :param tol:            误差容忍度，越大时收敛越快，但是越不精确
@@ -29,6 +29,7 @@ class LogisticRegression(BaseClassifier):
         self.tol = tol
         self.step = step
         self.has_intercept = has_intercept
+        self.sample_weight = sample_weights
         self.threshold = threshold
         self.w = None
 
@@ -59,6 +60,8 @@ class LogisticRegression(BaseClassifier):
 
     def fit(self, x, y):
         self._init(x, y)
+        if self.sample_weight is None:
+            self.sample_weight = np.ones(self.sample_num)
         if self.label_type != LabelType.binary:
             raise LabelTypeError("Logistic回归暂时只支持二分类问题")
         self.w, _ = self._fit()
@@ -117,6 +120,7 @@ class LogisticRegression(BaseClassifier):
     def new(cls):
         # 返回当前类的新的实例，由于该类是超类，因此用classmethod，无论是什么类调用，返回的都是该类本身
         return cls()
+
 
 class Lasso(LogisticRegression, BaseFeatureSelect):
 
@@ -180,8 +184,8 @@ class Lasso(LogisticRegression, BaseFeatureSelect):
             w = self.w[1:]
         else:
             w = self.w
-        if len(w[w!=0]) <= top_n:
-            return np.arange(w.shape[0])[w!=0]
+        if len(w[w != 0]) <= top_n:
+            return np.arange(w.shape[0])[w != 0]
         else:
             return w.argsort()[-top_n:][::-1]
 

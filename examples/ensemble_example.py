@@ -11,7 +11,12 @@ def moon_example():
     y = y[(y == 0) | (y == 1)]
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
-    ada = BaseAdaBoost()
+    ada = BaseAdaBoost(classifier=ClassifierType.LR)
+    ada.fit(x_train, y_train)
+    print(ada.score(x_test, y_test))
+    ada.classify_plot(x_test, y_test)
+
+    ada = BaseAdaBoost(classifier=ClassifierType.KNN)
     ada.fit(x_train, y_train)
     print(ada.score(x_test, y_test))
     ada.classify_plot(x_test, y_test)
@@ -40,5 +45,5 @@ def watermelon_example():
 
 
 if __name__ == '__main__':
-    # moon_example()
-    watermelon_example()
+    moon_example()
+    # watermelon_example()

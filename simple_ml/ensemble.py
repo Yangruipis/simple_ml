@@ -21,18 +21,25 @@ class BaseAdaBoost(BaseClassifier):
 
     def _init_classifier(self):
         if self.classifier == ClassifierType.LR:
-            from sklearn.linear_model import LogisticRegression
-            self.clf_list = [LogisticRegression() for i in range(self.nums)]
+            from simple_ml.logistic import Ridge
+            self.clf_list = [Ridge() for i in range(self.nums)]
         elif self.classifier == ClassifierType.KNN:
-            from sklearn.neighbors import KNeighborsClassifier
-            self.clf_list = [KNeighborsClassifier() for i in range(self.nums)]
+            from simple_ml.knn import KNN
+            self.clf_list = [KNN() for i in range(self.nums)]
         else:
             # TODO coming soon
             pass
 
-    # TODO: resample
-    def _re_sample(self):
-        pass
+    def _re_sample(self, x, y, weight):
+        """
+        这里采用bootstrap抽样方法，用以解决带权重的分类
+        :param x:
+        :param y:
+        :param weight:
+        :return:
+        """
+        choose_id = np.random.choice(np.arange(self.sample_num), self.sample_num, p=weight, replace=True)
+        return x[choose_id], y[choose_id]
 
     def fit(self, x, y):
         self._init(x, y)
@@ -40,16 +47,14 @@ class BaseAdaBoost(BaseClassifier):
         self.current_clf_num = 0
         for m in range(self.nums):
             clf = self.clf_list[m]
-            clf.fit(x, y, sample_weight=self.weights)
+            x, y = self._re_sample(x, y, self.weights)
+            clf.fit(x, y)
             y_predict = clf.predict(x)
             e, alpha = self._update_alpha(y_predict, y)
-            # print(sum(y_pred != y) / float(len(y)))
-
-            # TODO: 这儿有问题，每一次效果没有变的更好，考虑用resample做
 
             self.alpha[m] = alpha
             self._update_weight(y_predict, y, alpha)
-            print("Model %s fitted" % m)
+            # print("Model %s fitted" % m)
             self.current_clf_num += 1
             if e < 0.1:
                 break

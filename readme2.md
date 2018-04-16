@@ -18,6 +18,8 @@ Simple Meachine Learning
 - python3.5及以上
 - windows or Linux
 - numpy
+- matplotlib
+`强烈推荐Anaconda环境`
 
 **终端安装**
 
@@ -69,7 +71,7 @@ print(cart.predict(x_test))
 ### 1. 特征
 
 ### 2. 分类和回归
-![pic1](./doc/imgs/wine_bme.eps?raw=true)
+![pic1](./doc/imgs/wine.jpg?raw=true)
 
 ### 3. 聚类
 

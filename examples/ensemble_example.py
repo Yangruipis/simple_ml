@@ -10,7 +10,7 @@ def moon_example():
     AdaBoost的例子，以月亮数据集为例
     :return:
     """
-    x, y = get_moon()
+    x, y = get_wine()
     x = x[(y == 0) | (y == 1)]
     y = y[(y == 0) | (y == 1)]
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
@@ -19,19 +19,19 @@ def moon_example():
     ada = AdaBoost(classifier=ClassifierType.LR)
     ada.fit(x_train, y_train)
     print(ada.score(x_test, y_test))
-    ada.classify_plot(x_test, y_test)
+    ada.classify_plot(x_test, y_test, ", LR")
 
     # 采用KNN作为子分类器的AdaBoost
     ada = AdaBoost(classifier=ClassifierType.KNN)
     ada.fit(x_train, y_train)
     print(ada.score(x_test, y_test))
-    ada.classify_plot(x_test, y_test)
+    ada.classify_plot(x_test, y_test, ", KNN")
 
     # 采用CART树为子分类器的AdaBoost
     ada = AdaBoost(classifier=ClassifierType.CART)
     ada.fit(x_train, y_train)
     print(ada.score(x_test, y_test))
-    ada.classify_plot(x_test, y_test)
+    ada.classify_plot(x_test, y_test, ", CART")
 
 
 def watermelon_example():

@@ -8,8 +8,8 @@ from simple_ml.helper import train_test_split
 def wine_example():
     x, y = get_wine()
     # knn可以解决多分类问题
-    # x = x[(y == 0) | (y == 1)]
-    # y = y[(y == 0) | (y == 1)]
+    x = x[(y == 0) | (y == 1)]
+    y = y[(y == 0) | (y == 1)]
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
     knn = KNN()

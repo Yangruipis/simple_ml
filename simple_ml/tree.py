@@ -267,8 +267,8 @@ class CART(BaseClassifier):
         else:
             return classify_f1(y_predict, y)
 
-    def classify_plot(self, x, y):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
+    def classify_plot(self, x, y, title=""):
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__ + title)
 
 
 class RandomForest(BaseClassifier):
@@ -333,8 +333,8 @@ class RandomForest(BaseClassifier):
         else:
             return classify_f1_micro(y_predict, y)
 
-    def classify_plot(self, test_x, test_y):
-        classify_plot(self.new(1, 1), self.x, self.y, test_x, test_y, title=self.__doc__)
+    def classify_plot(self, test_x, test_y, title=""):
+        classify_plot(self.new(1, 1), self.x, self.y, test_x, test_y, title=self.__doc__ + title)
 
     @classmethod
     def new(cls, *args):

@@ -104,8 +104,8 @@ class AdaBoost(BaseClassifier):
         y_predict = self.predict(x)
         return classify_f1(y_predict, y)
 
-    def classify_plot(self, x, y):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
+    def classify_plot(self, x, y, title=""):
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__ + title)
 
 
 class GBDTTreeNode(BinaryTreeNode):

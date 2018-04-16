@@ -111,10 +111,10 @@ class LogisticRegression(BaseClassifier):
         predict_y = self.predict_prob(x)
         classify_roc_plot(predict_y, y)
 
-    def classify_plot(self, x, y):
+    def classify_plot(self, x, y, title=""):
         if self.has_intercept:
             x = self._add_ones(x)
-        classify_plot(self.new(), self.x[:], self.y[:], x, y, title=self.__doc__)
+        classify_plot(self.new(), self.x[:], self.y[:], x, y, title=self.__doc__ + title)
 
     @classmethod
     def new(cls):

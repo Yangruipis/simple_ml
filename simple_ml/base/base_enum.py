@@ -32,7 +32,7 @@ class LabelType(Enum):
 class KernelType(Enum):
     linear = 0
     polynomial = 1
-    gassian = 2
+    gaussian = 2
     laplace = 3
     sigmoid = 4
 

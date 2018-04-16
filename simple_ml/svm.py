@@ -9,7 +9,7 @@ from simple_ml.score import *
 
 class SVM(BaseClassifier):
 
-    __doc__ = "Support Vector Machine"
+    __doc__ = "SVM"
 
     def __init__(self, c=0.1, tol=0.001, precision=0.01, max_iter=100, kernel_type=KernelType.linear, **kwargs):
         """
@@ -39,7 +39,7 @@ class SVM(BaseClassifier):
         self.kernel_mat = None
 
     def _check_kernel(self, kwargs_dict):
-        if self.kernel_type == KernelType.gassian or self.kernel_type == KernelType.laplace:
+        if self.kernel_type == KernelType.gaussian or self.kernel_type == KernelType.laplace:
             if 'sigma' not in kwargs_dict:
                 raise KernelMissParameterError("高斯核或拉普拉斯核必须申明带宽sigma参数, sigma>0")
             self.sigma = kwargs_dict['sigma']
@@ -97,7 +97,7 @@ class SVM(BaseClassifier):
         elif self.kernel_type == KernelType.sigmoid:
             return np.tanh(self.beta * np.dot(self.x, self.x.T) + self.theta)
 
-        if self.kernel_type == KernelType.gassian:
+        if self.kernel_type == KernelType.gaussian:
             kernel_func = lambda x_i, x_j: np.exp(- np.sum((x_i - x_j)**2) / (2 * self.sigma**2))
         elif self.kernel_type == KernelType.laplace:
             kernel_func = lambda x_i, x_j: np.exp(- np.sqrt(np.sum((x_i - x_j)**2)) / self.sigma)
@@ -293,7 +293,7 @@ class SVM(BaseClassifier):
         elif kernel_type == KernelType.sigmoid:
             return np.tanh(self.beta * np.dot(x_mat, x_vector.reshape(-1, 1)).ravel() + self.theta)
 
-        if kernel_type == KernelType.gassian:
+        if kernel_type == KernelType.gaussian:
             kernel_func = lambda x_i, x_j: np.exp(- np.sum((x_i - x_j)**2) / (2 * self.sigma**2))
         elif kernel_type == KernelType.laplace:
             kernel_func = lambda x_i, x_j: np.exp(- np.sqrt(np.sum((x_i - x_j)**2)) / self.sigma)
@@ -312,6 +312,6 @@ class SVM(BaseClassifier):
         y_true_binary = np.array([0 if i == -1 else i for i in y])
         return classify_f1(y_predict_binary, y_true_binary)
 
-    def classify_plot(self, x, y):
+    def classify_plot(self, x, y, title=""):
         y = self._adj_y(y)
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__ + title)

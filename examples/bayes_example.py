@@ -9,6 +9,7 @@ def wine_example():
     x, y = get_wine()
     x = x[(y == 0) | (y == 1)]
     y = y[(y == 0) | (y == 1)]
+
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
     # 贝叶斯最小错误率

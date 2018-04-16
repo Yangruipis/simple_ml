@@ -71,7 +71,7 @@ print(cart.predict(x_test))
 ### 1. 特征
 
 ### 2. 分类和回归
-![pic1](./doc/imgs/wine.jpg?raw=true)
+![pic1](./doc/imgs/wine.jpg)
 
 ### 3. 聚类
 

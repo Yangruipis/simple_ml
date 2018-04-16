@@ -1,6 +1,6 @@
 
 <center>
-<img src="./doc/imgs/logo.png" width="100%" height="100%" />
+<img src="./doc/imgs/logo2.png" width="100%" height="100%" />
 </center>
 
 
@@ -8,7 +8,7 @@ Simple Meachine Learning
 
 一个简单的机器学习算法实现
 
-![](https://img.shields.io/npm/l/express.svg)  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806)](https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade) [![Join the chat at https://gitter.im/simple_ml/Lobby](https://badges.gitter.im/simple_ml/Lobby.svg)](https://gitter.im/simple_ml/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![](https://img.shields.io/npm/l/express.svg) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806)](https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade) [![Join the chat at https://gitter.im/simple_ml/Lobby](https://badges.gitter.im/simple_ml/Lobby.svg)](https://gitter.im/simple_ml/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ---
 
@@ -22,6 +22,7 @@ Simple Meachine Learning
 - windows or Linux
 - numpy
 - matplotlib
+- minepy
 
 `强烈推荐Anaconda环境`
 
@@ -30,7 +31,7 @@ Simple Meachine Learning
 ```bash
 git clone https://github.com/Yangruipis/simple_ml.git
 cd ./simple_ml
-pip install setup.py
+python setup.py install
 ```
 
 ## 使用
@@ -54,7 +55,7 @@ print(cart.predict(x_test))
 Out[1]: np.array([1,1])
 ```
 
-`./simple_ml/examples`文件夹中提供了大多数方法的使用范例，更详细的用法见 [帮助手册 manual.md](./manual.md)
+`./simple_ml/examples`文件夹中提供了大多数方法的使用范例，更详细的用法见 [帮助手册 manual.md](./doc/manual.md)
 
 # 它能做什么
 
@@ -74,6 +75,15 @@ Out[1]: np.array([1,1])
 ## 作为一个机器学习项目的任务
 
 ### 1. 特征
+
+`simple_ml`提供了Filter和Embedded两种特征选择方法，包括了：
+1. 方差法
+2. 相关系数法
+3. 卡方检验法
+4. L1正则
+5. GBDT特征选择
+
+同时，`simple_ml` 提供了`PCA`降维方法以及针对高维数据的`SuperPCA`降维方法
 
 ### 2. 分类和回归
 
@@ -111,16 +121,14 @@ Out[1]: np.array([1,1])
 
 # 为什么会有这个项目 & 致谢
 
-作者本科在上海一个双非商科院校读统计，而后保研失败继续在本校读经济，从大二开始接触机器学习，以及编程相关知识（stata->R->C#->python)，对数据和编程非常感兴趣，基本上一路走过来全靠自学。
+作者就读于上海某商科院校经济学，从大二开始接触数据挖掘，以及编程相关知识（stata->R->C#->python)，对数据和编程非常感兴趣，基本上一路走过来全靠自学。作者希望可以用心做好一个项目，记录自己学习的轨迹，尤其是即将毕业之际。
 
-而现在找工作的路磕磕绊绊（个人能力不够+非科班非211非985），有可能以后也不会从事算法工程师相关工作，但是总想留下一点东西，尤其是即将毕业之际。以后看起来可能非常可笑吧，不过总归是曾经的轨迹。
-
-作者在接下来的一年找工作的同时，将尽全力维护该项目，不断更新和修改，热烈欢迎任何贡献和讨论。
+在接下来的一年找工作的同时，作者将尽全力维护该项目，不断更新和修改，热烈欢迎任何贡献和讨论。
 
 **致谢：**
 - 首先感谢我自己，一路走来的不易如人饮水
 - 其次感谢我的好友[何燕杰](https://github.com/YanjieHe)和[程刚](https://github.com/chenggang0815)对我在学习和工作上的帮助
-- 最后感谢所有相关书籍、博客的作者
+- 最后感谢所有相关书籍、博客的作者，尤其感谢[刘建平Pinard](https://www.cnblogs.com/pinard/)一丝不苟的机器学习博客，无论是知识还是态度，都令人肃然起敬
 
 
 # TODO list:

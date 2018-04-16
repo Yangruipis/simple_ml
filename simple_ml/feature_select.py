@@ -6,7 +6,6 @@ filter方法进行特征选择
 
 from collections import Counter
 import numpy as np
-from minepy import MINE
 from simple_ml.base.base_enum import FilterType, LabelType, EmbeddedType
 from simple_ml.base.base_error import *
 from simple_ml.base.base import BaseTransform
@@ -39,13 +38,15 @@ class Filter(BaseTransform):
     def _entropy_select(self):
         """
         互信息法
+        from minepy import MINE
         """
-        m = MINE()
-        mic_array = np.zeros(self.sample_num)
-        for i, x in enumerate(self.x.T):
-            m.compute_score(x, self.y)
-            mic_array[i] = m.mic()
-        self._get_top_k_ids(mic_array)
+        pass
+    #     m = MINE()
+    #     mic_array = np.zeros(self.sample_num)
+    #     for i, x in enumerate(self.x.T):
+    #         m.compute_score(x, self.y)
+    #         mic_array[i] = m.mic()
+    #     self._get_top_k_ids(mic_array)
 
     def _get_top_k_ids(self, value_array, choose_max=True):
         """

@@ -1,6 +1,6 @@
 
 <center>
-<img src="./doc/imgs/logo2.png" width="100%" height="100%" />
+<img src="./docs/imgs/logo2.png" width="100%" height="100%" />
 </center>
 
 
@@ -55,7 +55,7 @@ print(cart.predict(x_test))
 Out[1]: np.array([1,1])
 ```
 
-`./simple_ml/examples`文件夹中提供了大多数方法的使用范例，更详细的用法见 [帮助手册 manual.md](docs/manual.md)
+`./simple_ml/examples`文件夹中提供了大多数方法的使用范例，更详细的用法见 [帮助手册 manual.md](./docs/manual.md)
 
 # 它能做什么
 
@@ -91,7 +91,7 @@ Out[1]: np.array([1,1])
 `simple_ml`提供了非常多的二分类方法，以[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)为例（见`./simple_ml/examples`），分类效果和方法名称见图1。
 
 <center>
-<img src="./doc/imgs/wine.jpg"  />
+<img src="./docs/imgs/wine.jpg"  />
 
 图 1. 二分类效果图
 </center>
@@ -101,7 +101,7 @@ Out[1]: np.array([1,1])
 `simple_ml`暂时只提供了一些多分类算法，见下图，同样是[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)，后面作者将会进行补充。
 
 <center>
-<img src="./doc/imgs/wine2.jpg" width="75%" height="75%" />
+<img src="./docs/imgs/wine2.jpg" width="75%" height="75%" />
 
 图 2. 多分类效果图
 </center>

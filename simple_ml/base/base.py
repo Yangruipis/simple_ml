@@ -1,10 +1,8 @@
 # -*- coding:utf-8 -*-
 
 from abc import ABCMeta, abstractmethod
-from collections import Counter
 
 import numpy as np
-import pandas as pd
 
 from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
@@ -38,7 +36,7 @@ class BaseClassifier(object):
 
     @staticmethod
     def _check_x(x):
-        if isinstance(x, np.ndarray) or isinstance(x, pd.DataFrame):
+        if isinstance(x, np.ndarray):
             if len(x.shape) != 2:
                 raise FeatureTypeError("请输入二维数组")
             return x.shape[0]
@@ -47,7 +45,7 @@ class BaseClassifier(object):
 
     @staticmethod
     def _check_y(y):
-        if isinstance(y, np.ndarray) or isinstance(y, pd.Series):
+        if isinstance(y, np.ndarray):
             if len(y.shape) != 1:
                 raise LabelArrayTypeError("请输入一维数组")
             return y.shape[0]
@@ -120,7 +118,7 @@ class BaseTransform(object):
 
     @staticmethod
     def _check_x(x):
-        if isinstance(x, np.ndarray) or isinstance(x, pd.DataFrame):
+        if isinstance(x, np.ndarray):
             if len(x.shape) != 2:
                 raise FeatureTypeError("请输入二维数组")
             return x.shape[0]
@@ -129,7 +127,7 @@ class BaseTransform(object):
 
     @staticmethod
     def _check_y(y):
-        if isinstance(y, np.ndarray) or isinstance(y, pd.Series):
+        if isinstance(y, np.ndarray):
             if len(y.shape) != 1:
                 raise LabelArrayTypeError("请输入一维数组")
             return y.shape[0]

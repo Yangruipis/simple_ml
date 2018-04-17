@@ -1,10 +1,8 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.base.base_enum import ClassifierType, LabelType
-from simple_ml.base.base_error import *
 from simple_ml.base.base import *
-from simple_ml.score import *
-from simple_ml.helper import classify_plot
+from simple_ml.evaluation import *
+from simple_ml.evaluation import classify_plot
 from simple_ml.tree import CART
 
 

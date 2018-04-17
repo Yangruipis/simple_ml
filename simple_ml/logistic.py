@@ -5,12 +5,10 @@
 - 结果经过检验，和stata的logit回归结果一致
 """
 
-from simple_ml.base.base_error import *
-from simple_ml.base.base import BaseClassifier, BaseFeatureSelect
-from simple_ml.base.base_enum import LabelType
-from simple_ml.helper import classify_plot
-from simple_ml.score import *
 import scipy.optimize as so
+
+from simple_ml.base.base import BaseFeatureSelect
+from simple_ml.evaluation import *
 
 
 class LogisticRegression(BaseClassifier):

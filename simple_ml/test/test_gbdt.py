@@ -13,7 +13,7 @@ class TESTGBDT(unittest.TestCase):
         x = np.random.rand(11, 5)
         y = np.random.rand(10)
         cart = CARTForGBDT()
-        self.assertRaises(FeatureNumberMismatchError, cart.fit, x, y)
+        self.assertRaises(SampleNumberMismatchError, cart.fit, x, y)
 
         x = np.random.choice([0, 1], 50).reshape(10, 5)
         cart.fit(x, y)

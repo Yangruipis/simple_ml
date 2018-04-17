@@ -18,7 +18,7 @@ class TESTGBDT(unittest.TestCase):
         x = np.random.choice([0, 1], 50).reshape(10, 5)
         cart.fit(x, y)
         self.assertIsNotNone(cart.importance)
-        self.assertNotEqual(0, cart.importance.any())
+        self.assertFalse(cart.importance.any())
         self.assertIsNotNone(cart.leaf_node_list)
 
     def test_GBDT_fit(self):

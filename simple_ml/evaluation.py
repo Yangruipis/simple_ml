@@ -32,7 +32,7 @@ from collections import Counter
 import numpy as np
 from matplotlib import pyplot as plt
 
-from simple_ml.base.base import BaseClassifier
+from simple_ml.base.base_model import BaseClassifier
 from simple_ml.base.base_enum import LabelType, CrossValidationType
 
 from simple_ml.base.base_error import *

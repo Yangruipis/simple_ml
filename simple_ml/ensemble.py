@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.base.base import *
+from simple_ml.base.base_model import *
 from simple_ml.evaluation import *
 from simple_ml.evaluation import classify_plot
 from simple_ml.tree import CART

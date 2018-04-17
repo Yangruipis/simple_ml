@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.base.base import BinaryTreeNode, MultiTreeNode
+from simple_ml.base.base_model import BinaryTreeNode, MultiTreeNode
 from simple_ml.evaluation import *
 
 

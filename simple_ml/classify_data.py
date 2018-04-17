@@ -36,6 +36,18 @@ def get_hastie_10_2():
     return x, np.array(y, dtype='int')
 
 
+def download_data(data_namr):
+    pass
+
+
+def fetch_origin_data(data_name):
+    pass
+
+
+def fetch_handled_data(data_name):
+    pass
+
+
 def dump(x, y, path):
     with open(PATH + path, 'w') as f:
         f.write("%s,%s\n" % (x.shape[0], x.shape[1]))

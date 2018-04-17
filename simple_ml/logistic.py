@@ -7,7 +7,7 @@
 
 import scipy.optimize as so
 
-from simple_ml.base.base import BaseFeatureSelect
+from simple_ml.base.base_model import BaseFeatureSelect
 from simple_ml.evaluation import *
 
 

@@ -22,6 +22,7 @@ Simple Meachine Learning
 - windows or Linux
 - numpy
 - matplotlib
+- scipy
 
 `强烈推荐Anaconda环境`
 

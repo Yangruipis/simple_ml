@@ -22,6 +22,6 @@ setup(
 
     url="https://github.com/Yangruipis/simple_ml",
     packages=['simple_ml', 'simple_ml.base'],
-    install_requires=['numpy>=1.10', 'setuptools>=16.0', 'matplotlib>2.0.0'],
+    install_requires=['numpy>=1.10', 'setuptools>=16.0', 'matplotlib>2.0.0', 'scipy>0.15.0'],
     # dependency_links = ['https://github.com/minepy/minepy/archive/1.2.2.tar.gz#egg=minepy-1.2.2']
 )

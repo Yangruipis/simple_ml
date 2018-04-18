@@ -12,17 +12,7 @@ class TestDataHandle(unittest.TestCase):
     def test_read_string(self):
 
         a = "1,2.0,3 \n 0,3.1,否 \n 1,0,2"
-        res = read_string(a, header=False)
-        self.assertEqual(len(res), 3)
-        self.assertEqual(len(res[0]), 3)
-        for i in range(3):
-            self.assertIsInstance(res[i][0], int)
-            self.assertIsInstance(res[i][1], float)
-            self.assertIsInstance(res[i][2], str)
-
-    def test_read_csv(self):
-        path = "./read_test.csv"
-        res = read_csv(path, header=False)
+        res = read_string(a, header=False, index=False)
         self.assertEqual(len(res), 3)
         self.assertEqual(len(res[0]), 3)
         for i in range(3):
@@ -58,8 +48,8 @@ class TestDataHandle(unittest.TestCase):
         arr = np.column_stack((a1, a2, a3))
         types = get_type(arr)
         res = one_hot_encoder(arr, types)
-        self.assertEqual(res.shape[0], 4)
-        self.assertEqual(res.shape[1], 10)
+        self.assertEqual(res.shape[0], 10)
+        self.assertEqual(res.shape[1], 4)
 
     def test_missing_value_handle(self):
         np.random.seed(918)

@@ -6,9 +6,11 @@ from simple_ml.data_handle import *
 
 # 读取字符串
 
-> read_string(string: str, header=True, index=True, sep=",")
->
-> 读取字符串为二维数组，如果某列是整型，转为int，如果是小数，转为float，如果是文本，则不变
+```python
+read_string(string, header=True, index=True, sep=",")
+```
+
+读取字符串为二维数组，如果某列是整型，转为int，如果是小数，转为float，如果是文本，则不变
 
 
 |             |  名称  |    类型     |      描述       |
@@ -21,9 +23,11 @@ from simple_ml.data_handle import *
 
 # 读取csv
 
-> read_csv(path, header=True, index=True, sep=",")
->
-> 读取csv文件
+```python
+read_csv(path, header=True, index=True, sep=",")
+```
+
+读取csv文件
 
 |             |  名称  |     类型     |      描述       |
 |------------:|:------:|:------------:|:---------------:|
@@ -36,9 +40,12 @@ from simple_ml.data_handle import *
 
 # 数据编码(Encoding)
 
-> number_encoder(x_lst)
->
-> 将含有文本、整型、浮点型的数据进行编码，统一格式为浮点型
+
+```python
+number_encoder(x_lst)
+```
+
+将含有文本、整型、浮点型的数据进行编码，统一格式为浮点型
 
 |             | 名称  |     类型     |           描述           |
 |------------:|:-----:|:------------:|:------------------------:|
@@ -47,9 +54,11 @@ from simple_ml.data_handle import *
 
 # 获取变量类型
 
-> get_type(arr)
->
-> 获取一个二维数组每一列的变量类型，包括了两类(binary)、多类(multi_class)、连续(continuous)三种类型
+```python
+get_type(arr)
+```
+
+获取一个二维数组每一列的变量类型，包括了两类(binary)、多类(multi_class)、连续(continuous)三种类型
 
 |             | 名称 |       类型       |      描述       |
 |------------:|:----:|:---------------:|:--------------:|

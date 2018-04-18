@@ -10,9 +10,10 @@ from simple_ml.classify_data import *
 
 `simple_ml` 提供了本地获取常用数据集的功能，无需联网，可以直接调用
 
-> simple_ml.classify_data.get_iris()
->
-> 获取鸢尾花数据集，**线性分类问题**，特征离散+连续，标签离散
+```python
+simple_ml.classify_data.get_iris()
+```
+获取鸢尾花数据集，**线性分类问题**，特征离散+连续，标签离散
 
 
 |             |          类型          | 描述          |
@@ -20,18 +21,22 @@ from simple_ml.classify_data import *
 | Parameters: |                        |               |
 |    Returns: | (np.2darray, np.array) | 训练集, 测试集 |
 
-> simple_ml.classify_data.get_wine()
->
-> 获取wine数据集，**线性分类问题**，特征离散+连续，标签离散
+```python
+simple_ml.classify_data.get_wine()
+```
+
+ 获取wine数据集，**线性分类问题**，特征离散+连续，标签离散
 
 |             |          类型          | 描述          |
 |------------:|:----------------------:|:--------------|
 | Parameters: |                        |               |
 |    Returns: | (np.2darray, np.array) | 训练集, 测试集 |
 
-> simple_ml.classify_data.get_moon()
->
-> 获取moon数据集，**非线性分类问题**，标签离散
+```python
+simple_ml.classify_data.get_moon()
+```
+
+获取moon数据集，**非线性分类问题**，标签离散
 
 |             |          类型          | 描述          |
 |------------:|:----------------------:|:--------------|
@@ -42,42 +47,51 @@ from simple_ml.classify_data import *
 
 如果您觉得这些数据集还不够，`simple_ml`提供了在线获取数据集的功能
 
-> class simple_ml.classify_data.DataCollector()
+```python
+class simple_ml.classify_data.DataCollector()
+```
 
 **Methods**
 
-> get_content()
->
-> 获取当前可以得到的所有数据集的名称，该命令在类实例化时自动加载
+```python
+get_content()
+```
+
+ 获取当前可以得到的所有数据集的名称，该命令在类实例化时自动加载
 
 |             |   类型    |     描述      |
 |------------:|:---------:|:-------------:|
 | Parameters: |           |               |
 |    Returns: | list(str) | 数据集名称列表 |
 
-> fetch_origin_data(data_name)
->
-> 获取原始数据，文本型，一般是逗号分隔符
+```python
+fetch_origin_data(data_name)
+```
+获取原始数据，文本型，一般是逗号分隔符
 
 |             | 类型 |               描述                |
 |------------:|:----:|:--------------------------------:|
 | Parameters: | str  | 数据集名称（必须在data_content中） |
 |    Returns: | str  |            数据集文本             |
 
-> fetch_handled_data(data_name)
->
-> 获取处理好的数据，经过了Encoding、缺失值处理、异常值处理、One-hot Encoding
->
-> 如果想自己处理，可以调用`fetch_origin_data()`以及data_handle模块进行处理
+```python
+fetch_handled_data(data_name)
+```
+
+获取处理好的数据，经过了Encoding、缺失值处理、异常值处理、One-hot Encoding
+
+如果想自己处理，可以调用`fetch_origin_data()`以及data_handle模块进行处理
 
 |             |    类型    |         描述         |
 |------------:|:----------:|:--------------------:|
 | Parameters: |    str     |      数据集名称       |
 |    Returns: | np.2darray | 所有数据构成的二维数组 |
 
-> detail_data()
->
-> 获取数据集的详细描述
+```python
+detail_data()
+```
+
+获取数据集的详细描述
 
 |             | 类型 |   描述    |
 |------------:|:----:|:---------:|

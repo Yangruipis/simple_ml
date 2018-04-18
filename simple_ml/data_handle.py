@@ -6,7 +6,7 @@ import numpy as np
 from collections import Counter
 
 
-def is_number(s: str):
+def _is_number(s: str):
     """
     判断一个字符串是否是数字
     :param s:  字符串
@@ -44,7 +44,7 @@ def read_string(string: str, header=True, index=True, sep=","):
         for j, _res in enumerate(res):
             if not str.isdigit(res[j][i]):
                 is_int = False
-            if not is_number(res[j][i]):
+            if not _is_number(res[j][i]):
                 is_float = False
 
         if is_int:
@@ -119,7 +119,7 @@ def get_type(arr):
 
 def abnormal_handle(arr, type_list, up=90, lp=10):
     """
-    在缺失值处理之前做
+    在缺失值处理之前做，否则补时全会用到异常值信息
     :param arr:        ndarray
     :param type_list:  list[LabelType]
     :return:           ndarray

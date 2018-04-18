@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import unittest
-from simple_ml.data_handle import read_csv, read_string, get_type, number_encoder, one_hot_encoder, \
+from simple_ml.data_handle import read_string, get_type, number_encoder, one_hot_encoder, \
     missing_value_handle, abnormal_handle
 import numpy as np
 from simple_ml.base.base_enum import LabelType, ConMissingHandle, DisMissigHandle
@@ -27,7 +27,7 @@ class TestDataHandle(unittest.TestCase):
         self.assertEqual(len(res[0]), 3)
         for i in range(3):
             for j in range(3):
-                self.assertIsInstance(res[i][0], float)
+                self.assertIsInstance(res[i][j], float)
 
     def test_get_type(self):
         np.random.seed(918)

@@ -318,7 +318,7 @@ def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
 
     cm = plt.cm.RdBu
-    cm_bright = plt.cm.RdBu   # ListedColormap(['#FF0000', '#29A086', '#0000FF'])
+    # cm_bright = plt.cm.RdBu   # ListedColormap(['#FF0000', '#29A086', '#0000FF'])
     colors = ['#67001F', '#053061', '#29A086', '#0000FF']
     if compare:
         ax = plt.subplot(1, 2, 1)

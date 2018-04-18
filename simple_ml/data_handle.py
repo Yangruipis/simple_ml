@@ -41,7 +41,7 @@ def read_string(string: str, header=True, index=True, sep=","):
     for i in range(len(res[0])):
         is_float = True
         is_int = True
-        for j in range(len(res)):
+        for j, _res in enumerate(res):
             if not str.isdigit(res[j][i]):
                 is_int = False
             if not is_number(res[j][i]):

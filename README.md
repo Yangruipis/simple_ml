@@ -23,6 +23,7 @@ Simple Meachine Learning
 - numpy
 - matplotlib
 - scipy
+- requests
 
 `强烈推荐Anaconda环境`
 
@@ -74,8 +75,19 @@ Out[1]: np.array([1,1])
 
 ## 作为一个机器学习项目的任务
 
-### 1. 特征
+### 1. 数据和特征
 
+#### 1.1 数据集获取
+
+`simple_ml`提供了大量经典的机器学习数据集的获取接口`DataCollector`，数据集来自[UCI](http://archive.ics.uci.edu/ml/index.php)。
+
+#### 1.2 数据预处理
+
+`simple_ml` 提供了常用的数据预处理方法，包括了编码、独热编码、缺失值处理、异常值处理以及随机数据集划分等。
+
+同时，`simple_ml` 提供了`PCA`降维方法以及针对高维数据的`SuperPCA`降维方法。
+
+#### 1.3 特征选择
 `simple_ml`提供了Filter和Embedded两种特征选择方法，包括了：
 1. 方差法
 2. 相关系数法
@@ -83,9 +95,7 @@ Out[1]: np.array([1,1])
 4. L1正则
 5. GBDT特征选择
 
-同时，`simple_ml` 提供了`PCA`降维方法以及针对高维数据的`SuperPCA`降维方法
-
-### 2. 分类和回归
+### 2. 模型
 
 #### 2.1 二分类
 `simple_ml`提供了非常多的二分类方法，以[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)为例（见`./simple_ml/examples`），分类效果和方法名称见图1。
@@ -112,11 +122,14 @@ Out[1]: np.array([1,1])
 `simple_ml`提供了`CART`、`GBDT`这两种回归方法，后面将加入`SVR`
 
 
-### 3. 聚类
+#### 2.4 聚类
 
 `simple_ml`提供了`K-means聚类`和`层次聚类`两种聚类方法
 
 `注:`以上所有图均为simple_ml直出（需要matplotlib）
+
+### 3. 效果评价
+
 
 
 # 为什么会有这个项目 & 致谢

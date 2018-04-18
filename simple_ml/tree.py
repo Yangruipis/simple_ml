@@ -1,11 +1,7 @@
 # -*- coding:utf-8 -*-
 
-from collections import Counter
-from simple_ml.base.base_error import *
-from simple_ml.base.base import BaseClassifier, BinaryTreeNode, MultiTreeNode
-from simple_ml.base.base_enum import LabelType
-from simple_ml.helper import classify_plot
-from simple_ml.score import *
+from simple_ml.base.base_model import BinaryTreeNode, MultiTreeNode
+from simple_ml.evaluation import *
 
 
 class ID3(BaseClassifier):
@@ -119,7 +115,7 @@ class CART(BaseClassifier):
     def _gen_tree(self, node: BinaryTreeNode, depth) -> BinaryTreeNode:
         if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
             # 获取相应的标签
-            if len(node.data_id) != 0 :
+            if len(node.data_id) != 0:
                 if self.label_type == LabelType.continuous:
                     node.leaf_label = np.mean(self.y[node.data_id])
                 else:
@@ -202,7 +198,6 @@ class CART(BaseClassifier):
                             best_split = (i, f, False, y_error - error)
         return best_split
 
-
     def _get_conditional_gini(self, y, arr, value, continuous=True):
         if continuous:
             y_left = y[arr <= value]
@@ -219,7 +214,7 @@ class CART(BaseClassifier):
         s = 0
         for i in count:
             s += (count[i] / len(arr))**2
-        return  1 - s
+        return 1 - s
 
     def _get_sum_sse(self, y, arr, value, continuous=True):
         if continuous:

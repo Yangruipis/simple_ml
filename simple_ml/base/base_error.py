@@ -91,3 +91,11 @@ class KernelMissParameterError(KernelTypeError):
 
 class ModelNotFittedError(Exception):
     pass
+
+
+class EmptyInputError(ValueError):
+    pass
+
+
+class MissingHandleTypeError(TypeError):
+    pass

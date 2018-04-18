@@ -1,10 +1,8 @@
 # -*- coding:utf-8 -*-
 
 
-from simple_ml.base.base_enum import LabelType
 from simple_ml.base.base_error import ModelNotFittedError
-from simple_ml.base.base import BaseClassifier
-from .score import *
+from .evaluation import *
 
 
 class BaseBPNetwork(BaseClassifier):

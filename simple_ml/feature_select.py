@@ -8,7 +8,7 @@ from collections import Counter
 import numpy as np
 from simple_ml.base.base_enum import FilterType, LabelType, EmbeddedType
 from simple_ml.base.base_error import *
-from simple_ml.base.base import BaseTransform
+from simple_ml.base.base_model import BaseTransform
 
 
 class Filter(BaseTransform):

@@ -2,7 +2,7 @@
 
 from simple_ml.logistic import *
 from simple_ml.classify_data import get_iris, get_wine
-from simple_ml.helper import train_test_split
+from simple_ml.data_handle import train_test_split
 
 
 def iris_example():

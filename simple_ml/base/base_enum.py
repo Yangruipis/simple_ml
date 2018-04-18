@@ -46,3 +46,25 @@ class ClassifierType(Enum):
 class EmbeddedType(Enum):
     GBDT = 0
     Lasso = 1
+
+
+class ConMissingHandle(Enum):
+    """
+    连续数据缺失值处理方法
+    """
+    mean_fill = 0
+    median_fill = 1
+    sample_drop = 2
+
+
+class DisMissigHandle(Enum):
+    """
+    离散数据缺失值处理方法
+    """
+    mode_fill = 0
+    sample_drop = 1
+    one_hot = 2
+
+class DataSetName(Enum):
+    a = "a"
+    b = "b"

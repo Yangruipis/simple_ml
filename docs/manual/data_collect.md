@@ -13,8 +13,9 @@ from simple_ml.classify_data import *
 获取鸢尾花数据集
 
 
-| ----------:| ---------------------- | -------------- |
-| Parameters: |                       |               |
+|             |       类型             |  描述           |
+| ----------: | :---------------------:| -------------- |
+| Parameters: |                        |                |
 | Returns:    | (np.2darray, np.array) | 训练集, 测试集  |
 
 > simple.class

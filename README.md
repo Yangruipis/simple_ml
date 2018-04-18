@@ -23,6 +23,7 @@ Simple Meachine Learning
 - numpy
 - matplotlib
 - scipy
+- requests
 
 `强烈推荐Anaconda环境`
 

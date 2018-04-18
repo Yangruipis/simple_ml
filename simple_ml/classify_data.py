@@ -44,9 +44,9 @@ def get_hastie_10_2():
 class DataCollector():
 
     def __init__(self):
-        exit_code = os.system('ping 8.8.8.8')
-        if exit_code:
-            raise ConnectionError("无网络连接")
+        # exit_code = os.system('ping 8.8.8.8')
+        # if exit_code:
+        #     raise ConnectionError("无网络连接")
 
         self._data_content = self.get_content()
         print("受支持的数据集有：", self._data_content)

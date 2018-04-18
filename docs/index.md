@@ -1,5 +1,4 @@
 
-![]({{ site.url }}./_includes/logo2.png)
 
 ---
 

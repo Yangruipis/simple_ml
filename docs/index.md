@@ -3,7 +3,7 @@
 
 ---
 
-# [介绍](./intruduction.md)
+# [介绍](./introduction.md)
 
 # [结构](./structure/class_structure.md)
 

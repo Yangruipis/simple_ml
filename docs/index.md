@@ -1,5 +1,5 @@
 
-![](./_includes/logo2.png)
+![]({{ site.url }}./_includes/logo2.png)
 
 ---
 

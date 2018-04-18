@@ -64,3 +64,7 @@ class DisMissigHandle(Enum):
     mode_fill = 0
     sample_drop = 1
     one_hot = 2
+
+class DataSetName(Enum):
+    a = "a"
+    b = "b"

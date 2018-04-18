@@ -49,13 +49,13 @@ def read_string(string: str, header=True, index=True, sep=","):
 
         if is_int:
             for j in range(len(res)):
-                if res[j][i] == "" or res[j][i] == "?":
+                if res[j][i] == "" or res[j][i] == "?" or res[j][i].lower() == "nan":
                     res[j][i] = np.nan
                 else:
                     res[j][i] = int(res[j][i])
         elif is_float:
             for j in range(len(res)):
-                if res[j][i] == "" or res[j][i] == "?":
+                if res[j][i] == "" or res[j][i] == "?" or res[j][i].lower() == "nan":
                     res[j][i] = np.nan
                 else:
                     res[j][i] = float(res[j][i])
@@ -102,9 +102,15 @@ def get_type(arr):
     res = []
     for feature in arr.T:
         count = np.unique([i for i in feature if not np.isnan(i)])
+        is_continuous = False
+        for i in count:
+            # 当存在浮点型，且小数点后有数字时，是连续值
+            if int(i) != i:
+                is_continuous = True
+
         if len(count) == 2:
             res.append(LabelType.binary)
-        elif len(count) > len(feature) // 2:
+        elif is_continuous:
             res.append(LabelType.continuous)
         else:
             res.append(LabelType.multi_class)

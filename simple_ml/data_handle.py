@@ -48,13 +48,13 @@ def read_string(string: str, header=True, index=True, sep=","):
                 is_float = False
 
         if is_int:
-            for j in range(len(res)):
+            for j, _res in enumerate(res):
                 if res[j][i] == "" or res[j][i] == "?" or res[j][i].lower() == "nan":
                     res[j][i] = np.nan
                 else:
                     res[j][i] = int(res[j][i])
         elif is_float:
-            for j in range(len(res)):
+            for j, _res in enumerate(res):
                 if res[j][i] == "" or res[j][i] == "?" or res[j][i].lower() == "nan":
                     res[j][i] = np.nan
                 else:

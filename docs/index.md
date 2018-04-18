@@ -10,8 +10,8 @@
 # 使用说明
 
 - 数据与特征(Data & Feature)
-  - 数据集 获取
-  - 数据 预处理
+  - [数据获取](./manual/data_collect.md)
+  - [数据预处理](./manual/data_handle.md)
   - 特征选择 与 交叉验证
   - 降维
 - 模型(Models)

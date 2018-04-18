@@ -1,7 +1,8 @@
 
 
 ![](./imgs/logo2.png)
-# 介绍
+
+# [介绍](./indroduction.md)
 
 # [结构](./structure/class_structure)
 

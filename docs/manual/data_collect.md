@@ -1,6 +1,19 @@
 # 数据集获取
 
+```python
+from simple_ml.classify_data import *
+```
+
+`classify_data` 模块提供了大量机器学习数据集的获取接口
+
 ## 直接获取本地数据集
+
+> simple.classify_data.get_iris()
+
+
+|-------|-------|
+|Parameters|  |  
+|returns|     | 
 
 
 ```python

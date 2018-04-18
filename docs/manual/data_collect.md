@@ -10,11 +10,14 @@ from simple_ml.classify_data import *
 
 > simple.classify_data.get_iris()
 
+获取鸢尾花数据集
 
-|-------|-------|
-|Parameters|  |  
-|returns|     | 
 
+| ----------:| ---------------------- | -------------- |
+| Parameters: |                       |               |
+| Returns:    | (np.2darray, np.array) | 训练集, 测试集  |
+
+> simple.class
 
 ```python
 >>> from simple_ml.classify_data import DataCollector

@@ -1,18 +1,20 @@
+# 数据集获取
+
+## 直接获取本地数据集
 
 
 ```python
-In[1]: from simple_ml.classify_data import DataCollector
+>>> from simple_ml.classify_data import DataCollector
 
-In[2]: dc = DataCollector()
-In[3]: print(dc.data_content)
-Out[1]: ['abalone', 'abscisic-acid', 'access-lists', 'acute', ...]
+>>> dc = DataCollector()
+>>> print(dc.data_content)
+['abalone', 'abscisic-acid', 'access-lists', 'acute', ...]
 
-In[4]: x = dc.fetch_handled_data("iris")
-In[5]: print(x.shape)
-Out[2]: (150, 6)
+>>> x = dc.fetch_handled_data("iris")
+>>> print(x.shape)
+(150, 6)
 
-In[6]: dc.detail_data("iris")
-Out[3]:
+>>> dc.detail_data("iris")
 """
 1. Title: Iris Plants Database
 	Updated Sept 21 by C.Blake - Added discrepency information

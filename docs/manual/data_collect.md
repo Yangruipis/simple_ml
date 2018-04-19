@@ -1,9 +1,7 @@
 
-# 数据集获取模块
+# 数据集获取模块 **simple_ml.classify_data**
 
-```python
-from simple_ml.classify_data import *
-```
+{% include toc.html html=content %}
 
 `classify_data` 模块提供了大量机器学习数据集的获取接口
 

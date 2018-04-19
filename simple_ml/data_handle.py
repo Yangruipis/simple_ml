@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from simple_ml.base.base_error import EmptyInputError, MissingHandleTypeError, FeatureNumberMismatchError
-from simple_ml.base.base_enum import DisMissigHandle, ConMissingHandle, LabelType
+from simple_ml.base.base_enum import DisMissingHandle, ConMissingHandle, LabelType
 import numpy as np
 from collections import Counter
 
@@ -151,7 +151,7 @@ def _winsorize(arr, upper_percentage=95, lower_percentage=5):
 
 
 def missing_value_handle(arr, type_list, continuous_method=ConMissingHandle.mean_fill,
-                         discrete_method=DisMissigHandle.mode_fill):
+                         discrete_method=DisMissingHandle.mode_fill):
     """
     缺失值处理
     必须先经过缺失值处理再去进行OneHotEncode

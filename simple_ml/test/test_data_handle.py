@@ -4,7 +4,7 @@ import unittest
 from simple_ml.data_handle import read_string, get_type, number_encoder, one_hot_encoder, \
     missing_value_handle, abnormal_handle
 import numpy as np
-from simple_ml.base.base_enum import LabelType, ConMissingHandle, DisMissigHandle
+from simple_ml.base.base_enum import LabelType, ConMissingHandle, DisMissingHandle
 
 
 class TestDataHandle(unittest.TestCase):
@@ -66,7 +66,7 @@ class TestDataHandle(unittest.TestCase):
         self.assertIsInstance(arr[4, 1], float)
         self.assertIsInstance(arr[6, 2], float)
         res = missing_value_handle(arr, types, continuous_method=ConMissingHandle.sample_drop,
-                                   discrete_method=DisMissigHandle.sample_drop)
+                                   discrete_method=DisMissingHandle.sample_drop)
         self.assertEqual(res.shape, (7, 3))
 
     def test_abnormal_handle(self):

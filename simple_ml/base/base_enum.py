@@ -57,7 +57,7 @@ class ConMissingHandle(Enum):
     sample_drop = 2
 
 
-class DisMissigHandle(Enum):
+class DisMissingHandle(Enum):
     """
     离散数据缺失值处理方法
     """

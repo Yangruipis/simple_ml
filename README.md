@@ -155,9 +155,11 @@ Out[1]: np.array([1,1])
 - [x] lasso and Ridge
 - [x] add GBDT feature select
 - [x] update Readme
-- [ ] setup.py
+- [x] setup.py
 - [x] examples
 - [x] get more datasets
 - [ ] regression plot
 - [ ] kd_tree
 - [ ] Support Machine Regression
+- [ ] more metrics
+- [ ] github pages, especially the class map

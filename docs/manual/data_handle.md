@@ -1,12 +1,7 @@
----
-# 数据处理模块
----
+
+# 数据处理模块 **simple_ml.data_handle**
 
 {% include toc.html html=content %}
-
-```python
-from simple_ml.data_handle import *
-```
 
 
 * * *

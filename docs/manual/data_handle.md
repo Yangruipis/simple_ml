@@ -153,6 +153,3 @@ def train_test_split(x, y, test_size=0.3, seed=None)
 
 
 # [返回](../index.md)
-
-
-{% include toc.html html=content %}

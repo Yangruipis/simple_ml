@@ -1,5 +1,5 @@
 
-**数据集获取模块**
+# 数据集获取模块
 
 ```python
 from simple_ml.classify_data import *
@@ -9,7 +9,7 @@ from simple_ml.classify_data import *
 
 * * *
 
-# 直接获取本地数据集
+## 直接获取本地数据集
 
 `simple_ml` 提供了本地获取常用数据集的功能，无需联网，可以直接调用
 
@@ -57,7 +57,7 @@ def get_moon()
 
 * * *
 
-# 在线获取数据集
+## 在线获取数据集
 
 如果您觉得这些数据集还不够，`simple_ml`提供了在线获取数据集的功能
 

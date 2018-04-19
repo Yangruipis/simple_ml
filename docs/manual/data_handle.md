@@ -1,14 +1,15 @@
 
-**数据处理模块**
+# 数据处理模块
 
 ```python
 from simple_ml.data_handle import *
 ```
 
 
+
 * * *
 
-# 读取字符串
+## 读取字符串
 
 ```python
 def read_string(string, header=True, index=True, sep=",")
@@ -25,7 +26,7 @@ def read_string(string, header=True, index=True, sep=",")
 |             |  sep   |     str     |      分隔符      |
 |    Returns: |        | np.2dnarray |     二维数组     |
 
-# 读取csv
+## 读取csv
 
 ```python
 def read_csv(path, header=True, index=True, sep=",")
@@ -42,7 +43,7 @@ def read_csv(path, header=True, index=True, sep=",")
 |    Returns: |        | List[List[]] |     二维列表     |
 
 
-# 数据编码(Encoding)
+## 数据编码(Encoding)
 
 
 ```python
@@ -56,7 +57,7 @@ def number_encoder(x_lst)
 | Parameters: | x_lst | List[List[]] | 二维列表数据，任意类型均可 |
 |    Returns: |       |  np.2darray  |       二维numpy数组       |
 
-# 获取变量类型
+## 获取变量类型
 
 ```python
 def get_type(arr)
@@ -69,9 +70,9 @@ def get_type(arr)
 | Parameters: | arr  |   np.2darray    |  二维numpy数组  |
 |    Returns: |      | List[LabelType] | 标签枚举类的列表 |
 
-# 独热编码(One-hot Encoding)
+## 独热编码(One-hot Encoding)
 
-# 缺失值处理
+## 缺失值处理
 
-# 异常值处理
+## 异常值处理
 

@@ -2,15 +2,15 @@
 
 ![](./imgs/logo2.png)
 
-# [介绍](./indroduction.md)
+# [介绍](./introduction.md)
 
 # 结构
 
 - 模型类
-  - 结构体
-  - 抽象类
-- 枚举类
-- 异常类
+  - [结构体](./structure/class_structure.md)
+  - [抽象类](./structure/abstract.md)
+- [枚举类](./structure/enum.md)
+- [异常类](./structure/error.md)
 
 
 # 使用说明

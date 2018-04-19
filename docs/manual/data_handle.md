@@ -1,3 +1,9 @@
+---
+数据处理模块
+---
+
+{% include toc.html html=content %}
+
 # 数据处理模块
 
 ```python
@@ -121,6 +127,23 @@ def one_hot_encoder(arr, type_list)
 |             | type_list | List[LabelType] |       标签类型的列表       |
 |    Returns: |           |   np.2darray    |      处理好的二维列表      |
 
+
+## 全自动处理
+
+```python
+def BIGMOM(path, header=True, index=True, sep=",")
+```
+
+只需提供csv文件位置，即可一键处理
+
+|             |  名称  |    类型    |       描述       |
+|------------:|:------:|:----------:|:----------------:|
+| Parameters: |  path  |    str     |     文件位置      |
+|             | header |    bool    | 第一行是否为变量名 |
+|             | index  |    bool    | 第一列是否为索引  |
+|             |  sep   |    str     |      切割符       |
+|    Returns: |        | np.2darray | 处理好的两维数组  |
+
 ## 随机数据集切分
 
 ```python
@@ -137,14 +160,6 @@ def train_test_split(x, y, test_size=0.3, seed=None)
 |             |   seed    |                int                 | 随机种子值（保证试验可重复） |
 |    Returns: |           | (x_train, y_train, x_test, y_test) |   分割后的测试集和训练集    |
 
-
-$a_1 = b_2$
-
-$$
-a_1 = b_2
-$$
-
-$$a_2 = b_1$$
 
 # [返回](../index.md)
 

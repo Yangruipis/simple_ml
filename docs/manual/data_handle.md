@@ -3,9 +3,6 @@
 
 # 数据处理模块 **simple_ml.data_handle**
 
-{: #custom-heading} {% endcapture %} {% assign text = markdown | markdownify %}
-
-{% include toc.html html=text %}
 
 * * *
 
@@ -159,3 +156,6 @@ def train_test_split(x, y, test_size=0.3, seed=None)
 
 # [返回](../index.md)
 
+{: #custom-heading} {% endcapture %} {% assign text = markdown | markdownify %}
+
+{% include toc.html html=text %}

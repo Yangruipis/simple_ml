@@ -1,13 +1,17 @@
 
+**数据处理模块**
+
 ```python
 from simple_ml.data_handle import *
 ```
-**数据处理模块**
+
+
+* * *
 
 # 读取字符串
 
 ```python
-read_string(string, header=True, index=True, sep=",")
+def read_string(string, header=True, index=True, sep=",")
 ```
 
 读取字符串为二维数组，如果某列是整型，转为int，如果是小数，转为float，如果是文本，则不变
@@ -24,7 +28,7 @@ read_string(string, header=True, index=True, sep=",")
 # 读取csv
 
 ```python
-read_csv(path, header=True, index=True, sep=",")
+def read_csv(path, header=True, index=True, sep=",")
 ```
 
 读取csv文件
@@ -42,7 +46,7 @@ read_csv(path, header=True, index=True, sep=",")
 
 
 ```python
-number_encoder(x_lst)
+def number_encoder(x_lst)
 ```
 
 将含有文本、整型、浮点型的数据进行编码，统一格式为浮点型
@@ -55,7 +59,7 @@ number_encoder(x_lst)
 # 获取变量类型
 
 ```python
-get_type(arr)
+def get_type(arr)
 ```
 
 获取一个二维数组每一列的变量类型，包括了两类(binary)、多类(multi_class)、连续(continuous)三种类型

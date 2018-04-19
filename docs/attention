@@ -2,4 +2,16 @@
 
 ---
 
+
+- github page更改代码高亮方法：
+
+1. http://jwarby.github.io/jekyll-pygments-themes/languages/python.html 中选择想要的主题
+2. 放在docs/assets/css/style.scss中
+3. 前面加入:
 ---
+
+---
+
+@import "{{ site.theme }}";
+
+结束

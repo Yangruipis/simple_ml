@@ -56,7 +56,8 @@ print(cart.predict(x_test))
 Out[1]: np.array([1,1])
 ```
 
-`./simple_ml/examples`文件夹中提供了大多数方法的使用范例，更详细的用法见 [帮助手册 manual.md](./docs/manual.md)
+- `./simple_ml/examples`文件夹中提供了大多数方法的使用范例
+- 更详细的用法见帮助文档： [https://yangruipis.github.io/simple_ml/](https://yangruipis.github.io/simple_ml/)
 
 # 它能做什么
 

@@ -1,8 +1,11 @@
 
+{% capture markdown %}
+
 # 数据处理模块 **simple_ml.data_handle**
 
-{% include toc.html %}
+{: #custom-heading} {% endcapture %} {% assign text = markdown | markdownify %}
 
+{% include toc.html html=text %}
 
 * * *
 

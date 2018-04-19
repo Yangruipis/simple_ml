@@ -106,16 +106,6 @@ class AdaBoost(BaseClassifier):
         classify_plot(self, self.x, self.y, x, y, title=self.__doc__ + title)
 
 
-class GBDTTreeNode(BinaryTreeNode):
-
-    def __init__(self, left=None, right=None, data_id=None, feature_id=None, value=None, leaf_label=None):
-        super(GBDTTreeNode, self).__init__(left, right, data_id, feature_id, value, leaf_label)
-        # gamma: GBDT需要记录的元素，当是回归树（平方损失）时，等于y_predict
-        # 只有叶节点需要记录
-        # gama反映的是这个叶子节点最优的预测值
-        self.gamma = None
-
-
 class CARTForGBDT(CART):
 
     __doc__ = "CART For GBDT"

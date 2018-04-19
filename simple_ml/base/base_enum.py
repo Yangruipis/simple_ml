@@ -36,12 +36,14 @@ class KernelType(Enum):
     laplace = 3
     sigmoid = 4
 
+
 class ClassifierType(Enum):
     LR = 0
     CART = 1
     SVM = 2
     NB = 3
     KNN = 4
+
 
 class EmbeddedType(Enum):
     GBDT = 0
@@ -65,6 +67,3 @@ class DisMissingHandle(Enum):
     sample_drop = 1
     one_hot = 2
 
-class DataSetName(Enum):
-    a = "a"
-    b = "b"

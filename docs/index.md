@@ -4,7 +4,14 @@
 
 # [介绍](./indroduction.md)
 
-# [结构](./structure/class_structure)
+# 结构
+
+- 模型类
+  - 结构体
+  - 抽象类
+- 枚举类
+- 异常类
+
 
 # 使用说明
 

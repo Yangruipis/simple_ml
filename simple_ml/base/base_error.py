@@ -39,7 +39,7 @@ class CostMatMismatchError(MisMatchError):
 
 class TopNTooLargeError(MisMatchError):
 
-    def __init__(self, err="top n数目超过可选择的最大数目"):
+    def __init__(self, err="Top_N 数目超过可选择的最大数目"):
         super(TopNTooLargeError, self).__init__(err)
 
 

@@ -1,9 +1,16 @@
 
+
 # 数据集获取模块 **simple_ml.classify_data**
 
-{% include toc.html html=content %}
-
-`classify_data` 模块提供了大量机器学习数据集的获取接口
+- [数据集获取模块 **simple_ml.classify_data**](#%E6%95%B0%E6%8D%AE%E9%9B%86%E8%8E%B7%E5%8F%96%E6%A8%A1%E5%9D%97-simplemlclassifydata)
+      - [直接获取本地数据集](#%E7%9B%B4%E6%8E%A5%E8%8E%B7%E5%8F%96%E6%9C%AC%E5%9C%B0%E6%95%B0%E6%8D%AE%E9%9B%86)
+            - [get_iris](#getiris)
+            - [get_wine](#getwine)
+            - [get_moon](#getmoon)
+      - [在线获取数据集](#%E5%9C%A8%E7%BA%BF%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E9%9B%86)
+            - [DataCollector()](#datacollector)
+      - [Example](#example)
+- [返回](#%E8%BF%94%E5%9B%9E)
 
 * * *
 
@@ -12,7 +19,7 @@
 `simple_ml` 提供了本地获取常用数据集的功能，无需联网，可以直接调用
 
 
-
+### get_iris
 ```python
 def get_iris()
 ```
@@ -26,7 +33,7 @@ def get_iris()
 
 * * *
 
-
+### get_wine
 ```python
 def get_wine()
 ```
@@ -41,6 +48,7 @@ def get_wine()
 
 * * *
 
+### get_moon
 
 ```python
 def get_moon()
@@ -61,6 +69,7 @@ def get_moon()
 
 * * *
 
+### DataCollector()
 ```python
 class DataCollector()
 ```
@@ -122,8 +131,7 @@ def detail_data()
 
 * * *
 
-
-**Example**
+## Example
 
 ```python
 >>> from simple_ml.classify_data import DataCollector
@@ -210,5 +218,5 @@ Summary Statistics:
 """
 ```
 
-# [返回](../index.md)
+# [返回主页](../index.md)
 

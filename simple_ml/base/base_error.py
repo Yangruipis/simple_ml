@@ -99,3 +99,9 @@ class EmptyInputError(ValueError):
 
 class MissingHandleTypeError(TypeError):
     pass
+
+class CostFunctionError(TypeError):
+    pass
+
+class NeuralNetworkParamError(ValueError):
+    pass

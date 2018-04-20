@@ -2,7 +2,10 @@
 
 
 from simple_ml.base.base_error import ModelNotFittedError
-from .evaluation import *
+from simple_ml.base.base_model import BaseClassifier
+from simple_ml.base.base_enum import LabelType
+import numpy as np
+from simple_ml.evaluation import classify_f1, classify_f1_macro
 
 
 class BaseBPNetwork(BaseClassifier):

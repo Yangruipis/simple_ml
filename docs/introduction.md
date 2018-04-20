@@ -1,3 +1,6 @@
+
+![](./imgs/logo2.png)
+
 # Simple Meachine Learning
 
 一个简单的机器学习算法实现
@@ -136,3 +139,5 @@ Out[1]: np.array([1,1])
 - 首先感谢我自己，一路走来的不易如人饮水
 - 其次感谢我的好友[何燕杰](https://github.com/YanjieHe)和[程刚](https://github.com/chenggang0815)对我在学习和工作上的帮助
 - 最后感谢所有相关书籍、博客的作者，尤其感谢[刘建平Pinard](https://www.cnblogs.com/pinard/)一丝不苟的机器学习博客，无论是知识还是态度，都令人肃然起敬
+
+# [返回主页](../index.md)

@@ -67,3 +67,17 @@ class DisMissingHandle(Enum):
     sample_drop = 1
     one_hot = 2
 
+
+class CostFunction(Enum):
+
+    square = 0
+    logistic = 1
+    hinge = 2        # max(0, 1 - t*y)，t为目标值，y为输出值
+    softmax = 3
+
+
+class ActiveFunction(Enum):
+
+    sigmoid = 0
+    tanh = 1
+    relu = 2

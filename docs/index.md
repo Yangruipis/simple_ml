@@ -7,7 +7,7 @@
 # 结构
 
 - 模型类
-  - [结构体](./structure/class_structure.md)
+  - [结构体](./structure/struct.md)
   - [抽象类](./structure/abstract.md)
 - [枚举类](./structure/enum.md)
 - [异常类](./structure/error.md)

@@ -199,5 +199,5 @@ def fit_transform(self, x, y):
 | self.feature_type | List[LabelType]| 特征类别 |
 
 
-# [返回主页](../index.md)
+# [返回主页](../../index.md)
 

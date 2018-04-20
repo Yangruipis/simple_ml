@@ -162,4 +162,4 @@ def train_test_split(x, y, test_size=0.3, seed=None)
 |    Returns: |           | (x_train, y_train, x_test, y_test) |   分割后的测试集和训练集    |
 
 
-# [返回主页](../index.md)
+# [返回主页](../../index.md)

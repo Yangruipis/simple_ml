@@ -129,4 +129,4 @@ class TopNTooLargeError(MisMatchError):
 
 ## ModelNotFittedError 模型未训练
 
-# [返回主页](../index.md)
+# [返回主页](../../index.md)

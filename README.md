@@ -169,3 +169,4 @@ Out[1]: np.array([1,1])
 - [ ] Support Machine Regression
 - [ ] more metrics
 - [x] github pages, especially the class map
+- [ ] stacking

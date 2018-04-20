@@ -1,8 +1,6 @@
 
-<center>
-<img src="./docs/imgs/logo2.png" width="100%" height="100%" />
-</center>
 
+![](./imgs/logo2.png）
 
 Simple Meachine Learning
 
@@ -101,21 +99,16 @@ Out[1]: np.array([1,1])
 #### 2.1 二分类
 `simple_ml`提供了非常多的二分类方法，以[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)为例（见`./simple_ml/examples`），分类效果和方法名称见图1。
 
-<center>
-<img src="./docs/imgs/wine.jpg"  />
 
-图 1. 二分类效果图
-</center>
+![](imgs/wine.jpg)
+
 
 #### 2.2 多分类
 
 `simple_ml`暂时只提供了一些多分类算法，见下图，同样是[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)，后面作者将会进行补充。
 
-<center>
-<img src="./docs/imgs/wine2.jpg" width="75%" height="75%" />
 
-图 2. 多分类效果图
-</center>
+![](imgs/wine2.jpg)
 
 
 #### 2.3 回归
@@ -143,23 +136,3 @@ Out[1]: np.array([1,1])
 - 首先感谢我自己，一路走来的不易如人饮水
 - 其次感谢我的好友[何燕杰](https://github.com/YanjieHe)和[程刚](https://github.com/chenggang0815)对我在学习和工作上的帮助
 - 最后感谢所有相关书籍、博客的作者，尤其感谢[刘建平Pinard](https://www.cnblogs.com/pinard/)一丝不苟的机器学习博客，无论是知识还是态度，都令人肃然起敬
-
-
-# TODO list:
-
-- [ ] test cases
-- [ ] an efficient bp network 
-- [ ] more optimal methods
-- [x] train test split func in helper
-- [x] other feature select method to add
-- [x] lasso and Ridge
-- [x] add GBDT feature select
-- [x] update Readme
-- [x] setup.py
-- [x] examples
-- [x] get more datasets
-- [ ] regression plot
-- [ ] kd_tree
-- [ ] Support Machine Regression
-- [ ] more metrics
-- [ ] github pages, especially the class map

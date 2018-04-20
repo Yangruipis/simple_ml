@@ -23,6 +23,8 @@
 ```python
 from simple_ml.base.base_model import BaseTransform
 from simple_ml.base.base_enum import FilterType
+
+
 class Filter(BaseTransform):
 
     def __init__(self, top_k, filter_type=FilterType.var):
@@ -41,6 +43,9 @@ class Filter(BaseTransform):
 
 **类方法**
 
+
+1. 
+
 ```python
 def fit(self, x, y=None)
 ```
@@ -54,7 +59,7 @@ def fit(self, x, y=None)
 |    Returns: |      |    Void    |              |
 
 
-
+2.
 
 ```python
 def transform(self, x)
@@ -67,6 +72,7 @@ def transform(self, x)
 | Parameters: |  x   | np.2darray |      特征       |
 |    Returns: |      | np.2darray | 特征选择后的数组 |
 
+3.
 
 ```python
 def fit_transform(self, x, y)
@@ -123,6 +129,8 @@ class Embedded(BaseTransform):
 
 **类方法**
 
+1.
+
 ```python
 def fit(self, x, y=None)
 ```
@@ -136,7 +144,7 @@ def fit(self, x, y=None)
 |    Returns: |      |    Void    |              |
 
 
-
+2.
 
 ```python
 def transform(self, x)
@@ -149,6 +157,7 @@ def transform(self, x)
 | Parameters: |  x   | np.2darray |      特征       |
 |    Returns: |      | np.2darray | 特征选择后的数组 |
 
+3.
 
 ```python
 def fit_transform(self, x, y)

@@ -1,7 +1,5 @@
 
-<center>
-<img src="./docs/imgs/logo2.png" width="100%" height="100%" />
-</center>
+![](./docs/imgs/logo2.png)
 
 
 Simple Meachine Learning
@@ -101,21 +99,15 @@ Out[1]: np.array([1,1])
 #### 2.1 二分类
 `simple_ml`提供了非常多的二分类方法，以[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)为例（见`./simple_ml/examples`），分类效果和方法名称见图1。
 
-<center>
-<img src="./docs/imgs/wine.jpg"  />
 
-图 1. 二分类效果图
-</center>
+![](./docs/imgs/wine.jpg")
+
 
 #### 2.2 多分类
 
 `simple_ml`暂时只提供了一些多分类算法，见下图，同样是[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)，后面作者将会进行补充。
 
-<center>
-<img src="./docs/imgs/wine2.jpg" width="75%" height="75%" />
-
-图 2. 多分类效果图
-</center>
+![](./docs/imgs/wine2.jpg)
 
 
 #### 2.3 回归

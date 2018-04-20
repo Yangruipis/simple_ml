@@ -140,4 +140,4 @@ Out[1]: np.array([1,1])
 - 其次感谢我的好友[何燕杰](https://github.com/YanjieHe)和[程刚](https://github.com/chenggang0815)对我在学习和工作上的帮助
 - 最后感谢所有相关书籍、博客的作者，尤其感谢[刘建平Pinard](https://www.cnblogs.com/pinard/)一丝不苟的机器学习博客，无论是知识还是态度，都令人肃然起敬
 
-# [返回主页](../index.md)
+# [返回主页](index.md)

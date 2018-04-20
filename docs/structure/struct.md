@@ -91,4 +91,4 @@ class GBDTTreeNode(BinaryTreeNode):
 |             |   gamma    |   float or int   |        叶子节点的最优值         |
 |    Returns: |            |       Void       |                                |
 
-# [返回主页](../../index.md)
+# [返回主页](../index.md)

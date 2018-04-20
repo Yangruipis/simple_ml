@@ -10,6 +10,8 @@
     - [Embedded特征选择类型 EmbeddedType](#embedded%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E7%B1%BB%E5%9E%8B-embeddedtype)
     - [连续数据缺失值处理类型 ConMissingHandle](#%E8%BF%9E%E7%BB%AD%E6%95%B0%E6%8D%AE%E7%BC%BA%E5%A4%B1%E5%80%BC%E5%A4%84%E7%90%86%E7%B1%BB%E5%9E%8B-conmissinghandle)
     - [离散数据缺失值处理类型 DisMissingHandle](#%E7%A6%BB%E6%95%A3%E6%95%B0%E6%8D%AE%E7%BC%BA%E5%A4%B1%E5%80%BC%E5%A4%84%E7%90%86%E7%B1%BB%E5%9E%8B-dismissinghandle)
+    - [损失函数类型 CostFunction](#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B-costfunction)
+    - [激活函数类型 ActiveFunction](#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B-activefunction)
 - [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
 * * *
@@ -101,7 +103,26 @@ class DisMissingHandle(Enum):
     one_hot = 2                 # 独热编码，将缺失值作为一个新的类比，进行独热编码
 ```
 
+## 损失函数类型 CostFunction
 
+```python
+class CostFunction(Enum):
+
+    square = 0
+    logistic = 1
+    hinge = 2        # max(0, 1 - t*y)，t为目标值，y为输出值
+    softmax = 3
+```
+
+## 激活函数类型 ActiveFunction
+
+```python
+class ActiveFunction(Enum):
+
+    sigmoid = 0
+    tanh = 1
+    relu = 2
+```
 
 # [返回主页](../index.md)
 

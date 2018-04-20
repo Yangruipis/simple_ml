@@ -145,16 +145,10 @@ Out[1]: np.array([1,1])
 - 最后感谢所有相关书籍、博客的作者，尤其感谢[刘建平Pinard](https://www.cnblogs.com/pinard/)一丝不苟的机器学习博客，无论是知识还是态度，都令人肃然起敬
 
 
-# 更新日志
-
-- 2018-04-20
-  - 加入BP神经网络算法`simple.neural_network`和相关的example
-  - 更新github pages
-
 # TODO list:
 
 - [ ] test cases
-- [x] an efficient bp network
+- [ ] an efficient bp network 
 - [ ] more optimal methods
 - [x] train test split func in helper
 - [x] other feature select method to add
@@ -168,4 +162,4 @@ Out[1]: np.array([1,1])
 - [ ] kd_tree
 - [ ] Support Machine Regression
 - [ ] more metrics
-- [x] github pages, especially the class map
+- [ ] github pages, especially the class map

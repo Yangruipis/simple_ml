@@ -76,6 +76,8 @@ def classify_precision(y_predict, y_true):
     con_matrix = _get_binary_confusion_matrix(y_predict, y_true)
     tp = con_matrix[0][0]
     tp_plus_fp = tp + con_matrix[0][1]  # 存伪
+    if tp_plus_fp == 0:
+        return 0
     return tp / tp_plus_fp
 
 
@@ -84,6 +86,8 @@ def classify_recall(y_predict, y_true):
     con_matrix = _get_binary_confusion_matrix(y_predict, y_true)
     tp = con_matrix[0][0]
     tp_plus_fn = tp + con_matrix[1][0]  # 弃真
+    if tp_plus_fn == 0:
+        return 0
     return tp / tp_plus_fn
 
 
@@ -96,8 +100,14 @@ def classify_f1(y_predict, y_true):
     tp = con_matrix[0][0]
     tp_plus_fp = tp + con_matrix[0][1]  # 存伪
     tp_plus_fn = tp + con_matrix[1][0]  # 弃真
-    precision = tp / tp_plus_fn
-    recall = tp / tp_plus_fp
+    precision = 0
+    recall = 0
+    if tp_plus_fn != 0:
+        precision = tp / tp_plus_fn
+    if tp_plus_fp != 0:
+        recall = tp / tp_plus_fp
+    if precision + recall == 0:
+        return 0
     return 2 * recall * precision / (recall + precision)
 
 

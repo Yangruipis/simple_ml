@@ -2,7 +2,7 @@
 
 ![](./imgs/logo2.png)
 
-# [介绍](./introduction.md)
+# [介绍](../README.md)
 
 # 结构
 

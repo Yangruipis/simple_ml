@@ -5,7 +5,7 @@ from simple_ml.base.base_error import ModelNotFittedError, CostFunctionError, \
 from simple_ml.base.base_model import BaseClassifier
 from simple_ml.base.base_enum import LabelType, CostFunction, ActiveFunction
 import numpy as np
-from simple_ml.evaluation import classify_f1, classify_plot, classify_auc
+from simple_ml.evaluation import classify_f1, classify_plot
 
 
 class NeuralNetwork(BaseClassifier):

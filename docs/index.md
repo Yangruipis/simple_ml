@@ -2,7 +2,10 @@
 
 ![](./imgs/logo2.png)
 
-# [介绍](../README.md)
+
+{% include README.html %}
+
+# [介绍](README.md)
 
 # 结构
 

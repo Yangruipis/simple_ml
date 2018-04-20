@@ -3,7 +3,7 @@
 ![](imgs/logo2.png)
 
 
-# [介绍](./README.md)
+# [介绍](https://github.com/Yangruipis/simple_ml)
 
 # 结构
 

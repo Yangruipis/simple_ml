@@ -3,9 +3,7 @@
 ![](./imgs/logo2.png)
 
 
-{% include README.html %}
-
-# [介绍](./_includes/README.md)
+# [介绍](../README.md)
 
 # 结构
 

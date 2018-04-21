@@ -9,7 +9,7 @@
     - [Example](#example)
 - [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
-## 主成分分析 (PCA)
+## 一、主成分分析 (PCA)
 
 ```python
 from simple_ml.base.base_model import BaseTransform
@@ -24,14 +24,14 @@ class PCA(BaseTransform):
 
 * * *
 
-### 初始化
+### 1.1 初始化
 
 |             | 名称  | 类型 |      描述       |
 |------------:|:-----:|:----:|:--------------:|
 | Parameters: | top_n | int  | 希望保留几个维度 |
 
 
-### 类方法
+### 1.2 类方法
 
 1 拟合
 
@@ -78,7 +78,7 @@ def fit_transform(self, x, y)
 |    Returns: |      | np.2darray | 特征选择后的数组 |
 
 
-## 类属性
+###  1.3 类属性
 
 |     名称      |    类型    |         描述          |
 |:-------------:|:----------:|:---------------------:|
@@ -87,7 +87,7 @@ def fit_transform(self, x, y)
 | eigen_vecttor | np.2darray |   训练数据的特征向量    |
 
 
-## 针对高维数据的主成分分析 (SuperPCA)
+## 二、针对高维数据的主成分分析 (SuperPCA)
 
 ```python
 from simple_ml.pca import PCA
@@ -123,15 +123,16 @@ class SuperPCA(PCA):
 
 * * *
 
-**初始化**
+### 2.1 初始化
 
 |             | 名称  | 类型 |      描述       |
 |------------:|:-----:|:----:|:--------------:|
 | Parameters: | top_n | int  | 希望保留几个维度 |
 
 
-**类方法**
-1. 
+### 2.2 类方法
+
+1 拟合
 
 ```python
 def fit(self, x, y=None)
@@ -146,7 +147,7 @@ def fit(self, x, y=None)
 |    Returns: |      |    Void    |              |
 
 
-1. 
+2 转换
 
 ```python
 def transform(self, x)
@@ -160,7 +161,7 @@ top_n)，`n`为样本数，`top_n`为初始化值
 | Parameters: |  x   | np.2darray |      特征       |
 |    Returns: |      | np.2darray | 特征选择后的数组 |
 
-1. 
+3 拟合+转换
 
 ```python
 def fit_transform(self, x, y)
@@ -176,7 +177,7 @@ def fit_transform(self, x, y)
 |    Returns: |      | np.2darray | 特征选择后的数组 |
 
 
-**类属性**
+### 2.3 类属性
 
 |     名称      |    类型    |         描述          |
 |:-------------:|:----------:|:---------------------:|
@@ -185,7 +186,7 @@ def fit_transform(self, x, y)
 | eigen_vecttor | np.2darray |   训练数据的特征向量    |
 
 
-## Example
+## Examples
 
 ```python
 from simple_ml.classify_data import get_iris

@@ -30,8 +30,7 @@
 ### 1.0 分类作图
 
 ```python
-def classify_plot(model, x_train, y_train, x_test, y_test, 
-                    title="",compare=False, px=100)
+def classify_plot(model, x_train, y_train, x_test, y_test, title="",compare=False, px=100)
 ```
 
 |             |  名称   |      类型      |                                             描述                                             |
@@ -197,8 +196,7 @@ def regression_median_absolute_error(y_predict, y_true)
 ```python
 from simple_ml.base.base_enum import CrossValidationType
 
-def cross_validation(model, x, y, method=CrossValidationType.holdout, 
-                     test_size=0.3, cv=5)
+def cross_validation(model, x, y, method=CrossValidationType.holdout, test_size=0.3, cv=5)
 ```
 
 |             |   名称    |                    类型                     |                  描述                  |

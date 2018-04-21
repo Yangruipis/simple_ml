@@ -10,7 +10,7 @@
       - [在线获取数据集](#%E5%9C%A8%E7%BA%BF%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E9%9B%86)
             - [DataCollector()](#datacollector)
       - [Example](#example)
-- [返回](#%E8%BF%94%E5%9B%9E)
+- [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
 * * *
 

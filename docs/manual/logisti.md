@@ -1,7 +1,7 @@
-学习模块 **simple_ml.knn**
+# 学习模块 **simple_ml.knn**
 
 
-## 标准Logistic回归
+## 1. 标准Logistic回归
 
 
 ```python
@@ -134,7 +134,7 @@ def auc_plot(self, x, y)
 
 None
 
-## 最小损失回归 (Lasso)
+## 2. 最小损失回归 (Lasso)
 
 
 
@@ -160,6 +160,8 @@ class Lasso(LogisticRegression, BaseFeatureSelect):
 ```
 
 `simple_ml` 提供了带`L1正则项`的Logistic回归模型，即Lasso模型，采用**坐标下降**进行参数估计，后面会加入更多优化方法
+
+
 
 Logistic回归支持：
 - 二分类问题

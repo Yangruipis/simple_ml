@@ -24,7 +24,7 @@ __all__ = [
 ]
 
 
-def _is_number(s: str):
+def _is_number(s):
     """
     判断一个字符串是否是数字
     :param s:  字符串

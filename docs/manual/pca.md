@@ -16,15 +16,16 @@ class PCA(BaseTransform):
 
 * * *
 
-**初始化**
+### 初始化
 
 |             | 名称  | 类型 |      描述       |
 |------------:|:-----:|:----:|:--------------:|
 | Parameters: | top_n | int  | 希望保留几个维度 |
 
 
-**类方法**
-1. 
+### 类方法
+
+1 拟合
 
 ```python
 def fit(self, x, y=None)
@@ -39,7 +40,7 @@ def fit(self, x, y=None)
 |    Returns: |      |    Void    |              |
 
 
-1. 
+2 转换
 
 ```python
 def transform(self, x)
@@ -53,7 +54,7 @@ top_n)，`n`为样本数，`top_n`为初始化值
 | Parameters: |  x   | np.2darray |      特征       |
 |    Returns: |      | np.2darray | 特征选择后的数组 |
 
-1. 
+3 拟合+转换
 
 ```python
 def fit_transform(self, x, y)
@@ -69,7 +70,7 @@ def fit_transform(self, x, y)
 |    Returns: |      | np.2darray | 特征选择后的数组 |
 
 
-**类属性**
+## 类属性
 
 |     名称      |    类型    |         描述          |
 |:-------------:|:----------:|:---------------------:|

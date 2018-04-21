@@ -24,10 +24,10 @@
   - [降维](manual/pca.md)
 
 - 模型(Models)
-  - [基于近邻的模型]()
+  - [基于近邻的模型](manual/knn.md)
     - KNN
     - KD Tree (coming soon~)
-  - 线性分类模型
+  - [线性分类模型](manual/logisti.md)
     - Logistic
     - Lasso
     - Ridge

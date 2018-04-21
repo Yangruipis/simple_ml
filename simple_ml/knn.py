@@ -69,8 +69,8 @@ class KNN(BaseClassifier):
             raise LabelTypeError
         return f1_score
 
-    def classify_plot(self, x, y):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__)
+    def classify_plot(self, x, y, title=""):
+        classify_plot(self, self.x, self.y, x, y, title=self.__doc__+title)
 
 
 class Node:

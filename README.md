@@ -170,3 +170,4 @@ Out[1]: np.array([1,1])
 - [ ] more metrics
 - [x] github pages, especially the class map
 - [ ] stacking
+- [ ] Model Auto Select

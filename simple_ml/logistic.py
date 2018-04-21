@@ -15,17 +15,17 @@ class LogisticRegression(BaseClassifier):
 
     __doc__ = "Logistic Regression"
 
-    def __init__(self, tol=0.01, step=0.01, threshold=0.5, has_intercept=True, sample_weights=None):
+    def __init__(self, tol=0.01, alpha=0.01, threshold=0.5, has_intercept=True, sample_weights=None):
         """
         不包含惩罚项的Logistic回归
         :param tol:            误差容忍度，越大时收敛越快，但是越不精确
-        :param step:           步长，梯度下降的参数
+        :param alpha:           步长，梯度下降的参数
         :param threshold:      决策阈值，当得到的概率大于等于阈值时输出1，否则输出0
         :param has_intercept:  是否包含截距项
         """
         super(LogisticRegression, self).__init__()
         self.tol = tol
-        self.step = step
+        self.alpha = alpha
         self.has_intercept = has_intercept
         self.sample_weight = sample_weights
         self.threshold = threshold
@@ -38,7 +38,7 @@ class LogisticRegression(BaseClassifier):
     def _update_w(self, w_old, *args):
         sigmoid_array = self._sigmoid(np.dot(self.x, w_old.reshape(-1, 1)).reshape(1, -1)[0])
         epsilon_array = self.y - sigmoid_array
-        w_new = w_old + self.step * np.dot(self.x.T, epsilon_array)
+        w_new = w_old + self.alpha * np.dot(self.x.T, epsilon_array)
         return w_new
 
     def _loss_function_value(self, w):
@@ -112,28 +112,29 @@ class LogisticRegression(BaseClassifier):
     def classify_plot(self, x, y, title=""):
         if self.has_intercept:
             x = self._add_ones(x)
-        classify_plot(self.new(), self.x[:], self.y[:], x, y, title=self.__doc__ + title)
+        classify_plot(self.new(self.tol, self.alpha, self.threshold, self.has_intercept),
+                      self.x[:], self.y[:], x, y, title=self.__doc__ + title)
 
     @classmethod
-    def new(cls):
+    def new(cls, tol, alpha, threshold, has_i):
         # 返回当前类的新的实例，由于该类是超类，因此用classmethod，无论是什么类调用，返回的都是该类本身
-        return cls()
+        return cls(tol=tol, alpha=alpha, threshold=threshold, has_intercept=has_i)
 
 
 class Lasso(LogisticRegression, BaseFeatureSelect):
 
     __doc__ = "Lasso Regression"
 
-    def __init__(self, tol=0.01, lamb=0.1, step=0.01, threshold=0.5, has_intercept=True):
+    def __init__(self, tol=0.01, lamb=0.1, alpha=0.01, threshold=0.5, has_intercept=True):
         """
         包含L1惩罚项的Logistic回归
         :param tol:            误差容忍度，越大时收敛越快，但是越不精确
         :param lamb            lambda，即惩罚项前面的参数，越大越不容易过拟合，但是偏差也越大
-        :param step:           步长，梯度下降的参数
+        :param alpha:           步长，梯度下降的参数
         :param threshold:      决策阈值，当得到的概率大于等于阈值时输出1，否则输出0
         :param has_intercept:  是否包含截距项
         """
-        super(Lasso, self).__init__(tol, step, threshold, has_intercept)
+        super(Lasso, self).__init__(tol, alpha, threshold, has_intercept)
         self.lamb = lamb
 
     def _loss_function_value(self, w):
@@ -192,16 +193,16 @@ class Ridge(Lasso):
 
     __doc__ = "Ridge Regression"
 
-    def __init__(self, tol=0.01, lamb=0.1, step=0.01, threshold=0.5, has_intercept=True):
+    def __init__(self, tol=0.01, lamb=0.1, alpha=0.01, threshold=0.5, has_intercept=True):
         """
         包含L2惩罚项的Logistic回归
         :param tol:            误差容忍度，越大时收敛越快，但是越不精确
         :param lamb            lambda，即惩罚项前面的参数，越大越不容易过拟合，但是偏差也越大
-        :param step:           步长，梯度下降的参数
+        :param alpha:           步长，梯度下降的参数
         :param threshold:      决策阈值，当得到的概率大于等于阈值时输出1，否则输出0
         :param has_intercept:  是否包含截距项
         """
-        super(Ridge, self).__init__(tol, lamb, step, threshold, has_intercept)
+        super(Ridge, self).__init__(tol, lamb, alpha, threshold, has_intercept)
 
     def _loss_function_value(self, w):
         """

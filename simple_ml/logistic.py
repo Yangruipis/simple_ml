@@ -10,12 +10,13 @@ import scipy.optimize as so
 from simple_ml.base.base_model import BaseFeatureSelect
 from simple_ml.evaluation import *
 
+# __all__ = ['LogisticRegression', 'Lasso', 'Ridge']
 
 class LogisticRegression(BaseClassifier):
 
     __doc__ = "Logistic Regression"
 
-    def __init__(self, tol=0.01, alpha=0.01, threshold=0.5, has_intercept=True, sample_weights=None):
+    def __init__(self, tol=0.01, alpha=0.01, threshold=0.5, has_intercept=True):
         """
         不包含惩罚项的Logistic回归
         :param tol:            误差容忍度，越大时收敛越快，但是越不精确
@@ -27,9 +28,12 @@ class LogisticRegression(BaseClassifier):
         self.tol = tol
         self.alpha = alpha
         self.has_intercept = has_intercept
-        self.sample_weight = sample_weights
         self.threshold = threshold
         self.w = None
+
+    @property
+    def weight(self):
+        return self.w
 
     @staticmethod
     def _sigmoid(x):
@@ -58,8 +62,6 @@ class LogisticRegression(BaseClassifier):
 
     def fit(self, x, y):
         self._init(x, y)
-        if self.sample_weight is None:
-            self.sample_weight = np.ones(self.sample_num)
         if self.label_type != LabelType.binary:
             raise LabelTypeError("Logistic回归暂时只支持二分类问题")
         self.w, _ = self._fit()

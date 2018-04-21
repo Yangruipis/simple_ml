@@ -8,8 +8,8 @@ setuptools比distutils.core多了检查包依赖功能
 """
 
 
-if sys.version_info < (3,5):
-    sys.exit('Sorry, Python < 3.5 is not supported')
+if sys.version_info < (2,7):
+    sys.exit('Sorry, Python < 2.7 is not supported')
 
 
 setup(

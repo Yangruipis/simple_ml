@@ -13,7 +13,6 @@
       - [Example](#example)
 - [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
-
 * * *
 
 ## 直接获取本地数据集
@@ -22,6 +21,7 @@
 
 
 ### get_iris
+
 ```python
 def get_iris()
 ```
@@ -36,6 +36,7 @@ def get_iris()
 * * *
 
 ### get_wine
+
 ```python
 def get_wine()
 ```
@@ -72,6 +73,7 @@ def get_moon()
 * * *
 
 ### DataCollector()
+
 ```python
 class DataCollector()
 ```

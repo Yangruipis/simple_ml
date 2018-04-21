@@ -2,6 +2,7 @@
 
 # 数据集获取模块 **simple_ml.classify_data**
 
+
 - [数据集获取模块 **simple_ml.classify_data**](#%E6%95%B0%E6%8D%AE%E9%9B%86%E8%8E%B7%E5%8F%96%E6%A8%A1%E5%9D%97-simplemlclassifydata)
       - [直接获取本地数据集](#%E7%9B%B4%E6%8E%A5%E8%8E%B7%E5%8F%96%E6%9C%AC%E5%9C%B0%E6%95%B0%E6%8D%AE%E9%9B%86)
             - [get_iris](#getiris)
@@ -11,6 +12,7 @@
             - [DataCollector()](#datacollector)
       - [Example](#example)
 - [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
+
 
 * * *
 

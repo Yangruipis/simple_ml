@@ -73,7 +73,7 @@ def get_type(arr)
 |             | 名称 |       类型       |     描述      |
 |------------:|:----:|:---------------:|:------------:|
 | Parameters: | arr  |   np.2darray    | 二维numpy数组 |
-|    Returns: |      | List[LabelType] | 标签类型的列表 |
+|    Returns: |      | List[[LabelType](../structure/enum.md)] | 标签类型的列表 |
 
 
 ## 异常值处理
@@ -87,7 +87,7 @@ def abnormal_handle(arr, type_list, up=90, lp=10)
 |             |   名称    |      类型       |           描述            |
 |------------:|:---------:|:---------------:|:-------------------------:|
 | Parameters: |    arr    |   np.2darray    | 需要进行异常值处理的二维数组 |
-|             | type_list | List[LabelType] |       标签类型的列表       |
+|             | type_list | List[[LabelType](../structure/enum.md)] |       标签类型的列表       |
 |             |    up     | int, (50, 100)  |          上分位数          |
 |             |    lp     |    int(0,50)    |          下分位数          |
 |    Returns: |           |   np.2darray    |      处理好的二维列表      |
@@ -96,7 +96,8 @@ def abnormal_handle(arr, type_list, up=90, lp=10)
 ## 缺失值处理
 
 ```python
-from simple_ml.ensemble import ConMissingHandle, DisMissingHandle
+from simple_ml.base.base_enum import ConMissingHandle, DisMissingHandle
+
 def missing_value_handle(arr, type_list, continuous_method=ConMissingHandle.mean_fill,
                          discrete_method=DisMissingHandle.mode_fill)
 ```
@@ -107,9 +108,9 @@ def missing_value_handle(arr, type_list, continuous_method=ConMissingHandle.mean
 |             |       名称        |       类型       |           描述            |
 |------------:|:-----------------:|:----------------:|:-------------------------:|
 | Parameters: |        arr        |    np.2darray    | 需要进行缺失值处理的二维数组 |
-|             |     type_list     | List[LabelType]  |       标签类型的列表       |
-|             | continuous_method | ConMissingHandle |     连续数据的处理方法      |
-|             |  discrete_method  | DisMissingHandle |     离散数据的处理方法      |
+|             |     type_list     | List[[LabelType](../structure/enum.md)]  |       标签类型的列表       |
+|             | continuous_method |  [ConMissingHandle](../structure/enum.md) |     连续数据的处理方法      |
+|             |  discrete_method  |  [DisMissingHandle](../structure/enum.md) |     离散数据的处理方法      |
 |    Returns: |                   |    np.2darray    |      处理好的二维列表      |
 
 
@@ -125,7 +126,7 @@ def one_hot_encoder(arr, type_list)
 |        名称 |   类型    |      描述       |                           |
 |------------:|:---------:|:---------------:|:-------------------------:|
 | Parameters: |    arr    |   np.2darray    | 需要进行缺失值处理的二维数组 |
-|             | type_list | List[LabelType] |       标签类型的列表       |
+|             | type_list | List[[LabelType](../structure/enum.md)] |       标签类型的列表       |
 |    Returns: |           |   np.2darray    |      处理好的二维列表      |
 
 

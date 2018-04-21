@@ -5,7 +5,7 @@
 - [特征选择模块 **simple_ml.feature_select**](#%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E6%A8%A1%E5%9D%97-simplemlfeatureselect)
     - [Filter方法](#filter%E6%96%B9%E6%B3%95)
     - [Embedded方法](#embedded%E6%96%B9%E6%B3%95)
-- [放回主页](#%E6%94%BE%E5%9B%9E%E4%B8%BB%E9%A1%B5)
+- [返回主页](#%E6%94%BE%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
 * * *
 

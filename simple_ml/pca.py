@@ -24,6 +24,14 @@ class PCA(BaseTransform):
             raise TopNTooLargeError
         self._fit(x)
 
+    @property
+    def eigen_value(self):
+        return self._eigen_value
+
+    @property
+    def eigen_vecttor(self):
+        return self._eigen_vector
+
     def _fit(self, x):
         cov_mat = np.cov(x.T)
         # 下式得到的特征值和特征矩阵有如下特点：

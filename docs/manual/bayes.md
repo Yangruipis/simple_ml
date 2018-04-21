@@ -36,11 +36,11 @@ class NaiveBayes(BaseClassifier):
 
 * * *
 
-### 初始化
+### 1.1 初始化
 
 None
 
-### 类方法
+### 1.2 类方法
 
 1 拟合
 
@@ -102,7 +102,7 @@ def classify_plot(self, x, y, title="")
 
 
 
-**类属性**
+### 1.3 类属性
 
 
 |     名称      |    类型    |         描述          |
@@ -131,11 +131,11 @@ class BayesMinimumError(BaseClassifier):
 
 * * *
 
-### 初始化
+### 2.1 初始化
 
 None
 
-### 类方法
+### 2.2 类方法
 
 1 拟合
 
@@ -197,7 +197,7 @@ def classify_plot(self, x, y, title="")
 
 
 
-**类属性**
+### 2.3 类属性
 
 
 |  名称  |       类型        |    描述     |
@@ -236,13 +236,13 @@ class BayesMinimumRisk(BayesMinimumError):
 
 * * *
 
-### 初始化
+### 3.1 初始化
 
 |             |  名称   |  类型    |  描述           |
 | ----------: | :-----: |:-------:| :--------------:|
 | Parameters: | cost_mat | np.2darray  | 损失矩阵 ，见代码中的注释        |
 
-### 类方法
+### 3.2 类方法
 
 1 拟合
 
@@ -304,7 +304,7 @@ def classify_plot(self, x, y, title="")
 
 
 
-**类属性**
+### 3.3 类属性
 
 
 |  名称  |       类型        |    描述     |

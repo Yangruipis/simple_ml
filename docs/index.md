@@ -51,6 +51,10 @@
     - K-means
     - 层次聚类
 
-- 效果评价(Model Evaluation)
+- [效果评价(Model Evaluation)](manual/metric.md)
+  - 二分类模型评分
+  - 多分类模型评分
+  - 回归模型评价
+  - 交叉验证
 
-# 后记
+# [后记](manual.md)

@@ -171,3 +171,4 @@ Out[1]: np.array([1,1])
 - [x] github pages, especially the class map
 - [ ] stacking
 - [ ] Model Auto Select
+- [ ] __all__ 隔离

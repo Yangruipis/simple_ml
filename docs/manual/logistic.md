@@ -1,4 +1,4 @@
-# 学习模块 **simple_ml.knn**
+# 线性学习模块 **simple_ml.logistic**
 
 
 ## 一、标准Logistic回归
@@ -24,7 +24,7 @@ class LogisticRegression(BaseClassifier):
 ```
 
 `simple_ml`
-提供了标准的Logistic回归模型，采用梯度下降进行参数估计，后面会加入更多优化方法
+提供了标准的Logistic回归模型，采用**梯度下降**进行参数估计，后面会加入更多优化方法
 
 `Logistic`回归支持：
 - 二分类问题
@@ -429,6 +429,38 @@ def auc_plot(self, x, y)
 | weight |   np.array(float)   | 每个特征的参数 |
 
 
+
+## Examples
+
+```python
+from simple_ml.logistic import *
+from simple_ml.classify_data import get_iris, get_wine
+from simple_ml.data_handle import train_test_split
+
+
+x, y = get_wine()
+x = x[(y==0)|(y==1)]
+y = y[(y==0)|(y==1)]
+x_train, y_train, x_test, y_test = train_test_split(x, y, 0.5, 918)
+
+logistic = LogisticRegression(has_intercept=True)
+logistic.fit(x_train, y_train)
+print(logistic.w)
+logistic.classify_plot(x_test, y_test)
+logistic.auc_plot(x_test, y_test)
+
+lasso = Lasso()
+lasso.fit(x_train, y_train)
+print(lasso.w)
+lasso.classify_plot(x_test, y_test)
+lasso.auc_plot(x_test, y_test)
+
+ridge = Ridge()
+ridge.fit(x_train, y_train)
+print(ridge.w)
+ridge.classify_plot(x_test, y_test)
+ridge.auc_plot(x_test, y_test)
+```
 
 # [返回主页](../index.md)
 

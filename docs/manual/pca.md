@@ -177,6 +177,27 @@ def fit_transform(self, x, y)
 | eigen_vecttor | np.2darray |   训练数据的特征向量    |
 
 
+## Example
+
+```python
+from simple_ml.classify_data import get_iris
+from simple_ml.pca import PCA
+import matplotlib.pyplot as plt
+
+x, y = get_iris()
+pca = PCA(2)
+new_x = pca.fit_transform(x, y)
+print(new_x.shape)
+
+ax1 = plt.subplot(1, 2, 2)
+ax1.scatter(new_x[:, 0], new_x[:, 1], c=y)
+ax1.set_title("After PCA")
+ax2 = plt.subplot(1, 2, 1)
+ax2.scatter(x[:, 0], x[:, 1], c=y)
+ax2.set_title("Before PCA")
+plt.show()
+```
+
 # [返回主页](../index.md)
 
 

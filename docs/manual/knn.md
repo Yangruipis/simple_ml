@@ -106,6 +106,26 @@ None
 Coming Soon
 
 
+## Example
+
+```python
+from simple_ml.classify_data import get_wine
+from simple_ml.data_handle import train_test_split
+from simple_ml.knn import KNN
+
+x, y = get_wine()
+# knn可以解决多分类问题
+# x = x[(y == 0) | (y == 1)]
+# y = y[(y == 0) | (y == 1)]
+x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
+
+knn = KNN()
+knn.fit(x_train, y_train)
+print(knn.score(x_test, y_test))
+knn.classify_plot(x_test, y_test)
+
+```
+
 # [返回主页](../index.md)
 
 

@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.feature_select import *
+from simple_ml.feature_select import Filter, Embedded
+from simple_ml.base.base_enum import FilterType, EmbeddedType
+import numpy as np
 from simple_ml.classify_data import get_wine
 
 def wine_example():

@@ -27,11 +27,11 @@
   - [基于近邻的模型](manual/knn.md)
     - KNN
     - KD Tree (coming soon~)
-  - [线性分类模型](manual/logisti.md)
+  - [线性分类模型](manual/logistic.md)
     - Logistic
     - Lasso
     - Ridge
-  - 基于贝叶斯的模型
+  - [基于贝叶斯的模型](manual/bayes.md)
     - Naive Bayes
     - Bayes Minimum Error
     - Bayes Minimum Risk

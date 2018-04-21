@@ -6,11 +6,15 @@
 """
 
 import scipy.optimize as so
-
-from simple_ml.base.base_model import BaseFeatureSelect
+from simple_ml.base.base_model import *
 from simple_ml.evaluation import *
+import numpy as np
+from simple_ml.base.base_enum import *
+from simple_ml.base.base_error import *
 
-# __all__ = ['LogisticRegression', 'Lasso', 'Ridge']
+
+__all__ = ['LogisticRegression', 'Lasso', 'Ridge']
+
 
 class LogisticRegression(BaseClassifier):
 

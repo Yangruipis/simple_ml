@@ -3,6 +3,15 @@
 
 from simple_ml.base.base_error import *
 from simple_ml.evaluation import *
+from simple_ml.base.base_model import *
+from simple_ml.base.base_enum import *
+import numpy as np
+
+__all__ = [
+    'NaiveBayes',
+    'BayesMinimumRisk',
+    'BayesMinimumError'
+]
 
 
 class NaiveBayes(BaseClassifier):

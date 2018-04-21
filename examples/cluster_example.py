@@ -3,6 +3,7 @@
 from simple_ml.cluster import *
 from simple_ml.classify_data import *
 import matplotlib.pyplot as plt
+from simple_ml.base.base_enum import *
 
 
 def iris_example():

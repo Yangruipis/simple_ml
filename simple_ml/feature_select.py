@@ -4,11 +4,13 @@
 filter方法进行特征选择
 """
 
-from collections import Counter
 import numpy as np
 from simple_ml.base.base_enum import FilterType, LabelType, EmbeddedType
 from simple_ml.base.base_error import *
 from simple_ml.base.base_model import BaseTransform
+
+
+__all__ = ['Filter', 'Embedded']
 
 
 class Filter(BaseTransform):

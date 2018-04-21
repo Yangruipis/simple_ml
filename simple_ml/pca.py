@@ -6,6 +6,9 @@ from simple_ml.base.base_error import *
 from simple_ml.base.base_model import BaseTransform
 
 
+__all__ = ['PCA', 'SuperPCA']
+
+
 class PCA(BaseTransform):
 
     def __init__(self, top_n):

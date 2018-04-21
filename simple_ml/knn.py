@@ -1,9 +1,15 @@
 # -*- coding:utf-8 -*-
 
 
-from simple_ml.base.base_enum import DisType
+from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
-from .evaluation import *
+from simple_ml.evaluation import *
+from simple_ml.base.base_model import *
+import numpy as np
+from collections import Counter
+
+
+__all__ = ['KNN']
 
 
 class KNN(BaseClassifier):

@@ -2,6 +2,20 @@
 
 from enum import Enum
 
+__all__ = [
+    'DisType',
+    'CrossValidationType',
+    'FilterType',
+    'LabelType',
+    'KernelType',
+    'ClassifierType',
+    'EmbeddedType',
+    'ConMissingHandle',
+    'DisMissingHandle',
+    'CostFunction',
+    'ActiveFunction'
+]
+
 
 class DisType(Enum):
     Eculidean = 1

@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import unittest
-from simple_ml.ensemble import CARTForGBDT, GBDT
+from simple_ml.ensemble import _CARTForGBDT, GBDT
 from simple_ml.base.base_error import *
 import numpy as np
 
@@ -12,7 +12,7 @@ class TESTGBDT(unittest.TestCase):
         np.random.seed(918)
         x = np.random.rand(11, 5)
         y = np.random.rand(10)
-        cart = CARTForGBDT()
+        cart = _CARTForGBDT()
         self.assertRaises(SampleNumberMismatchError, cart.fit, x, y)
 
         x = np.random.choice([0, 1], 50).reshape(10, 5)

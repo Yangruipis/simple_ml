@@ -1,11 +1,13 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.base.base_error import ModelNotFittedError, CostFunctionError, \
-    NeuralNetworkParamError, FeatureNumberMismatchError, LabelTypeError
-from simple_ml.base.base_model import BaseClassifier
-from simple_ml.base.base_enum import LabelType, CostFunction, ActiveFunction
+from simple_ml.base.base_error import *
+from simple_ml.base.base_model import *
+from simple_ml.base.base_enum import *
 import numpy as np
 from simple_ml.evaluation import classify_f1, classify_plot
+
+
+__all__ = ['NeuralNetwork']
 
 
 class NeuralNetwork(BaseClassifier):

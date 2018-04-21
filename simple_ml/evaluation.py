@@ -39,6 +39,30 @@ from simple_ml.base.base_error import *
 from simple_ml.data_handle import transform_y, train_test_split
 from simple_ml.pca import PCA
 
+__all__ = [
+    'classify_f1',
+    'classify_accuracy',
+    'classify_f1_macro',
+    'classify_plot',
+    'classify_auc',
+    'classify_f1_micro',
+    'classify_f1_weighted',
+    'classify_precision',
+    'classify_recall',
+    'classify_roc',
+    'classify_roc_plot',
+
+    'regression_r2',
+    'regression_absolute_error',
+    'regression_explained_variance',
+    'regression_median_absolute_error',
+    'regression_rmse',
+    'regression_rmsel',
+    'regression_squared_error',
+
+    'cross_validation'
+]
+
 
 def _check_input(y_predict, y_true):
     if len(y_predict) != len(y_true):
@@ -341,7 +365,7 @@ def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title
                        alpha=0.6)
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, 0), ncol=2)
 
-        # p1 = ax.scatter(x_train[:, 0], x_train[:, 1], c=transform_y(y_train), cmap=cm_bright, label=transform_y(y_train))
+        # p1 = ax.scatter(x_train[:, 0],x_train[:, 1],c=transform_y(y_train),cmap=cm_bright,label=transform_y(y_train))
         # p2 = ax.scatter(x_test[:, 0], x_test[:, 1], c=transform_y(y_test), cmap=cm_bright, alpha=0.6)
         # ax.legend([p1, p2], ['train', 'test'])
 

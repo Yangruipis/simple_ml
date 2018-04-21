@@ -1,7 +1,13 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.base.base_enum import KernelType
 from simple_ml.evaluation import *
+from simple_ml.base.base_error import *
+from simple_ml.base.base_enum import *
+from simple_ml.base.base_model import *
+import numpy as np
+
+
+__all__ = ['SVM']
 
 
 class SVM(BaseClassifier):

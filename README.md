@@ -172,3 +172,4 @@ Out[1]: np.array([1,1])
 - [ ] stacking
 - [ ] Model Auto Select
 - [ ] __all__ 隔离
+- [ ] 万能多分类器

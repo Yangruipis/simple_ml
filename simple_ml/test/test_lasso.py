@@ -5,6 +5,7 @@ import numpy as np
 from simple_ml.logistic import Lasso
 from simple_ml.base.base_error import *
 
+
 class TestLasso(unittest.TestCase):
 
     def test_w_update(self):

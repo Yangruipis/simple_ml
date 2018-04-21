@@ -3,6 +3,7 @@
 from simple_ml.classify_data import *
 from simple_ml.neural_network import *
 from simple_ml.data_handle import train_test_split
+from simple_ml.base.base_enum import *
 
 
 def wine_example():

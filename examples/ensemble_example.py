@@ -1,8 +1,9 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.ensemble import *
-from simple_ml.classify_data import *
+from simple_ml.ensemble import AdaBoost, GBDT
+from simple_ml.classify_data import get_wine, get_watermelon
 from simple_ml.data_handle import train_test_split
+from simple_ml.base.base_enum import *
 
 
 def moon_example():

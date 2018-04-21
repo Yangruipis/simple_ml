@@ -1,8 +1,9 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.classify_data import *
-from simple_ml.tree import *
+from simple_ml.classify_data import get_watermelon, get_wine
 from simple_ml.data_handle import train_test_split
+from simple_ml.ensemble import RandomForest
+from simple_ml.tree import ID3, CART
 
 
 def ID3_example():

@@ -7,6 +7,7 @@ from numpy.linalg import norm
 from simple_ml.base.base_enum import DisType
 from simple_ml.base.base_error import *
 
+__all__ = ['KMeans', 'Hierarchical']
 
 class KMeans(object):
 

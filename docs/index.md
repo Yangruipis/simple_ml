@@ -35,10 +35,10 @@
     - Naive Bayes
     - Bayes Minimum Error
     - Bayes Minimum Risk
-  - 基于树的模型
+  - [基于树的模型](manual/tree.md)
     - ID3
     - CART
-  - 集成学习模型
+  - [集成学习模型](manual/ensemble.md)
     - AdaBoost
     - GBDT
     - Random Forest

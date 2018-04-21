@@ -1,8 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import unittest
-from simple_ml.data_handle import read_string, get_type, number_encoder, one_hot_encoder, \
-    missing_value_handle, abnormal_handle
+from simple_ml.data_handle import *
 import numpy as np
 from simple_ml.base.base_enum import LabelType, ConMissingHandle, DisMissingHandle
 

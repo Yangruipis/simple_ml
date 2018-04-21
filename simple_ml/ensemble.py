@@ -1,10 +1,19 @@
 # -*- coding:utf-8 -*-
 
+from collections import Counter
+import numpy as np
+from simple_ml.base.base_enum import *
+from simple_ml.base.base_error import *
 from simple_ml.base.base_model import *
-from simple_ml.evaluation import *
-from simple_ml.evaluation import classify_plot
+from simple_ml.evaluation import classify_plot, classify_f1, classify_f1_micro
 from simple_ml.tree import CART
 
+
+__all__ = [
+    'AdaBoost',
+    'GBDT',
+    'RandomForest'
+]
 
 class AdaBoost(BaseClassifier):
 
@@ -103,22 +112,27 @@ class AdaBoost(BaseClassifier):
         return classify_f1(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__ + title)
+        classify_plot(self.new(self.classifier, self.nums),
+                      self.x, self.y, x, y, title=self.__doc__ + title)
+
+    @classmethod
+    def new(cls, a, b):
+        return cls(a, b)
 
 
-class CARTForGBDT(CART):
+class _CARTForGBDT(CART):
 
     __doc__ = "CART For GBDT"
 
     def __init__(self, max_depth=4, min_samples_leaf=10):
-        super(CARTForGBDT, self).__init__(max_depth, min_samples_leaf)
+        super(_CARTForGBDT, self).__init__(max_depth, min_samples_leaf)
         self.leaf_node_list = []
         self.importance = None
 
     def fit(self, x, y):
         self._init(x, y)
         self.importance = np.zeros(self.variable_num)
-        self.root = self._gen_tree(GBDTTreeNode(None, None, np.arange(self.x.shape[0])), 1)
+        self._root = self._gen_tree(GBDTTreeNode(None, None, np.arange(self.x.shape[0])), 1)
 
     def _gen_tree(self, node: GBDTTreeNode, depth):
         if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
@@ -201,8 +215,12 @@ class GBDT(BaseClassifier, BaseFeatureSelect):
         self.nums = nums
         self.learning_rate = learning_rate
         self.F = []
-        self.Trees = [CARTForGBDT() for i in range(nums)]
-        self.importance = None
+        self.trees = [_CARTForGBDT() for i in range(nums)]
+        self._importance = None
+
+    @property
+    def importance(self):
+        return self._importance
 
     def fit(self, x, y):
         self._init(x, y)
@@ -213,17 +231,11 @@ class GBDT(BaseClassifier, BaseFeatureSelect):
         temp = []
         for m in range(self.nums):
             y_residual = self._get_residual(m)
-            tree = self.Trees[m]
+            tree = self.trees[m]
             tree.fit(x, y_residual)
             self._update_f(tree)
             temp.append(tree.importance)
-        self.importance = np.mean(np.array(temp), axis=0)
-
-    @property
-    def importance_score(self):
-        if self.importance is None:
-            raise ModelNotFittedError
-        return self.importance
+        self._importance = np.mean(np.array(temp), axis=0)
 
     def feature_select(self, top_n):
         """
@@ -231,16 +243,16 @@ class GBDT(BaseClassifier, BaseFeatureSelect):
         :param top_n: 前几个特征
         :return:      选的特征的下标
         """
-        if self.importance is None:
+        if self._importance is None:
             raise ModelNotFittedError
         if top_n > self.variable_num:
             raise TopNTooLargeError
-        return self.importance.argsort()[-top_n:][::-1]
+        return self._importance.argsort()[-top_n:][::-1]
 
     def predict(self, x):
         res = np.zeros(x.shape[0]) + self.F[0][0]
         for m in range(self.nums):
-            tree = self.Trees[m]
+            tree = self.trees[m]
             res += self.learning_rate * tree.predict(x)
         return np.array(res)
 
@@ -251,7 +263,7 @@ class GBDT(BaseClassifier, BaseFeatureSelect):
         else:
             raise LabelTypeError
 
-    def _update_f(self, tree: CARTForGBDT):
+    def _update_f(self, tree: _CARTForGBDT):
         leaf_node_list = tree.leaf_node_list
         f = np.zeros(self.sample_num)
         for leaf_node in leaf_node_list:
@@ -276,3 +288,77 @@ class GBDT(BaseClassifier, BaseFeatureSelect):
         f0 = np.ones(self.sample_num)
         f0 = f0 * np.mean(self.y)
         self.F.append(f0)
+
+
+class RandomForest(BaseClassifier):
+
+    __doc__ = "Random Forest"
+
+    def __init__(self, m, tree_num=200):
+        super(RandomForest, self).__init__()
+        self.m = m
+        self.tree_num = tree_num
+        self.forest = None
+
+    @property
+    def the_forest(self):
+        return self.forest
+
+    def fit(self, x, y):
+        self._init(x, y)
+        if self.m > self.variable_num:
+            raise ValueBoundaryError
+        self._fit()
+
+    def _fit(self):
+        self.forest = [CART() for i in range(self.tree_num)]
+        self.feature_list = []
+        for i, tree in enumerate(self.forest):
+            random_x, random_y, select_features = self._sample_from_x(i)   # 默认以当前树的编号作为随机种子，使每次运行时抽样结果完全一致
+            tree.fit(random_x, random_y)
+            self.feature_list.append(select_features)
+
+    def _sample_from_x(self, seed):
+        np.random.seed(seed)
+        selected_sample_ids = np.random.randint(0, self.sample_num, self.sample_num)
+        np.random.seed(seed)
+        selected_feature_ids = np.random.choice(range(self.variable_num), self.m, False)
+        random_x = self.x[selected_sample_ids, :]
+        random_x = random_x[:, selected_feature_ids]
+        random_y = self.y[selected_sample_ids]
+        return random_x, random_y, selected_feature_ids
+
+    def predict(self, x):
+        if self.forest is None:
+            raise ModelNotFittedError
+
+        # tree_num*sample_num 行为每一棵树的预测，列为对每一个样本的预测
+        predict_results_mat = np.array([tree.predict(x[:, self.feature_list[i]])
+                                        for i, tree in enumerate(self.forest)])
+        return self._vote(predict_results_mat)
+
+    def _vote(self, result):
+        if result.shape[0] != self.tree_num:
+            raise TreeNumberMismatchError
+        voted_result = list(map(self._one_vote, result.T))
+        return np.array(voted_result)
+
+    def _one_vote(self, result):
+        if len(result) != self.tree_num:
+            raise TreeNumberMismatchError
+        count = Counter(result)
+        return max(count, key=count.get)
+
+    def score(self, x, y):
+        y_predict = self.predict(x)
+        if self.label_type == LabelType.binary:
+            return classify_f1(y_predict, y)
+        else:
+            return classify_f1_micro(y_predict, y)
+
+    def classify_plot(self, test_x, test_y, title=""):
+        classify_plot(self.new(self.m, self.tree_num), self.x, self.y, test_x, test_y, title=self.__doc__ + title)
+
+    @classmethod
+    def new(cls, *args):
+        return cls(*args)

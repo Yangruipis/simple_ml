@@ -1,7 +1,17 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.base.base_model import BinaryTreeNode, MultiTreeNode
+from simple_ml.base.base_model import *
+from simple_ml.base.base_enum import LabelType
+from simple_ml.base.base_error import *
+import numpy as np
+from collections import Counter
 from simple_ml.evaluation import *
+
+
+__all__ = [
+    'ID3',
+    'CART'
+]
 
 
 class ID3(BaseClassifier):
@@ -17,7 +27,11 @@ class ID3(BaseClassifier):
         super(ID3, self).__init__()
         self.max_depth = max_depth if max_depth is not None else np.inf
         self.min_samples_leaf = min_samples_leaf
-        self.root = None
+        self._root = None
+
+    @property
+    def root(self):
+        return self._root
 
     def fit(self, x, y):
         self._init(x, y)
@@ -26,7 +40,7 @@ class ID3(BaseClassifier):
         if LabelType.continuous in self.feature_type:
             raise FeatureTypeError("ID3算法只支持离散特征")
 
-        self.root = self._gen_tree(MultiTreeNode(data_id=np.arange(self.x.shape[0])), 0)
+        self._root = self._gen_tree(MultiTreeNode(data_id=np.arange(self.x.shape[0])), 0)
 
     def _gen_tree(self, node: MultiTreeNode, depth) -> MultiTreeNode:
         if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
@@ -73,9 +87,9 @@ class ID3(BaseClassifier):
         return s
 
     def predict(self, x):
-        if self.root is None:
+        if self._root is None:
             raise ModelNotFittedError
-        return np.array([self._predict_single(i, self.root) for i in x])
+        return np.array([self._predict_single(i, self._root) for i in x])
 
     def _predict_single(self, x, node: MultiTreeNode):
         if node.leaf_label is not None:
@@ -92,6 +106,14 @@ class ID3(BaseClassifier):
         y_predict = self.predict(x)
         return classify_f1(y_predict, y)
 
+    def classify_plot(self, x, y, title=""):
+        classify_plot(self.new(self.max_depth, self.min_samples_leaf),
+                      self.x, self.y, x, y, title=self.__doc__ + title)
+
+    @classmethod
+    def new(cls, depth, min_sample):
+        return cls(max_depth=depth, min_samples_leaf=min_sample)
+
 
 class CART(BaseClassifier):
 
@@ -106,11 +128,15 @@ class CART(BaseClassifier):
         super(CART, self).__init__()
         self.max_depth = max_depth if max_depth is not None else np.inf
         self.min_samples_leaf = min_samples_leaf
-        self.root = None
+        self._root = None
+
+    @property
+    def root(self):
+        return self._root
 
     def fit(self, x, y):
         self._init(x, y)
-        self.root = self._gen_tree(BinaryTreeNode(None, None, np.arange(self.x.shape[0])), 1)
+        self._root = self._gen_tree(BinaryTreeNode(None, None, np.arange(self.x.shape[0])), 1)
 
     def _gen_tree(self, node: BinaryTreeNode, depth) -> BinaryTreeNode:
         if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
@@ -232,9 +258,9 @@ class CART(BaseClassifier):
         return np.sum(np.square(y - np.mean(y)))
 
     def predict(self, x):
-        if self.root is None:
+        if self._root is None:
             raise ModelNotFittedError
-        return np.array([self._predict_single(i, self.root) for i in x])
+        return np.array([self._predict_single(i, self._root) for i in x])
 
 
     def _predict_single(self, x, node: BinaryTreeNode):
@@ -263,74 +289,9 @@ class CART(BaseClassifier):
             return classify_f1(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__ + title)
-
-
-class RandomForest(BaseClassifier):
-
-    __doc__ = "Random Forest"
-
-    def __init__(self, m, tree_num=200):
-        super(RandomForest, self).__init__()
-        self.m = m
-        self.tree_num = tree_num
-        self.forest = None
-
-    def fit(self, x, y):
-        self._init(x, y)
-        if self.m > self.variable_num:
-            raise ValueBoundaryError
-        self._fit()
-
-    def _fit(self):
-        self.forest = [CART() for i in range(self.tree_num)]
-        self.feature_list = []
-        for i, tree in enumerate(self.forest):
-            random_x, random_y, select_features = self._sample_from_x(i)   # 默认以当前树的编号作为随机种子，使每次运行时抽样结果完全一致
-            tree.fit(random_x, random_y)
-            self.feature_list.append(select_features)
-
-    def _sample_from_x(self, seed):
-        np.random.seed(seed)
-        selected_sample_ids = np.random.randint(0, self.sample_num, self.sample_num)
-        np.random.seed(seed)
-        selected_feature_ids = np.random.choice(range(self.variable_num), self.m, False)
-        random_x = self.x[selected_sample_ids, :]
-        random_x = random_x[:, selected_feature_ids]
-        random_y = self.y[selected_sample_ids]
-        return random_x, random_y, selected_feature_ids
-
-    def predict(self, x):
-        if self.forest is None:
-            raise ModelNotFittedError
-
-        # tree_num*sample_num 行为每一棵树的预测，列为对每一个样本的预测
-        predict_results_mat = np.array([tree.predict(x[:, self.feature_list[i]])
-                                        for i, tree in enumerate(self.forest)])
-        return self._vote(predict_results_mat)
-
-    def _vote(self, result):
-        if result.shape[0] != self.tree_num:
-            raise TreeNumberMismatchError
-        voted_result = list(map(self._one_vote, result.T))
-        return np.array(voted_result)
-
-    def _one_vote(self, result):
-        if len(result) != self.tree_num:
-            raise TreeNumberMismatchError
-        count = Counter(result)
-        return max(count, key=count.get)
-
-    def score(self, x, y):
-        y_predict = self.predict(x)
-        if self.label_type == LabelType.binary:
-            return classify_f1(y_predict, y)
-        else:
-            return classify_f1_micro(y_predict, y)
-
-    def classify_plot(self, test_x, test_y, title=""):
-        classify_plot(self.new(1, 1), self.x, self.y, test_x, test_y, title=self.__doc__ + title)
+        classify_plot(self.new(self.max_depth, self.min_samples_leaf),
+                      self.x, self.y, x, y, title=self.__doc__ + title)
 
     @classmethod
-    def new(cls, *args):
-        return cls(*args)
+    def new(cls, depth, min_sample):
+        return cls(max_depth=depth, min_samples_leaf=min_sample)

@@ -6,11 +6,21 @@ import re
 import requests
 from simple_ml.data_handle import *
 
+__all__ = [
+    'get_iris',
+    'get_watermelon',
+    'get_wine',
+    'get_moon',
+    'get_circle',
+    'get_hastie_10_2',
+    'DataCollector',
+    'load'
+]
+
 
 # 获取该文件的绝对路径
 PATH = os.path.split(os.path.realpath(__file__))[0]
 
-#__dir__ = ["./", "./simple_ml/", "../"]
 
 def get_iris():
     x, y = load("/data_sets/iris.txt")
@@ -42,7 +52,7 @@ def get_hastie_10_2():
     return x, np.array(y, dtype='int')
 
 
-class DataCollector():
+class DataCollector:
 
     def __init__(self):
         # exit_code = os.system('ping 8.8.8.8')
@@ -57,9 +67,9 @@ class DataCollector():
     def get_content(self):
 
         text = requests.get(self.URL).text.replace(" ", "").replace("\n", "").replace("\t", "")
-        _reg =  r'alt="\[DIR\]"></td><td><ahref="(.+?)">'
+        _reg = r'alt="\[DIR\]"></td><td><ahref="(.+?)">'
         reg = re.compile(_reg)
-        find  = reg.findall(str(text))
+        find = reg.findall(str(text))
         name_lst = []
         flag = False
         for i in find:
@@ -133,10 +143,9 @@ def dump(x, y, path):
 
 def load(path):
     x = []
-    y = None
     with open(PATH + path, "r") as f:
         m, n = list(map(int, f.readline().strip().split(",")))
         for i in range(m):
-          x.append(list(map(float, f.readline().strip().split(","))))
+            x.append(list(map(float, f.readline().strip().split(","))))
         y = list(map(float, f.readline().strip().split(",")))
     return np.array(x), np.array(y)

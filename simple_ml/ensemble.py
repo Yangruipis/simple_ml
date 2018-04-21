@@ -1,11 +1,13 @@
 # -*- coding:utf-8 -*-
 
+from __future__ import division, absolute_import
+
 from collections import Counter
 import numpy as np
 from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
 from simple_ml.base.base_model import *
-from simple_ml.evaluation import classify_plot, classify_f1, classify_f1_micro
+from simple_ml.evaluation import classify_plot, classify_f1, classify_f1_micro, regression_r2
 from simple_ml.tree import CART
 
 
@@ -136,7 +138,7 @@ class _CARTForGBDT(CART):
         self.importance = np.zeros(self.variable_num)
         self._root = self._gen_tree(GBDTTreeNode(None, None, np.arange(self.x.shape[0])), 1)
 
-    def _gen_tree(self, node: GBDTTreeNode, depth):
+    def _gen_tree(self, node, depth):
         if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
             # 获取相应的标签
             if len(node.data_id) != 0:
@@ -179,7 +181,7 @@ class _CARTForGBDT(CART):
         node.right = self._gen_tree(right, depth + 1)
         return node
 
-    def _predict_single(self, x, node: GBDTTreeNode):
+    def _predict_single(self, x, node):
         if node.leaf_label is not None:
             return node.gamma
 
@@ -265,7 +267,7 @@ class GBDT(BaseClassifier, BaseFeatureSelect):
         else:
             raise LabelTypeError
 
-    def _update_f(self, tree: _CARTForGBDT):
+    def _update_f(self, tree):
         leaf_node_list = tree.leaf_node_list
         f = np.zeros(self.sample_num)
         for leaf_node in leaf_node_list:

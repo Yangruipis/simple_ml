@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 
+from __future__ import division, absolute_import
+
 from simple_ml.base.base_model import *
 from simple_ml.base.base_enum import LabelType
 from simple_ml.base.base_error import *
@@ -42,7 +44,7 @@ class ID3(BaseClassifier):
 
         self._root = self._gen_tree(MultiTreeNode(data_id=np.arange(self.x.shape[0])), 0)
 
-    def _gen_tree(self, node: MultiTreeNode, depth) -> MultiTreeNode:
+    def _gen_tree(self, node, depth):
         if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
             node.leaf_label = np.argmax(np.bincount(self.y[node.data_id]))
             return node
@@ -91,7 +93,7 @@ class ID3(BaseClassifier):
             raise ModelNotFittedError
         return np.array([self._predict_single(i, self._root) for i in x])
 
-    def _predict_single(self, x, node: MultiTreeNode):
+    def _predict_single(self, x, node):
         if node.leaf_label is not None:
             return node.leaf_label
 
@@ -138,7 +140,7 @@ class CART(BaseClassifier):
         self._init(x, y)
         self._root = self._gen_tree(BinaryTreeNode(None, None, np.arange(self.x.shape[0])), 1)
 
-    def _gen_tree(self, node: BinaryTreeNode, depth) -> BinaryTreeNode:
+    def _gen_tree(self, node, depth):
         if depth >= self.max_depth or len(node.data_id) <= self.min_samples_leaf:
             # 获取相应的标签
             if len(node.data_id) != 0:
@@ -263,7 +265,7 @@ class CART(BaseClassifier):
         return np.array([self._predict_single(i, self._root) for i in x])
 
 
-    def _predict_single(self, x, node: BinaryTreeNode):
+    def _predict_single(self, x, node):
         if node.leaf_label is not None:
             return node.leaf_label
 

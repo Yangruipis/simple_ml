@@ -1,7 +1,8 @@
 # -*- coding:utf-8 -*-
 
-import numpy as np
+from __future__ import division, absolute_import
 
+import numpy as np
 from simple_ml.base.base_error import *
 from simple_ml.base.base_model import BaseTransform
 

@@ -26,15 +26,13 @@ ref:
     - median_absolute_error
 
 """
+from __future__ import division, absolute_import
 
 from collections import Counter
-
 import numpy as np
 from matplotlib import pyplot as plt
-
 from simple_ml.base.base_model import BaseClassifier
 from simple_ml.base.base_enum import LabelType, CrossValidationType
-
 from simple_ml.base.base_error import *
 from simple_ml.data_handle import transform_y, train_test_split
 from simple_ml.pca import PCA
@@ -319,7 +317,7 @@ def regression_median_absolute_error(y_predict, y_true):
     return np.median(error_list)
 
 
-def classify_plot(model: BaseClassifier, x_train, y_train, x_test, y_test, title="",compare=False, px=100):
+def classify_plot(model, x_train, y_train, x_test, y_test, title="",compare=False, px=100):
     """
     注意：
     - 该画图方法是在内部训练进行画图，如果特征大于2，则降至2维再进行训练，而不是先训练后作图，因为要对图上每一个二维点都进行预测

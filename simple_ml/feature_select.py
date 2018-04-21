@@ -3,6 +3,7 @@
 """
 filter方法进行特征选择
 """
+from __future__ import division, absolute_import
 
 import numpy as np
 from simple_ml.base.base_enum import FilterType, LabelType, EmbeddedType

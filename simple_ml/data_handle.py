@@ -1,9 +1,12 @@
 # -*- coding:utf-8 -*-
 
+from __future__ import division, absolute_import
+
 from simple_ml.base.base_error import EmptyInputError, MissingHandleTypeError, FeatureNumberMismatchError
 from simple_ml.base.base_enum import DisMissingHandle, ConMissingHandle, LabelType
 import numpy as np
 from collections import Counter
+
 
 __all__ = [
     'read_string',

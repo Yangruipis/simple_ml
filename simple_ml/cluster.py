@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from __future__ import division, absolute_import
 
 import numpy as np
 from numpy.linalg import norm

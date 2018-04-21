@@ -5,6 +5,8 @@
 - 结果经过检验，和stata的logit回归结果一致
 """
 
+from __future__ import division, absolute_import
+
 import scipy.optimize as so
 from simple_ml.base.base_model import *
 from simple_ml.evaluation import *

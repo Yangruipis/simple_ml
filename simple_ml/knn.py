@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from __future__ import division, absolute_import
 
 from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
@@ -113,7 +114,7 @@ class KDTree(KNN):
         self.root_node = Node(None, None, None, None, None, np.arange(self.x.shape[0]))
         self._build_kd_tree(self.root_node, 0)
 
-    def _build_kd_tree(self, input_node: Node, depth):
+    def _build_kd_tree(self, input_node, depth):
         if len(input_node.sample_ids) == 0:
             return None
 
@@ -142,7 +143,7 @@ class KDTree(KNN):
         """
         pass
 
-    def _search_kd_tree(self, x, the_node: Node, dist_func):
+    def _search_kd_tree(self, x, the_node, dist_func):
         if x[the_node.dimension] == the_node.value:
             return the_node
 

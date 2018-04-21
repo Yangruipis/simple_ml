@@ -36,6 +36,10 @@ class NaiveBayes(BaseClassifier):
         cons = np.sqrt(2 * np.pi)
         return 1 / cons * np.exp(- (value - mu)**2 / (2 * sigma2))
 
+    @property
+    def posterior_prob(self):
+        return self.prob_array
+
     def _fit(self):
         y_values = np.unique(self.y)
         self.prob_array = np.zeros((len(y_values), self.variable_num+1))  # 第一列为标签的先验概率
@@ -88,16 +92,24 @@ class NaiveBayes(BaseClassifier):
 
 
 
-class BaseBayesMinimumError(BaseClassifier):
+class BayesMinimumError(BaseClassifier):
 
     __doc__ = "Bayes Minimum Error"
 
     def __init__(self):
-        super(BaseBayesMinimumError, self).__init__()
-        self.mu = None
-        self.sigma = None
-        self.prior = None
+        super(BayesMinimumError, self).__init__()
+        self._mu = None
+        self._sigma = None
+        self._prior = None
         self.labels = None
+
+    @property
+    def sigma(self):
+        return self._sigma
+
+    @property
+    def mu(self):
+        return self._mu
 
     def fit(self, x, y):
         self._init(x, y)
@@ -109,20 +121,20 @@ class BaseBayesMinimumError(BaseClassifier):
     def _get_normal_distribution(self):
         _y = np.unique(self.y)
         self.labels = _y
-        self.prior = [len(self.y[self.y == i]) / self.sample_num for i in _y]
-        self.mu = []
-        self.sigma = []
+        self._prior = [len(self.y[self.y == i]) / self.sample_num for i in _y]
+        self._mu = []
+        self._sigma = []
         for i in _y:
             _x = self.x[self.y == i]
-            self.mu.append(self._get_mu(_x))
-            self.sigma.append(self._get_sigma(_x))
+            self._mu.append(self._get_mu(_x))
+            self._sigma.append(self._get_sigma(_x))
 
     def _get_probability(self, x):
         res = []
-        for i in range(len(self.mu)):
-            temp = 1/(np.sqrt(2*np.pi)**self.variable_num * np.sqrt(np.linalg.det(self.sigma[i])))
-            temp *= np.exp(-1/2 * np.dot(np.dot((x - self.mu[i]), np.linalg.inv(self.sigma[i])), (x - self.mu[i])))
-            temp *= self.prior[i]
+        for i in range(len(self._mu)):
+            temp = 1/(np.sqrt(2*np.pi) ** self.variable_num * np.sqrt(np.linalg.det(self._sigma[i])))
+            temp *= np.exp(-1 / 2 * np.dot(np.dot((x - self._mu[i]), np.linalg.inv(self._sigma[i])), (x - self._mu[i])))
+            temp *= self._prior[i]
             res.append(temp)
         return res
 
@@ -135,7 +147,7 @@ class BaseBayesMinimumError(BaseClassifier):
         return np.cov(x.T)
 
     def predict(self, x):
-        if not self.mu:
+        if not self._mu:
             raise ModelNotFittedError
         return np.array([self._predict_single(i) for i in x])
 
@@ -154,7 +166,7 @@ class BaseBayesMinimumError(BaseClassifier):
         classify_plot(self, self.x, self.y, x, y, title=self.__doc__+title)
 
 
-class BayesMinimumRisk(BaseBayesMinimumError):
+class BayesMinimumRisk(BayesMinimumError):
 
     __doc__ = "Bayes Minimum Risk"
 

@@ -1,5 +1,17 @@
 # 线性学习模块 **simple_ml.logistic**
 
+- [线性学习模块 **simple_ml.logistic**](#%E7%BA%BF%E6%80%A7%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9D%97-simplemllogistic)
+    - [一、标准Logistic回归](#%E4%B8%80%E3%80%81%E6%A0%87%E5%87%86logistic%E5%9B%9E%E5%BD%92)
+        - [初始化](#%E5%88%9D%E5%A7%8B%E5%8C%96)
+        - [类方法](#%E7%B1%BB%E6%96%B9%E6%B3%95)
+    - [二、 最小损失回归 (Lasso)](#%E4%BA%8C%E3%80%81-%E6%9C%80%E5%B0%8F%E6%8D%9F%E5%A4%B1%E5%9B%9E%E5%BD%92-lasso)
+        - [初始化](#%E5%88%9D%E5%A7%8B%E5%8C%96)
+        - [类方法](#%E7%B1%BB%E6%96%B9%E6%B3%95)
+    - [三、岭回归 (Ridge)](#%E4%B8%89%E3%80%81%E5%B2%AD%E5%9B%9E%E5%BD%92-ridge)
+        - [初始化](#%E5%88%9D%E5%A7%8B%E5%8C%96)
+        - [类方法](#%E7%B1%BB%E6%96%B9%E6%B3%95)
+    - [Examples](#examples)
+- [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
 ## 一、标准Logistic回归
 

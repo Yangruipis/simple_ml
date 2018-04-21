@@ -1,5 +1,13 @@
 # PCA降维模块 **simple_ml.pca**
 
+- [PCA降维模块 **simple_ml.pca**](#pca%E9%99%8D%E7%BB%B4%E6%A8%A1%E5%9D%97-simplemlpca)
+    - [主成分分析 (PCA)](#%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90-pca)
+        - [初始化](#%E5%88%9D%E5%A7%8B%E5%8C%96)
+        - [类方法](#%E7%B1%BB%E6%96%B9%E6%B3%95)
+    - [类属性](#%E7%B1%BB%E5%B1%9E%E6%80%A7)
+    - [针对高维数据的主成分分析 (SuperPCA)](#%E9%92%88%E5%AF%B9%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E7%9A%84%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90-superpca)
+    - [Example](#example)
+- [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
 ## 主成分分析 (PCA)
 

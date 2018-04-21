@@ -1,7 +1,8 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.classify_data import *
-from simple_ml.bayes import *
+from simple_ml.classify_data import get_wine, get_moon
+from simple_ml.bayes import BayesMinimumError, BayesMinimumRisk, NaiveBayes
+import numpy as np
 from simple_ml.data_handle import train_test_split
 
 
@@ -14,7 +15,7 @@ def wine_example():
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
     # 贝叶斯最小错误率
-    bme = BaseBayesMinimumError()
+    bme = BayesMinimumError()
     bme.fit(x_train, y_train)
     print(bme.score(x_test, y_test))
     bme.classify_plot(x_test, y_test)
@@ -41,7 +42,7 @@ def wine_example_multi_class():
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
     # 贝叶斯最小错误率
-    bme = BaseBayesMinimumError()
+    bme = BayesMinimumError()
     bme.fit(x_train, y_train)
     print(bme.score(x_test, y_test))
     bme.classify_plot(x_test, y_test)
@@ -69,7 +70,7 @@ def moon_example():
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
     # 贝叶斯最小错误率
-    bme = BaseBayesMinimumError()
+    bme = BayesMinimumError()
     bme.fit(x_train, y_train)
     print(bme.score(x_test, y_test))
     bme.classify_plot(x_test, y_test)

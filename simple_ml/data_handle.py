@@ -38,7 +38,7 @@ def _is_number(s):
     return False
 
 
-def read_string(string: str, header=True, index=True, sep=","):
+def read_string(string, header=True, index=True, sep=","):
     """
     读取字符串为二维数组，如果某列是整型，转为int，如果是小数，转为float，如果是文本，则不变
     :param string:  字符串

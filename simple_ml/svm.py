@@ -7,7 +7,7 @@ from simple_ml.base.base_model import *
 import numpy as np
 
 
-__all__ = ['SVM']
+__all__ = ['SVM', 'KernelType', 'LabelType']
 
 
 class SVM(BaseClassifier):
@@ -22,7 +22,7 @@ class SVM(BaseClassifier):
             tol         误差容忍度（越大越不准确，但是省时间）
             precision   alpha结果精度
             max_iter    外循环最大迭代次数
-            KERNEL_type 核函数类型:
+            kernel_type 核函数类型:
                         linear（无需提供参数，相当于没有用核函数）
                         polynomial(需提供参数：d)
                         gassian(需提供参数：sigma)

@@ -60,7 +60,8 @@ __all__ = [
     'regression_rmsel',
     'regression_squared_error',
 
-    'cross_validation'
+    'cross_validation',
+    'CrossValidationType'
 ]
 
 

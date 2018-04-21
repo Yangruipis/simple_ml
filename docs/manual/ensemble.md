@@ -1,6 +1,23 @@
 # 集成学习 **simple_ml.ensemble**
 
-
+- [集成学习 **simple_ml.ensemble**](#%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0-simplemlensemble)
+    - [一、AdaBoost算法](#%E4%B8%80%E3%80%81adaboost%E7%AE%97%E6%B3%95)
+        - [1.1 初始化](#11-%E5%88%9D%E5%A7%8B%E5%8C%96)
+        - [1.2 类方法](#12-%E7%B1%BB%E6%96%B9%E6%B3%95)
+        - [1.3 类属性](#13-%E7%B1%BB%E5%B1%9E%E6%80%A7)
+    - [二、梯度提升树 (GBDT)](#%E4%BA%8C%E3%80%81%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%87%E6%A0%91-gbdt)
+        - [2.1 初始化](#21-%E5%88%9D%E5%A7%8B%E5%8C%96)
+        - [2.2 类方法](#22-%E7%B1%BB%E6%96%B9%E6%B3%95)
+        - [2.3 类属性](#23-%E7%B1%BB%E5%B1%9E%E6%80%A7)
+    - [随机森林 (RandomForest)](#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-randomforest)
+        - [3.1 初始化](#31-%E5%88%9D%E5%A7%8B%E5%8C%96)
+        - [3.2 类方法](#32-%E7%B1%BB%E6%96%B9%E6%B3%95)
+        - [3.3 类属性](#33-%E7%B1%BB%E5%B1%9E%E6%80%A7)
+    - [Examples](#examples)
+        - [AdaBoost Example](#adaboost-example)
+        - [GBDT Example](#gbdt-example)
+        - [Random Forest Example](#random-forest-example)
+    - [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
 ## 一、AdaBoost算法
 
@@ -50,8 +67,8 @@ def fit(self, x, y)
 
 |             | 名称 |    类型     |     描述      |
 |------------:|:----:|:----------:|:------------:|
-| Parameters: |  x   | np.2darray |     特征      |
-|             |  y   |  np.array  | 标签，可以没有 |
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签 |
 |    Returns: |      |    Void    |              |
 
 
@@ -146,8 +163,8 @@ def fit(self, x, y)
 
 |             | 名称 |    类型     |     描述      |
 |------------:|:----:|:----------:|:------------:|
-| Parameters: |  x   | np.2darray |     特征      |
-|             |  y   |  np.array  | 标签，可以没有 |
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签 |
 |    Returns: |      |    Void    |              |
 
 
@@ -260,8 +277,8 @@ def fit(self, x, y)
 
 |             | 名称 |    类型     |     描述      |
 |------------:|:----:|:----------:|:------------:|
-| Parameters: |  x   | np.2darray |     特征      |
-|             |  y   |  np.array  | 标签，可以没有 |
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签 |
 |    Returns: |      |    Void    |              |
 
 

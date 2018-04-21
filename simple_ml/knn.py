@@ -9,7 +9,7 @@ import numpy as np
 from collections import Counter
 
 
-__all__ = ['KNN']
+__all__ = ['KNN', 'DisType']
 
 
 class KNN(BaseClassifier):

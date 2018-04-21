@@ -4,10 +4,10 @@ from simple_ml.base.base_error import *
 from simple_ml.base.base_model import *
 from simple_ml.base.base_enum import *
 import numpy as np
-from simple_ml.evaluation import classify_f1, classify_plot
+from simple_ml.evaluation import classify_f1, classify_plot, classify_roc_plot
 
 
-__all__ = ['NeuralNetwork']
+__all__ = ['NeuralNetwork', 'ActiveFunction', 'CostFunction']
 
 
 class NeuralNetwork(BaseClassifier):
@@ -45,12 +45,12 @@ class NeuralNetwork(BaseClassifier):
         self.layers_num = 1
         self.layers = [(self.output_neuron_num, self.output_active_func)]
 
-    def clear_hidden_layer(self):
+    def _clear_hidden_layer(self):
         # 此处将输出层和隐含层放到一起了，layers不包括输入层
         self.layers_num = 1
         self.layers = [(self.output_neuron_num, self.output_active_func)]
 
-    def clear_init(self):
+    def _clear_init(self):
         self.w_list = []
         self.b_list = []
         self.z_list = []
@@ -58,10 +58,10 @@ class NeuralNetwork(BaseClassifier):
         self.delta_list = []
 
     def clear_all(self):
-        self.clear_hidden_layer()
-        self.clear_init()
+        self._clear_hidden_layer()
+        self._clear_init()
 
-    def model_init(self):
+    def _model_init(self):
         """
         - 模型初始化，每次add_layer之后模型必须初始化
             - 神经网络输入层神经元个数就是特征数，每个特征就是一个神经元
@@ -116,7 +116,7 @@ class NeuralNetwork(BaseClassifier):
         self._init(x, y)
         if self.label_type != LabelType.binary:
             raise LabelTypeError("暂时只支持二分类")
-        self.model_init()
+        self._model_init()
         for i in range(self.iter_times):
             self._forward_transfer(self.x)
             self._error_of_output_layer()
@@ -257,3 +257,7 @@ class NeuralNetwork(BaseClassifier):
         new_cls.layers = layers
         new_cls.layers_num = len(layers)
         return new_cls
+
+    def auc_plot(self, x, y):
+        predict_y = self.predict_prob(x)
+        classify_roc_plot(predict_y, y)

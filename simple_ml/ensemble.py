@@ -12,8 +12,10 @@ from simple_ml.tree import CART
 __all__ = [
     'AdaBoost',
     'GBDT',
-    'RandomForest'
+    'RandomForest',
+    'ClassifierType',
 ]
+
 
 class AdaBoost(BaseClassifier):
 

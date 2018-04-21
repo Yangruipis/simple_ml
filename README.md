@@ -171,5 +171,7 @@ Out[1]: np.array([1,1])
 - [x] github pages, especially the class map
 - [ ] stacking
 - [ ] Model Auto Select
-- [ ] __all__ 隔离
-- [ ] 万能多分类器
+- [x] __all__
+- [ ] 二分类转多分类器
+- [ ] 模型自动调参
+- [ ] python2 __future__

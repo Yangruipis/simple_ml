@@ -42,12 +42,12 @@
     - AdaBoost
     - GBDT
     - Random Forest
-  - 神经网络模型
+  - [神经网络模型](manual/bp.md)
     - BP 神经网络
-  - 支持向量模型
+  - [支持向量模型](manual/svm.md)
     - SVMachine
     - SVRegression
-  - 聚类模型
+  - [聚类模型](manual/cluster.md)
     - K-means
     - 层次聚类
 

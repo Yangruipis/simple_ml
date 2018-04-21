@@ -15,7 +15,9 @@ __all__ = [
     'one_hot_encoder',
     'BIGMOM',
     'train_test_split',
-    'transform_y'
+    'transform_y',
+    'DisMissingHandle',
+    'ConMissingHandle'
 ]
 
 

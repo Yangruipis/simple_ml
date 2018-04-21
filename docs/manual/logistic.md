@@ -69,8 +69,8 @@ def fit(self, x, y)
 
 |             | 名称 |    类型     |     描述      |
 |------------:|:----:|:----------:|:------------:|
-| Parameters: |  x   | np.2darray |     特征      |
-|             |  y   |  np.array  | 标签，可以没有 |
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签 |
 |    Returns: |      |    Void    |              |
 
 
@@ -212,8 +212,8 @@ def fit(self, x, y)
 
 |             | 名称 |    类型     |     描述      |
 |------------:|:----:|:----------:|:------------:|
-| Parameters: |  x   | np.2darray |     特征      |
-|             |  y   |  np.array  | 标签，可以没有 |
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签 |
 |    Returns: |      |    Void    |              |
 
 
@@ -275,7 +275,7 @@ def predict_prob(self, x)
 
 6 ROC曲线绘制
 
-针对二分类且可以包含
+针对二分类且包含
 `predict_prob`方法的模型，我们均给出了ROC曲线的绘制方法`auc_plot`，并且在图中输出AUC值
 
 ```python
@@ -361,8 +361,8 @@ def fit(self, x, y)
 
 |             | 名称 |    类型     |     描述      |
 |------------:|:----:|:----------:|:------------:|
-| Parameters: |  x   | np.2darray |     特征      |
-|             |  y   |  np.array  | 标签，可以没有 |
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签 |
 |    Returns: |      |    Void    |              |
 
 

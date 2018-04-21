@@ -10,7 +10,7 @@ from simple_ml.base.base_error import *
 from simple_ml.base.base_model import BaseTransform
 
 
-__all__ = ['Filter', 'Embedded']
+__all__ = ['Filter', 'Embedded', 'FilterType', 'EmbeddedType']
 
 
 class Filter(BaseTransform):

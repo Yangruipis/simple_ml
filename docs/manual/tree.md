@@ -60,8 +60,8 @@ def fit(self, x, y)
 
 |             | 名称 |    类型     |     描述      |
 |------------:|:----:|:----------:|:------------:|
-| Parameters: |  x   | np.2darray |     特征      |
-|             |  y   |  np.array  | 标签，可以没有 |
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签 |
 |    Returns: |      |    Void    |              |
 
 
@@ -163,8 +163,8 @@ def fit(self, x, y)
 
 |             | 名称 |    类型     |     描述      |
 |------------:|:----:|:----------:|:------------:|
-| Parameters: |  x   | np.2darray |     特征      |
-|             |  y   |  np.array  | 标签，可以没有 |
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签 |
 |    Returns: |      |    Void    |              |
 
 

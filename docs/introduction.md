@@ -1,7 +1,7 @@
 
 ![](./imgs/logo2.png)
 
-# Simple Meachine Learning
+# Simple Machine Learning
 
 一个简单的机器学习算法实现
 
@@ -23,7 +23,15 @@
 
 `强烈推荐Anaconda环境`
 
-**终端安装**
+
+**pip安装**
+
+```bash
+pip install simple_male
+```
+对，是`simple_ma(chine)le(arning)`，因为`simple_ml`已经在pypi上被人注册了喵
+
+**git安装**
 
 ```bash
 git clone https://github.com/Yangruipis/simple_ml.git

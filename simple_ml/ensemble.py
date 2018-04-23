@@ -366,3 +366,5 @@ class RandomForest(BaseClassifier):
     @classmethod
     def new(cls, *args):
         return cls(*args)
+
+

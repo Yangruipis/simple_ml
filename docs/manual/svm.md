@@ -1,14 +1,14 @@
 # 支持向量学习 **simple_ml.svm**
 
 - [支持向量学习 **simple_ml.svm**](#%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E5%AD%A6%E4%B9%A0-simplemlsvm)
-    - [支持向量机 (SVM)](#%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA-svm)
+    - [一、支持向量机 (SVM)](#%E4%B8%80%E3%80%81%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA-svm)
         - [1.1 初始化](#11-%E5%88%9D%E5%A7%8B%E5%8C%96)
         - [1.2 类方法](#12-%E7%B1%BB%E6%96%B9%E6%B3%95)
         - [1.3 类属性](#13-%E7%B1%BB%E5%B1%9E%E6%80%A7)
     - [Examples](#examples)
         - [线性可分情况](#%E7%BA%BF%E6%80%A7%E5%8F%AF%E5%88%86%E6%83%85%E5%86%B5)
-        - [线性不可分，软间隔情况](#%E7%BA%BF%E6%80%A7%E4%B8%8D%E5%8F%AF%E5%88%86%EF%BC%8C%E8%BD%AF%E9%97%B4%E9%9A%94%E6%83%85%E5%86%B5)
-        - [线性不可分，高维可分情况](#%E7%BA%BF%E6%80%A7%E4%B8%8D%E5%8F%AF%E5%88%86%EF%BC%8C%E9%AB%98%E7%BB%B4%E5%8F%AF%E5%88%86%E6%83%85%E5%86%B5)
+        - [软间隔情况](#%E8%BD%AF%E9%97%B4%E9%9A%94%E6%83%85%E5%86%B5)
+        - [高维可分情况](#%E9%AB%98%E7%BB%B4%E5%8F%AF%E5%88%86%E6%83%85%E5%86%B5)
 - [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
 * * *
@@ -148,7 +148,7 @@ print(mysvm.predict(x_train))
 mysvm.classify_plot(x_test, y_test)
 ```
 
-### 线性不可分，软间隔情况
+### 软间隔情况
 
 ```python
 from simple_ml.svm import *
@@ -169,7 +169,7 @@ mysvm.classify_plot(x_test, y_test)
 ```
 
 
-### 线性不可分，高维可分情况
+### 高维可分情况
 
 ```python
 from simple_ml.svm import *

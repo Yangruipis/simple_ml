@@ -9,6 +9,8 @@ from simple_ml.base.base_error import *
 from simple_ml.base.base_model import *
 from simple_ml.evaluation import classify_plot, classify_f1, classify_f1_micro, regression_r2
 from simple_ml.tree import CART
+from simple_ml.data_handle import get_k_folder_idx
+from simple_ml.logistic import LogisticRegression
 
 
 __all__ = [
@@ -16,6 +18,7 @@ __all__ = [
     'GBDT',
     'RandomForest',
     'ClassifierType',
+    'Stacking',
 ]
 
 
@@ -368,3 +371,84 @@ class RandomForest(BaseClassifier):
         return cls(*args)
 
 
+class Stacking(BaseClassifier):
+
+    __doc__ = "模型融合 Stacking 方法"
+
+    def __init__(self, models, meta_model=LogisticRegression(), k_folder=5):
+        """
+        模型融合Stacking方法，支持分类问题
+        :param models:      子模型列表，必须包含fit和predict方法，或者继承BaseClassifier
+        :param meta_model:  元分类器，用于stacking第二层分类
+        :param k_folder:    折叠次数
+        """
+        super(Stacking, self).__init__()
+        if not isinstance(models, list):
+            raise ValueError("models 必须是一个继承fit和predict方法的object列表")
+        if len(models) == 0:
+            raise EmptyInputError("models 不能为空")
+        if not isinstance(models[0], BaseClassifier) or not isinstance(meta_model, BaseClassifier):
+            raise ClassifierTypeError("必须选择继承BaseClassifier的分类模型")
+        self.models = models
+        self.meta_model = meta_model
+        self.k_folder = k_folder
+        self._x_train_stack = None
+        self._x_test_stack = None
+        self._score_mat = None
+
+    @property
+    def model_num(self):
+        return len(self.models)
+
+    @property
+    def score_mat(self):
+        """
+        k折训练时的得分矩阵
+        :return: (模型数目 x k折数目)
+        """
+        return self._score_mat
+
+    def fit(self, x, y):
+        self._init(x, y)
+        self._fit()
+
+    def _fit(self, quiet=True):
+        self._x_train_stack = np.zeros((self.sample_num, self.model_num))
+        self._score_mat = np.zeros((self.model_num, self.k_folder))
+        for i, (test, train) in enumerate(get_k_folder_idx(self.sample_num, self.k_folder)):
+            _X_train = self.x[train]
+            _y_train = self.y[train]
+            _X_test = self.x[test]
+            _y_test = self.y[test]
+            _y_test_predict = np.zeros((_X_test.shape[0], self.model_num))
+
+            for j, model in enumerate(self.models):
+                model.fit(_X_train, _y_train)
+                self._score_mat[j, i] = model.score(_X_test, _y_test)
+                _y_test_predict[:, j] = model.predict(_X_test)
+                if not quiet:
+                    print("The %s th folder, %s th model finished." % (i+1, j+1))
+
+            # 训练集分 k_folder 次填充，得到特征[n_train_samples, clfs_num]
+            self._x_train_stack[test, :] = _y_test_predict
+
+    def predict(self, x):
+        self._get_new_test(x)
+        return self._predict_with_meta_classifier()
+
+    def _get_new_test(self, x):
+        self._x_test_stack = np.zeros((x.shape[0], self.model_num))
+        for i in range(self.k_folder):
+            y_test_predict = np.zeros((x.shape[0], self.model_num))
+            for j, model in enumerate(self.models):
+                predict = model.predict(x)
+                y_test_predict[:, j] = predict
+            self._x_test_stack += y_test_predict
+        self._x_test_stack /= self.k_folder
+        sign = lambda x: 1 if x >= 0.5 else 0
+        vec = np.vectorize(sign)
+        self._x_test_stack = vec(self._x_test_stack)
+
+    def _predict_with_meta_classifier(self):
+        self.meta_model.fit(self._x_train_stack, self.y)
+        return self.predict(self._x_test_stack)

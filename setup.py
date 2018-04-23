@@ -1,10 +1,5 @@
 # -*- coding:utf-8 -*-
 
-import codecs
-from setuptools import setup
-import sys
-import os
-
 """
 setuptools比distutils.core多了检查包依赖功能
 """

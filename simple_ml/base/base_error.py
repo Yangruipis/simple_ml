@@ -100,8 +100,17 @@ class EmptyInputError(ValueError):
 class MissingHandleTypeError(TypeError):
     pass
 
+
 class CostFunctionError(TypeError):
     pass
 
+
 class NeuralNetworkParamError(ValueError):
     pass
+
+
+class ArrayContainNANorINF(MisMatchError):
+
+    def __init__(self, info=""):
+        err = "包含缺失值或无限值，请先调用data_handle模块进行处理"
+        super(ArrayContainNANorINF, self).__init__(info + err)

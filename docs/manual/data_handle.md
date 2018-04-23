@@ -163,4 +163,26 @@ def train_test_split(x, y, test_size=0.3, seed=None)
 |    Returns: |           | (x_train, y_train, x_test, y_test) |   分割后的测试集和训练集    |
 
 
+## 获取k折后的配对样本下标
+
+```python
+def get_k_folder_idx(length, k_folder, seed=918):
+    """
+    获取k折后的配对样本下标
+    :param length:    样本长度
+    :param k_folder:  K折数目
+    :param seed:      随机种子
+    :return:          迭代器， (其中一个folder下标，剩余folder下标)
+    """
+    pass
+```
+
+|             |   名称   |      类型       |                描述                |
+|------------:|:--------:|:---------------:|:----------------------------------:|
+| Parameters: |  length  |       int       |              样本长度               |
+|             | k_folder |       int       |               k折数目               |
+|             |   seed   |       int       |              随机种子               |
+|    Returns: |          | iterator(tuple) | (其中一个folder下标，剩余folder下标) |
+
+
 # [返回主页](../index.md)

@@ -20,7 +20,8 @@ __all__ = [
     'train_test_split',
     'transform_y',
     'DisMissingHandle',
-    'ConMissingHandle'
+    'ConMissingHandle',
+    'get_k_folder_idx',
 ]
 
 
@@ -283,3 +284,19 @@ def transform_y(y):
         return np.array([0 if i == -1 else i for i in y])
     else:
         return y
+
+
+def get_k_folder_idx(length, k_folder, seed=918):
+    """
+    获取k折后的配对样本下标
+    :param length:    样本长度
+    :param k_folder:  K折数目
+    :param seed:      随机种子
+    :return:          迭代器， (其中一个folder下标，剩余folder下标)
+    """
+    arr = np.arange(length)
+    np.random.seed(seed)
+    random_arr = np.random.choice(arr, length, False)
+    group_list = np.array([i % k_folder for i in arr])
+    for i in range(k_folder):
+        yield (random_arr[group_list == i], random_arr[group_list != i])

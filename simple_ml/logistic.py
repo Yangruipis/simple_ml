@@ -128,6 +128,9 @@ class LogisticRegression(BaseClassifier):
         # 返回当前类的新的实例，由于该类是超类，因此用classmethod，无论是什么类调用，返回的都是该类本身
         return cls(tol=tol, alpha=alpha, threshold=threshold, has_intercept=has_i)
 
+    def new2(self):
+        return LogisticRegression(self.tol, self.alpha, self.threshold, self.has_intercept)
+
 
 class Lasso(LogisticRegression, BaseFeatureSelect):
 

@@ -177,7 +177,17 @@ Out[1]: np.array([1,1])
 - [ ] more metrics
 - [x] github pages, especially the class map
 - [ ] stacking
-- [ ] Model Auto Select
 - [ ] 二分类转多分类器
-- [ ] 模型自动调参
-- [ ] recognize nan and inf
+- [x] recognize nan and inf
+- [ ] check x before predict, check x and y before score
+- [ ] new function in each model
+
+
+# TODO List AUTO MODEL
+
+- [x] auto data handle
+- [ ] auto feature select
+- [ ] auto param select
+- [ ] auto model select
+
+

@@ -196,7 +196,7 @@ class BayesMinimumRisk(BayesMinimumError):
     def fit(self, x, y):
         label_num = len(np.unique(y))
         if self.cost_mat.shape[0] != label_num or self.cost_mat.shape[1] != label_num:
-            raise CostMatMismatchError
+            raise CostMatMismatchError("损失矩阵维度不匹配")
         super(BayesMinimumRisk, self).fit(x, y)
 
     def _predict_single(self, x):

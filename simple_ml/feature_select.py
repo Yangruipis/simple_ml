@@ -102,6 +102,7 @@ class Embedded(BaseTransform):
         self.model = None
 
     def fit(self, x, y):
+        self._init(x, y)
         if self.embedded_type == EmbeddedType.Lasso:
             from simple_ml.logistic import Lasso
             self.model = Lasso()

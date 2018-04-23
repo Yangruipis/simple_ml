@@ -16,25 +16,31 @@ __all__ = [
     'GBDTTreeNode'
 ]
 
-class BaseClassifier(object):
-
-    __metaclass__ = ABCMeta
+class BaseModel(object):
 
     def __init__(self):
         pass
 
     def _init(self, x, y):
         self._clear()
-        x_sample_num = self._check_x(x)
-        y_sample_num = self._check_y(y)
-        if x_sample_num != y_sample_num:
-            raise SampleNumberMismatchError
-        self.sample_num = x_sample_num
-        self.variable_num = x.shape[1]
-        self.x = np.array(x)
-        self.y = y
-        self.label_type = self._check_label_type(self.y)
-        self.feature_type = self._check_feature_type(self.x)
+        if y is not None:
+            x_sample_num = self._check_x(x)
+            y_sample_num = self._check_y(y)
+            if x_sample_num != y_sample_num:
+                raise SampleNumberMismatchError
+            self.sample_num = x_sample_num
+            self.variable_num = x.shape[1]
+            self.x = np.array(x)
+            self.y = y
+            self.label_type = self._check_label_type(self.y)
+            self.feature_type = self._check_feature_type(self.x)
+        else:
+            self.sample_num = self._check_x(x)
+            self.variable_num = x.shape[1]
+            self.x = np.array(x)
+            self.y = None
+            self.label_type = None
+            self.feature_type = self._check_feature_type(self.x)
 
     def _clear(self):
         self.x = None
@@ -47,100 +53,27 @@ class BaseClassifier(object):
         if isinstance(x, np.ndarray):
             if len(x.shape) != 2:
                 raise FeatureTypeError("请输入二维数组")
-            return x.shape[0]
+
         else:
             raise FeatureTypeError("请输入二维Numpy.array或pandas.Series")
+
+        if not np.isfinite(x).all():
+            raise ArrayContainNANorINF("input:X ")
+
+        return x.shape[0]
 
     @staticmethod
     def _check_y(y):
         if isinstance(y, np.ndarray):
             if len(y.shape) != 1:
                 raise LabelArrayTypeError("请输入一维数组")
-            return y.shape[0]
         else:
             raise LabelArrayTypeError("请输入一维Numpy.array或pandas.Series")
 
-    @staticmethod
-    def _check_label_type(y):
-        count = np.unique(y)
-        if len(count) == 2:
-            return LabelType.binary
-        elif len(count) > len(y)/2:
-            return LabelType.continuous
-        else:
-            return LabelType.multi_class
+        if not np.isfinite(y).all():
+            raise ArrayContainNANorINF("input:y ")
 
-    @staticmethod
-    def _check_feature_type(x):
-        res = []
-        for feature in x.T:
-            count = np.unique(feature)
-            if len(count) == 2:
-                res.append(LabelType.binary)
-            elif len(count) > len(feature) // 2:
-                res.append(LabelType.continuous)
-            else:
-                res.append(LabelType.multi_class)
-        return res
-
-    @abstractmethod
-    def fit(self, x, y):
-        pass
-
-    @abstractmethod
-    def predict(self, x):
-        pass
-
-    @abstractmethod
-    def score(self, x, y):
-        pass
-
-
-class BaseTransform(object):
-
-    __doc__ = "This is a Transform Abstract Class"
-
-    __metaclass__ = ABCMeta
-
-    def __init__(self):
-        pass
-
-    def _init(self, x, y):
-        self._clear()
-        x_sample_num = self._check_x(x)
-        y_sample_num = self._check_y(y)
-        if x_sample_num != y_sample_num:
-            raise SampleNumberMismatchError
-        self.sample_num = x_sample_num
-        self.variable_num = x.shape[1]
-        self.x = np.array(x)
-        self.y = y
-        self.label_type = self._check_label_type(self.y)
-        self.feature_type = self._check_feature_type(self.x)
-
-    def _clear(self):
-        self.x = None
-        self.y = None
-        self.sample_num = 0
-        self.variable_num = 0
-
-    @staticmethod
-    def _check_x(x):
-        if isinstance(x, np.ndarray):
-            if len(x.shape) != 2:
-                raise FeatureTypeError("请输入二维数组")
-            return x.shape[0]
-        else:
-            raise FeatureTypeError("请输入二维Numpy.array或pandas.Series")
-
-    @staticmethod
-    def _check_y(y):
-        if isinstance(y, np.ndarray):
-            if len(y.shape) != 1:
-                raise LabelArrayTypeError("请输入一维数组")
-            return y.shape[0]
-        else:
-            raise LabelArrayTypeError("请输入一维Numpy.array或pandas.Series")
+        return y.shape[0]
 
     @staticmethod
     def _check_label_type(y):
@@ -165,6 +98,39 @@ class BaseTransform(object):
                 res.append(LabelType.multi_class)
         return res
 
+
+class BaseClassifier(BaseModel):
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self):
+        super(BaseClassifier, self).__init__()
+
+    @abstractmethod
+    def fit(self, x, y):
+        pass
+
+    @abstractmethod
+    def predict(self, x):
+        pass
+
+    @abstractmethod
+    def score(self, x, y):
+        pass
+
+
+class BaseTransform(BaseModel):
+
+    __doc__ = "This is a Transform Abstract Class"
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self):
+        super(BaseTransform, self).__init__()
+
+    def _init(self, x, y=None):
+        super(BaseTransform, self)._init(x, y)
+
     @abstractmethod
     def fit(self, x, y):
         pass
@@ -177,7 +143,8 @@ class BaseTransform(object):
     def fit_transform(self, x, y):
         pass
 
-class BaseFeatureSelect():
+
+class BaseFeatureSelect:
 
     __metaclass__ = ABCMeta
 

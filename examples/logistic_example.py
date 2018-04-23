@@ -59,5 +59,5 @@ def wine_example():
     ridge.auc_plot(x_test, y_test)
 
 if __name__ == '__main__':
-    # iris_example()
-    wine_example()
+    iris_example()
+    # wine_example()

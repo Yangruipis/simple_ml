@@ -31,10 +31,9 @@ from __future__ import division, absolute_import
 from collections import Counter
 import numpy as np
 from matplotlib import pyplot as plt
-from simple_ml.base.base_model import BaseClassifier
 from simple_ml.base.base_enum import LabelType, CrossValidationType
 from simple_ml.base.base_error import *
-from simple_ml.data_handle import transform_y, train_test_split
+from simple_ml.data_handle import transform_y, train_test_split, get_k_folder_idx
 from simple_ml.pca import PCA
 
 __all__ = [
@@ -433,7 +432,18 @@ def classify_plot(model, x_train, y_train, x_test, y_test, title="",compare=Fals
         plt.show()
 
 
-def cross_validation(model, x, y, method=CrossValidationType.holdout, test_size=0.3, cv=5):
+def cross_validation(model, x, y, method=CrossValidationType.holdout, test_size=0.3, cv=5, seed=918):
+    """
+    交叉验证函数
+    :param model:         模型，继承predict和score方法
+    :param x:             特征
+    :param y:             标签
+    :param method:        交叉验证方法
+    :param test_size:     训练集占比，仅对holdout方法有用
+    :param cv:            交叉验证次数，如果是k_folder法，则k=cv
+    :param seed:          随机种子
+    :return:
+    """
     if not isinstance(x, np.ndarray):
         raise FeatureTypeError
 
@@ -448,16 +458,8 @@ def cross_validation(model, x, y, method=CrossValidationType.holdout, test_size=
             result[i] = model.score(x_test, y_test)
         return result
     elif method == CrossValidationType.k_folder:
-        ids = np.arange(x.shape[0])
-        ids_random = np.random.choice(ids, len(ids), False)
-        ids_split = [[] for i in range(cv)]
-        for idx in ids_random:
-            group_num = idx % cv
-            ids_split[group_num].append(idx)
-
-        for i, group in enumerate(ids_split):
-            x_test, y_test = x[group], y[group]
-            train_ids = sum([i for i in ids_split if i != group], [])
+        for i, (test_ids, train_ids)in enumerate(get_k_folder_idx(x.shape[0], cv, seed)):
+            x_test, y_test = x[test_ids], y[test_ids]
             x_train, y_train = x[train_ids], y[train_ids]
             model.fit(x_train, y_train)
             result[i] = model.score(x_test, y_test)

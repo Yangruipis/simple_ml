@@ -24,7 +24,10 @@
 ```python
 class BaseClassifier(object):
     
-    __metaclass__ = ABCMeta    
+    __metaclass__ = ABCMeta
+    
+    def __init__(self):
+        pass
 ```
 
 ### 1.1 继承关系
@@ -125,7 +128,10 @@ def score(self, x, y):
 ```python
 class BaseTransform(object):
     
-    __metaclass__ = ABCMeta    
+    __metaclass__ = ABCMeta
+    
+    def __init__(self):
+        pass    
 ```
 
 ### 2.1 继承关系

@@ -189,7 +189,7 @@ Out[1]: np.array([1,1])
 - [x] 二分类转多分类器
 - [x] recognize nan and inf
 - [x] check x before predict, check x and y before score
-- [x] new function in each model
+- [x] "self.new()" function in each model
 
 
 # TODO List AUTO MODEL

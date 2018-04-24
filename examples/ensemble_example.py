@@ -68,7 +68,17 @@ def AdaBoost_multi_class_example():
     ada = AdaBoost(classifier=ClassifierType.LR)
     ada.fit(x_train, y_train)
     print(ada.predict(x_test))
-    ada.classify_plot(x_test, y_test)
+    ada.classify_plot(x_test, y_test, ", LR")
+
+    ada = AdaBoost(classifier=ClassifierType.CART)
+    ada.fit(x_train, y_train)
+    print(ada.predict(x_test))
+    ada.classify_plot(x_test, y_test, ", CART")
+
+    ada = AdaBoost(classifier=ClassifierType.KNN)
+    ada.fit(x_train, y_train)
+    print(ada.predict(x_test))
+    ada.classify_plot(x_test, y_test, ", CART")
 
 
 if __name__ == '__main__':

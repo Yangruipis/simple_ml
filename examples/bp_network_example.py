@@ -48,12 +48,12 @@ def multi_class_example():
     nn.clear_all()
     nn.add_some_layers(2, 3, active_func=ActiveFunction.relu)
     nn.fit(x_train, y_train)
-    # print(nn.predict_prob(x_test))    # we raise error here
+    # print(nn.predict_prob(x_test))    # raise error here
     nn.classify_plot(x_test, y_test)
-    # nn.auc_plot(x_test, y_test)       # we raise error here
+    # nn.auc_plot(x_test, y_test)       # raise error here
 
 
 if __name__ == '__main__':
-    wine_example()
+    # wine_example()
     # moon_example()
-    # multi_class_example()
+    multi_class_example()

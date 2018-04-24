@@ -19,7 +19,7 @@ __all__ = [
 class BaseModel(object):
 
     def __init__(self):
-        pass
+        self.y_dic = {}    # 注意： 不能放在__init__(self)上面，否则成为共享的参数，会通过self传入其他实例当中
 
     def _init(self, x, y):
         self._clear()
@@ -31,7 +31,12 @@ class BaseModel(object):
             self.sample_num = x_sample_num
             self.variable_num = x.shape[1]
             self.x = np.array(x)
-            self.y = y
+
+            _min = min(y)
+            for i in np.unique(y):
+                self.y_dic[i] = i - _min
+
+            self.y = np.array([self.y_dic[i] for i in y])
             self.label_type = self._check_label_type(self.y)
             self.feature_type = self._check_feature_type(self.x)
         else:
@@ -114,6 +119,8 @@ class BaseModel(object):
         self._check_x_test(x)
         if y is not None:
             self._check_y_test(y)
+            for i in range(len(y)):
+                y[i] = self.y_dic[y[i]]
             if y.shape[0] != x.shape[0]:
                 raise LabelLengthMismatchError
 

@@ -327,9 +327,110 @@ def classify_plot(self, x, y, title="")
 
 ### 3.3 类属性
 
-|     名称      |    类型    |         描述          |
-|:-------------:|:----------:|:---------------------:|
-| the_forest |   List[BinaryTreeNode](../structure/struct.md)   |  每棵树的列表 |
+|    名称    |                     类型                     |    描述     |
+|:----------:|:--------------------------------------------:|:-----------:|
+| the_forest | List[BinaryTreeNode](../structure/struct.md) | 每棵树的列表 |
+
+
+
+## 模型堆叠 (Stacking)
+
+```python
+from simple_ml.base.base_model import BaseClassifier
+from simple_ml.logistic import LogisticRegression
+
+class Stacking(BaseClassifier):
+
+    __doc__ = "Ensemble Model of Stacking"
+
+    def __init__(self, models, meta_model=LogisticRegression(), k_folder=5):
+        """
+        模型融合Stacking方法，支持分类问题
+        :param models:      子模型列表，必须包含fit和predict方法，或者继承BaseClassifier
+        :param meta_model:  元分类器，用于stacking第二层分类
+        :param k_folder:    折叠次数
+        """
+        pass
+```
+
+通过模型堆叠进行融合，提高多个子模型效果，支持`simple_ml`中除了`BayesMinimumRisk`之外的所有分类模型
+
+### 4.1 初始化
+
+|             |    名称    |         类型         |                        描述                        |
+|------------:|:----------:|:--------------------:|:--------------------------------------------------:|
+| Parameters: |   models   | List[BaseClassifier] | 子模型列表，必须实例化，必须包含合法的fit和predict方法 |
+|             | mata_model |    BaseClassifier    |               用于stacking第二层分类                |
+|             |  k_folder  |         int          |          k折次数，越大结果越可信，耗时也越久          |
+
+### 4.2 类方法
+
+1 拟合
+
+```python
+def fit(self, x, y)
+```
+
+拟合特征
+
+|             | 名称 |    类型     |     描述      |
+|------------:|:----:|:----------:|:------------:|
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签 |
+|    Returns: |      |    Void    |              |
+
+
+2 预测
+
+```python
+def predict(self, x)
+```
+
+
+给定测试集特征x，进行预测
+
+|             | 名称 |    类型     |    描述    |
+|------------:|:----:|:----------:|:---------:|
+| Parameters: |  x   | np.2darray | 测试集特征 |
+|    Returns: |      |  np.array  | 预测的结果 |
+
+3 结果评价
+
+```python
+def score(self, x, y)
+```
+
+拟合并进行预测，最后给出预测效果的得分
+
+
+|             | 名称 |    类型     |                            描述                            |
+|------------:|:----:|:----------:|:---------------------------------------------------------:|
+| Parameters: |  x   | np.2darray |                         测试集特征                         |
+|             |  y   |  np.array  |                         测试集标签                         |
+|    Returns: |      |   float    | 预测结果评分，二分类给出F1值，多分类给出Macro F1值 |
+
+4 分类作图
+
+绘制分类效果图，如果维度大于2，则通过PCA降至两维
+
+```python
+def classify_plot(self, x, y, title="")
+```
+
+|             | 名称 |    类型     |    描述    |
+|------------:|:----:|:----------:|:---------:|
+| Parameters: |  x   | np.2darray | 测试集特征 |
+|             |  y   |  np.array  | 测试集标签 |
+|    Returns: |      |    Void    |           |
+
+### 4.3 类属性
+
+
+|   名称    |    类型    |                      描述                      |
+|:---------:|:----------:|:----------------------------------------------:|
+| model_num |    int     |                   子模型数目                    |
+| score_mat | np.2darray | 每个子模型每一folder的得分(model_num x k_folder) |
+
 
 
 ## Examples
@@ -414,5 +515,27 @@ print(rf.score(x_test, y_test))
 rf.classify_plot(x_test, y_test)
 
 ```
+
+### Stacking Example
+
+```python
+from simple_ml import *
+from simple_ml.classify_data import *
+from simple_ml.data_handle import train_test_split
+
+x, y = get_wine()
+x = x[(y == 2) | (y == 1)]
+y = y[(y == 2) | (y == 1)]
+x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 91)
+
+model_list = [LogisticRegression(), NaiveBayes()]     # , SVM(kernel_type=KernelTbbype.gaussian, sigma=1)]
+
+stack = Stacking(model_list, k_folder=5)
+stack.fit(x_train, y_train)
+print(stack.score(x_test, y_test))
+print(stack.score_mat)
+stack.classify_plot(x_test, y_test)
+```
+
 
 ## [返回主页](../index.md)

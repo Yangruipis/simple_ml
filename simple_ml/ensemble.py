@@ -417,7 +417,7 @@ class Stacking(BaseClassifier):
         return self._score_mat
 
     def fit(self, x, y):
-        self._init(x, y)
+        super(Stacking, self).fit(x, y)
         self._fit()
 
     def _fit(self, quiet=True):
@@ -441,6 +441,9 @@ class Stacking(BaseClassifier):
             self._x_train_stack[test, :] = _y_test_predict
 
     def predict(self, x):
+        if self._x_train_stack is None:
+            raise ModelNotFittedError
+        super(Stacking, self).predict(x)
         self._get_new_test(x)
         return self._predict_with_meta_classifier()
 
@@ -462,6 +465,7 @@ class Stacking(BaseClassifier):
         return self.meta_model.predict(self._x_test_stack)
 
     def score(self, x, y):
+        super(Stacking, self).score(x, y)
         y_predict = self.predict(x)
         if self.label_type == LabelType.binary:
             return classify_f1(y_predict, y)

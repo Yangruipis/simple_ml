@@ -62,6 +62,16 @@ def watermelon_example():
     print("R square: %.4f" % gbdt.score(x_test, y_test))
 
 
+def AdaBoost_multi_class_example():
+    x, y = get_wine()
+    x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
+    ada = AdaBoost(classifier=ClassifierType.LR)
+    ada.fit(x_train, y_train)
+    print(ada.predict(x_test))
+    ada.classify_plot(x_test, y_test)
+
+
 if __name__ == '__main__':
-    moon_example()
+    # moon_example()
     # watermelon_example()
+    AdaBoost_multi_class_example()

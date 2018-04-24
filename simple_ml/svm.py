@@ -12,7 +12,7 @@ import numpy as np
 __all__ = ['SVM', 'KernelType', 'LabelType']
 
 
-class SVM(BaseClassifier):
+class SVM(BaseClassifier, Multi2Binary):
 
     __doc__ = "SVM"
 
@@ -73,9 +73,20 @@ class SVM(BaseClassifier):
         self.alphas = np.zeros(self.sample_num)
         self.kernel_mat = None
 
-    @staticmethod
-    def _adj_y(y):
-        return np.array([i if i == 1 else -1 for i in y])
+    def _adj_y(self, y):
+        y_unique = np.unique(y)
+        self.y_dic2 = {}
+        self.y_dic2[y_unique[0]] = -1
+        self.y_dic2[y_unique[1]] = 1
+        return np.array([self.y_dic2[i] for i in y])
+
+    def _adj_y_back(self, y):
+        dic_rev = {}
+        if hasattr(self, 'y_dic2'):
+            for i, j in self.y_dic2.items():
+                dic_rev[j] = i
+            return np.array([dic_rev[i] for i in y])
+        return y
 
     def fit(self, x, y):
         """
@@ -84,16 +95,20 @@ class SVM(BaseClassifier):
             2. 二次优化求解QP方法（调用python cvxopt包，参考http://tullo.ch/articles/svm-py/）
         """
         super(SVM, self).fit(x, y)
-        if self.label_type != LabelType.binary:
-            raise LabelTypeError("SVM 暂时只支持二分类问题")
-        self.y = self._adj_y(self.y)
+        if self.label_type == LabelType.binary:
 
-        self.clear()
-        # self._clear()
-        # 事先计算出核函数矩阵，避免高维下的计算问题
-        self.kernel_mat = self._cal_kernel_matrix()
-        entire_set = True
-        self._smo_outer(entire_set)
+            self.y = self._adj_y(self.y)
+
+            self.clear()
+            # self._clear()
+            # 事先计算出核函数矩阵，避免高维下的计算问题
+            self.kernel_mat = self._cal_kernel_matrix()
+            entire_set = True
+            self._smo_outer(entire_set)
+        elif self.label_type == LabelType.multi_class:
+            self._multi_fit(self)
+        else:
+            raise LabelTypeError("SVM不支持连续标签（回归）")
 
     def _cal_kernel_matrix(self):
         if self.kernel_type == KernelType.linear:
@@ -266,21 +281,24 @@ class SVM(BaseClassifier):
         print('Finished')
 
     def predict(self, x):
-        if self.error is None:
+        if self.error is None and self.new_models is None:
             raise ModelNotFittedError
         super(SVM, self).predict(x)
-        # step1. 找到支持向量对应的坐标
-        support_vector_index = list(np.nonzero(self.alphas > 0))[0]
+        if self.label_type == LabelType.binary:
+            # step1. 找到支持向量对应的坐标
+            support_vector_index = list(np.nonzero(self.alphas > 0))[0]
 
-        # step2. 获取支持向量
-        support_vector_x = self.x[support_vector_index]
-        support_vector_y = self.y[support_vector_index]
-        support_vector_alphas = self.alphas[support_vector_index]
+            # step2. 获取支持向量
+            support_vector_x = self.x[support_vector_index]
+            support_vector_y = self.y[support_vector_index]
+            support_vector_alphas = self.alphas[support_vector_index]
 
-        # step3. 计算预测值向量
-        pred_y_value = np.array(list(map(lambda i: self._predict_single(i, support_vector_x, support_vector_y, support_vector_alphas), x)))
-        pred_y_binary = np.array([np.sign(i) for i in pred_y_value])
-        return pred_y_binary
+            # step3. 计算预测值向量
+            pred_y_value = np.array(list(map(lambda i: self._predict_single(i, support_vector_x, support_vector_y, support_vector_alphas), x)))
+            pred_y_binary = np.array([np.sign(i) for i in pred_y_value])
+            return self._adj_y_back(pred_y_binary)
+        else:
+            return self._multi_predict(x)
 
     def _predict_single(self, x, support_vector_x, support_vector_y, support_vector_alphas):
         kernel_vector = self._cal_kernel_vector(support_vector_x, x, self.kernel_type)
@@ -313,15 +331,18 @@ class SVM(BaseClassifier):
 
     def score(self, x, y):
         super(SVM, self).score(x, y)
-        y = self._adj_y(y)
-        y_predict = self.predict(x)
-        y_predict_binary = np.array([0 if i == -1 else i for i in y_predict])
-        y_true_binary = np.array([0 if i == -1 else i for i in y])
-        return classify_f1(y_predict_binary, y_true_binary)
+        if self.label_type == LabelType.binary:
+            y = self._adj_y(y)
+            y_predict = self.predict(x)
+            y_predict_binary = np.array([0 if i == -1 else i for i in y_predict])
+            y_true_binary = np.array([0 if i == -1 else i for i in y])
+            return classify_f1(y_predict_binary, y_true_binary)
+        else:
+            y_predict = self.predict(x)
+            return classify_f1_macro(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
-        y = self._adj_y(y)
-        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)
+        classify_plot(self.new(), self.x, self._adj_y_back(self.y), x, y, title=self.__doc__ + title)
 
     def new(self):
         return SVM(self.c, self.tol, self.precision, self.max_iter, self.kernel_type, **self.kwargs)

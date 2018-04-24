@@ -18,7 +18,7 @@ from simple_ml.base.base_error import *
 __all__ = ['LogisticRegression', 'Lasso', 'Ridge']
 
 
-class LogisticRegression(BaseClassifier):
+class LogisticRegression(BaseClassifier, Multi2Binary):
 
     __doc__ = "Logistic Regression"
 
@@ -62,17 +62,19 @@ class LogisticRegression(BaseClassifier):
 
     def _init(self, x, y):
         super(LogisticRegression, self)._init(x, y)
-        if self.has_intercept:
+        if self.has_intercept and not (self.x[:, 0] == 1).all():
             self.x = self._add_ones(self.x)
             self.variable_num += 1
 
     def fit(self, x, y):
         super(LogisticRegression, self).fit(x, y)
         if self.label_type != LabelType.binary:
-            raise LabelTypeError("Logistic回归暂时只支持二分类问题")
-        self.w, _ = self._fit()
-        if len(self.w) != self.variable_num:
-            raise FeatureNumberMismatchError
+            self._multi_fit(self)
+            #raise LabelTypeError("Logistic回归暂时只支持二分类问题")
+        else:
+            self.w, _ = self._fit()
+            if len(self.w) != self.variable_num:
+                raise FeatureNumberMismatchError
 
     def _fit(self):
         """
@@ -95,15 +97,16 @@ class LogisticRegression(BaseClassifier):
         return self._sigmoid(y)
 
     def predict(self, x):
-        if self.w is None:
+        if self.w is None and self.new_models is None:
             raise ModelNotFittedError
         if self.has_intercept and not (x[:, 0] == 1).all():
             x = self._add_ones(x)
         super(LogisticRegression, self).predict(x)
-        if self.w is None:
-            raise ModelNotFittedError
 
-        return np.array([1 if i >= self.threshold else 0 for i in self._predict(x)])
+        if self.label_type == LabelType.binary:
+            return np.array([1 if i >= self.threshold else 0 for i in self._predict(x)])
+        else:
+            return self._multi_predict(x)
 
     def predict_prob(self, x):
         if self.has_intercept and not (x[:, 0] == 1).all():

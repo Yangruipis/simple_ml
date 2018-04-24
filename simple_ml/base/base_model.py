@@ -6,11 +6,14 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
+from collections import defaultdict
+
 
 __all__ = [
     'BaseClassifier',
     'BaseFeatureSelect',
     'BaseTransform',
+    'Multi2Binary',
     'BinaryTreeNode',
     'MultiTreeNode',
     'GBDTTreeNode'
@@ -19,7 +22,7 @@ __all__ = [
 class BaseModel(object):
 
     def __init__(self):
-        self.y_dic = {}    # 注意： 不能放在__init__(self)上面，否则成为共享的参数，会通过self传入其他实例当中
+        self.y_dic = {}    # 注意： 不能放在__init__(self)上面，否则成为类变量（类属性），所有实例将会共享
 
     def _init(self, x, y):
         self._clear()
@@ -144,6 +147,10 @@ class BaseClassifier(BaseModel):
     def score(self, x, y):
         self.check_test_data(x, y)
 
+    @abstractmethod
+    def new(self):
+        pass
+
 
 class BaseTransform(BaseModel):
 
@@ -180,6 +187,38 @@ class BaseFeatureSelect:
     @abstractmethod
     def feature_select(self, top_n):
         pass
+
+
+class Multi2Binary:
+
+    def __init__(self):
+        self.new_models = None
+        self.y_unique = None
+        self.model_num = None
+
+    def _multi_fit(self, model: BaseClassifier):
+        self.y_unique = np.unique(model.y)
+        self.model_num = len(self.y_unique)
+        self.new_models = [model.new() for i in range(self.model_num)]
+        for i, y_value in enumerate(self.y_unique):
+            new_y = (model.y == y_value).astype('int')
+            self.new_models[i].fit(model.x, new_y)
+
+    def _multi_predict_single(self, x):
+        dic = defaultdict(int)
+
+        for i in range(self.model_num):
+            y_predict = self.new_models[i].predict(x.reshape(1, -1))
+            if y_predict == 1:
+                dic[i] += 1
+            else:
+                for j in range(self.model_num):
+                    if j != i:
+                        dic[j] += 1
+        return max(dic.keys(), key=lambda x: dic[x])
+
+    def _multi_predict(self, x):
+        return np.array([self._multi_predict_single(i) for i in x])
 
 
 class BinaryTreeNode:

@@ -12,11 +12,11 @@ from simple_ml.evaluation import *
 __all__ = ['NeuralNetwork', 'ActiveFunction', 'CostFunction']
 
 
-class NeuralNetwork(BaseClassifier):
+class NeuralNetwork(BaseClassifier, Multi2Binary):
 
     __doc__ = "BP Neural Network"
 
-    def __init__(self, alpha=0.5, threshold=0.5, iter_times=100, output_neuron_num=1,
+    def __init__(self, alpha=0.5, threshold=None, iter_times=100, output_neuron_num=1,
                  output_active_func=ActiveFunction.sigmoid, cost_func=CostFunction.logistic):
         """
         BP神经网络
@@ -116,14 +116,20 @@ class NeuralNetwork(BaseClassifier):
                      NeuralNetwork().add_some_layers(self, layer_num, neuron_num, active_func=ActiveFunction.sigmoid)
             """)
         super(NeuralNetwork, self).fit(x, y)
-        if self.label_type != LabelType.binary:
-            raise LabelTypeError("暂时只支持二分类")
-        self._model_init()
-        for i in range(self.iter_times):
-            self._forward_transfer(self.x)
-            self._error_of_output_layer()
-            self._error_of_hidden_layer()
-            self._update_grad()
+        if self.label_type == LabelType.binary:
+            self._model_init()
+            for i in range(self.iter_times):
+                self._forward_transfer(self.x)
+                self._error_of_output_layer()
+                self._error_of_hidden_layer()
+                self._update_grad()
+            if self.threshold is None:
+                # 如果没有给定阈值，那么通过SvsS（ROC曲线与对角线相交的点）确定阈值
+                self.get_threshold_from_train_data()
+        elif self.label_type == LabelType.multi_class:
+            self._multi_fit(self)
+        else:
+            raise LabelTypeError("不支持连续标签（回归）")
 
     @staticmethod
     def _sigmoid(arr):
@@ -229,16 +235,30 @@ class NeuralNetwork(BaseClassifier):
 
     def predict(self, x):
         super(NeuralNetwork, self).predict(x)
-        y_prob = self.predict_prob(x)
-        return np.array([1 if i >= self.threshold else 0 for i in y_prob])
+        if self.label_type == LabelType.binary:
+            y_prob = self.predict_prob(x)
+            return np.array([1 if i >= self.threshold else 0 for i in y_prob])
+        else:
+            return self._multi_predict(x)
 
-    # TODO: S vs S 的方法自动分类，无需给定 threshold
-    def auto_threshold(self):
-        pass
+    @staticmethod
+    def auto_threshold(y_prob_predict, y_true):
+        # DONE: S vs S 的方法自动分类，无需给定 threshold
+        fpr, tpr, thresholds = classify_roc(y_prob_predict, y_true)
+        diff = fpr - (1 - tpr)
+        threshold = thresholds[np.argmin(np.abs(diff))]
+        return threshold
+
+    def get_threshold_from_train_data(self):
+        y_prob_train = self.predict_prob(self.x)
+        self.threshold = self.auto_threshold(y_prob_train, self.y)
 
     def predict_prob(self, x):
-        if self.input_neuron_num is None:
+        if self.input_neuron_num is None and self.new_models is None:
             raise ModelNotFittedError
+
+        if self.label_type == LabelType.multi_class:
+            raise LabelTypeError("多分类问题无法输出概率")
 
         if x.shape[1] != self.variable_num:
             raise FeatureNumberMismatchError

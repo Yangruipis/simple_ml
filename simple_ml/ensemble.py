@@ -7,7 +7,7 @@ import numpy as np
 from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
 from simple_ml.base.base_model import *
-from simple_ml.evaluation import classify_plot, classify_f1, classify_f1_micro, regression_r2
+from simple_ml.evaluation import classify_plot, classify_f1, classify_f1_macro, regression_r2
 from simple_ml.tree import CART
 from simple_ml.data_handle import get_k_folder_idx
 from simple_ml.logistic import LogisticRegression
@@ -23,7 +23,7 @@ __all__ = [
 ]
 
 
-class AdaBoost(BaseClassifier):
+class AdaBoost(BaseClassifier, Multi2Binary):
 
     __doc__ = "AdaBoost Classifier"
 
@@ -55,8 +55,6 @@ class AdaBoost(BaseClassifier):
         else:
             raise ClassifierTypeError("暂不支持的分类器，你想你也可以自己添加（先找到我哦）")
 
-
-
     def _re_sample(self, x, y, weight):
         """
         这里采用bootstrap抽样方法，用以解决带权重的分类
@@ -69,34 +67,41 @@ class AdaBoost(BaseClassifier):
         return x[choose_id], y[choose_id]
 
     def fit(self, x, y):
-        self._init(x, y)
-        self.weights = np.array([1 / self.sample_num for i in range(self.sample_num)])
-        self.current_clf_num = 0
-        for m in range(self.nums):
-            clf = self.clf_list[m]
-            x, y = self._re_sample(x, y, self.weights)
-            clf.fit(x, y)
-            y_predict = clf.predict(x)
-            e, alpha = self._update_alpha(y_predict, y)
+        super(AdaBoost, self).fit(x, y)
+        if self.label_type == LabelType.binary:
+            self.weights = np.array([1 / self.sample_num for i in range(self.sample_num)])
+            self.current_clf_num = 0
+            for m in range(self.nums):
+                clf = self.clf_list[m]
+                x, y = self._re_sample(x, y, self.weights)
+                clf.fit(x, y)
+                y_predict = clf.predict(x)
+                e, alpha = self._update_alpha(y_predict, y)
 
-            self.alpha[m] = alpha
-            self._update_weight(y_predict, y, alpha)
-            # print("Model %s fitted" % m)
-            self.current_clf_num += 1
-            if e < 0.1:
-                break
+                self.alpha[m] = alpha
+                self._update_weight(y_predict, y, alpha)
+                # print("Model %s fitted" % m)
+                self.current_clf_num += 1
+                if e < 0.1:
+                    break
+        elif self.label_type == LabelType.multi_class:
+            self._multi_fit(self)
+        else:
+            raise LabelTypeError("不支持连续标签（回归）")
 
     def predict(self, x):
-        if x.shape[1] != self.variable_num:
-            raise FeatureNumberMismatchError
-        res = np.zeros(x.shape[0])
-        for m in range(self.current_clf_num):
-            clf = self.clf_list[m]
-            predict = clf.predict(x)
-            predict = self._adj_y(predict)
-            res += self.alpha[m] * predict
-        func = np.vectorize(lambda j: 1 if j > 0 else 0)
-        return func(res)
+        super(AdaBoost, self).predict(x)
+        if self.label_type == LabelType.binary:
+            res = np.zeros(x.shape[0])
+            for m in range(self.current_clf_num):
+                clf = self.clf_list[m]
+                predict = clf.predict(x)
+                predict = self._adj_y(predict)
+                res += self.alpha[m] * predict
+            func = np.vectorize(lambda j: 1 if j > 0 else 0)
+            return func(res)
+        else:
+            return self._multi_predict(x)
 
     @staticmethod
     def _adj_y(y):
@@ -116,8 +121,12 @@ class AdaBoost(BaseClassifier):
         return e, alpha
 
     def score(self, x, y):
+        super(AdaBoost, self).score(x, y)
         y_predict = self.predict(x)
-        return classify_f1(y_predict, y)
+        if self.label_type == LabelType.binary:
+            return classify_f1(y_predict, y)
+        else:
+            return classify_f1_macro(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
         classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)
@@ -363,7 +372,7 @@ class RandomForest(BaseClassifier):
         if self.label_type == LabelType.binary:
             return classify_f1(y_predict, y)
         else:
-            return classify_f1_micro(y_predict, y)
+            return classify_f1_macro(y_predict, y)
 
     def classify_plot(self, test_x, test_y, title=""):
         temp = self.m
@@ -449,16 +458,21 @@ class Stacking(BaseClassifier):
 
     def _get_new_test(self, x):
         self._x_test_stack = np.zeros((x.shape[0], self.model_num))
+        y_test_predict_list = []
         for i in range(self.k_folder):
             y_test_predict = np.zeros((x.shape[0], self.model_num))
             for j in range(self.model_num):
                 predict = self.models[j][i].predict(x)
                 y_test_predict[:, j] = predict
-            self._x_test_stack += y_test_predict
-        self._x_test_stack /= self.k_folder
-        sign = lambda x: 1 if x >= 0.5 else 0
-        vec = np.vectorize(sign)
-        self._x_test_stack = vec(self._x_test_stack)
+
+            # 用投票的形式决定二分类或多分类问题
+            y_test_predict_list.append(y_test_predict)
+
+        y_test_predict_list = np.array(y_test_predict_list)
+        for sample_id in range(y_test_predict_list.shape[1]):
+            for model_id in range(y_test_predict_list.shape[2]):
+                arr = y_test_predict_list[:, sample_id, model_id]
+                self._x_test_stack[sample_id, model_id] = np.argmax(np.bincount(arr.astype('int')))
 
     def _predict_with_meta_classifier(self):
         self.meta_model.fit(self._x_train_stack, self.y)
@@ -470,7 +484,7 @@ class Stacking(BaseClassifier):
         if self.label_type == LabelType.binary:
             return classify_f1(y_predict, y)
         else:
-            return classify_f1_micro(y_predict, y)
+            return classify_f1_macro(y_predict, y)
 
     def classify_plot(self, test_x, test_y, title=""):
         classify_plot(self.new(), self.x, self.y, test_x, test_y, title=self.__doc__ + title)

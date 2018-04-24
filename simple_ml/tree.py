@@ -265,7 +265,6 @@ class CART(BaseClassifier):
         super(CART, self).predict(x)
         return np.array([self._predict_single(i, self._root) for i in x])
 
-
     def _predict_single(self, x, node):
         if node.leaf_label is not None:
             return node.leaf_label

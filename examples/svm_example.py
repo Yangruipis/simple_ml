@@ -84,6 +84,25 @@ def moon_example():
     mysvm.classify_plot(x_test, y_test, ", Sigmoid(beta=1,theta=1)")
 
 
+def multi_class_example():
+    x, y = get_wine()  # get moon()
+    x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
+
+    mysvm = SVM(0.6, 0.001, 0.00001, 50, KernelType.linear)
+    mysvm.fit(x_train, y_train)
+    print(mysvm.alphas, mysvm.b)
+    print(mysvm.predict(x_train))
+    mysvm.classify_plot(x_test, y_test, ", Linear")
+
+    # sigma设置的比较小，会过拟合
+    mysvm = SVM(0.6, 0.001, 0.00001, 50, KernelType.gaussian, sigma=2)
+    mysvm.fit(x_train, y_train)
+    print(mysvm.alphas, mysvm.b)
+    print(mysvm.predict(x_train))
+    mysvm.classify_plot(x_test, y_test, ", Gaussian(sigma=1)")
+
+
 if __name__ == '__main__':
     # iris_example()
-    moon_example()
+    # moon_example()
+    multi_class_example()

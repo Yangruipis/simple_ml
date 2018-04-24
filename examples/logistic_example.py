@@ -59,6 +59,17 @@ def wine_example():
     ridge.classify_plot(x_test, y_test)
     ridge.auc_plot(x_test, y_test)
 
+
+def multi_class_example():
+    x, y = get_wine()
+    x_train, y_train, x_test, y_test = train_test_split(x, y, 0.5, 918)
+    logistic = LogisticRegression(has_intercept=True)
+    logistic.fit(x_train, y_train)
+    print(logistic.predict(x_test))
+    logistic.classify_plot(x_test, y_test)
+
+
 if __name__ == '__main__':
     # iris_example()
-    wine_example()
+    # wine_example()
+    multi_class_example()

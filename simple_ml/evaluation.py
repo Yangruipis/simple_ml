@@ -225,7 +225,7 @@ def classify_roc(y_predict, y_true):
         tpr, fpr = get_tpr_and_fpr(i[0])
         tpr_list.append(tpr)
         fpr_list.append(fpr)
-    return tpr_list, fpr_list
+    return np.array(tpr_list), np.array(fpr_list), sorted(y_predict, reverse=True)
 
 
 def classify_auc(y_predict, y_true):
@@ -252,7 +252,7 @@ def classify_auc(y_predict, y_true):
 
 def classify_roc_plot(y_predict, y_true):
     _check_input(y_predict, y_true)
-    tpr, fpr = classify_roc(y_predict, y_true)
+    tpr, fpr, _ = classify_roc(y_predict, y_true)
     auc = classify_auc(y_predict, y_true)
     plt.plot([0, 1], [0, 1], '--')
     plt.plot(fpr, tpr, 'k--', label='Mean ROC (area = %0.2f)' % auc, lw=2)

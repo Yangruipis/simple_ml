@@ -19,7 +19,7 @@ class NeuralNetwork(BaseClassifier):
 
     __doc__ = "BP Neural Network"
     
-    def __init__(self, alpha=0.5, threshold=0.5, iter_times=100, 
+    def __init__(self, alpha=0.5, threshold=None, iter_times=100, 
             output_neuron_num=1, output_active_func=ActiveFunction.sigmoid, 
             cost_func=CostFunction.logistic):
         pass
@@ -46,7 +46,7 @@ class NeuralNetwork(BaseClassifier):
 |             |        名称        |                  类型                  |               描述               |
 |------------:|:------------------:|:--------------------------------------:|:--------------------------------:|
 | Parameters: |       alpha        |                 float                  |         梯度下降更新步长          |
-|             |     threshold      |              float, (0,1)              | 分类阈值，大于等于该值为1，否则为0  |
+|             |     threshold      |              float, (0,1)              | 分类阈值，大于等于该值为1，否则为0，如果默认None，则采用SvsS方法确定阈值 |
 |             |     iter_times     |                  int                   |         反向传播迭代次数          |
 |             | output_neuron_num  |                  int                   | 输出层神经元个数，如果是二分类就是1 |
 |             | output_active_func | [ActiveFunction](../structure/enum.md) |         输出层激活函数类型         |

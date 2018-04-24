@@ -161,6 +161,7 @@ Out[1]: np.array([1,1])
   - 加入Stacking model
   - 更新每个模型的new()函数
   - 重写BaseModel的predict和score抽象方法，以检查测试集是否满足要求
+  - fix SuperPCA bugs
 
 # TODO list:
 

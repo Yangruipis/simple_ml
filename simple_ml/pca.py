@@ -89,12 +89,12 @@ class SuperPCA(PCA):
             raise NeedMoreSampleError
 
         if _sample_number > self._variable_num:
-            super(SuperPCA, self).fit(x)
-        else:
-            if self.top_n > _sample_number:
-                raise TopNTooLargeError
+            raise SampleNumberMismatchError("SuperPCA样本数必须小于变量数")
 
-            self._fit(x)
+        if self.top_n > _sample_number:
+            raise TopNTooLargeError
+
+        self._fit(x)
 
     def _fit(self, x):
         x_new = x.copy()

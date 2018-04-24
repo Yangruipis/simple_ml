@@ -162,6 +162,10 @@ Out[1]: np.array([1,1])
   - 更新每个模型的new()函数
   - 重写BaseModel的predict和score抽象方法，以检查测试集是否满足要求
   - fix SuperPCA bugs
+- 2018-04-24
+  - 加入类： Multi2binary，继承该类的BaseClassifier可以将多分类问题转为二分类问题
+  - 添加SVM， Logistic，NeuralNetwork, AdaBoost 的继承关系和多分类方法
+  - 增加相关的多分类例子，以及帮助文档
 
 # TODO list:
 
@@ -181,8 +185,8 @@ Out[1]: np.array([1,1])
 - [ ] Support Machine Regression
 - [ ] more metrics
 - [x] github pages, especially the class map
-- [ ] stacking
-- [ ] 二分类转多分类器
+- [x] stacking
+- [x] 二分类转多分类器
 - [x] recognize nan and inf
 - [x] check x before predict, check x and y before score
 - [x] new function in each model

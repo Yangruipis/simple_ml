@@ -196,7 +196,7 @@ class Multi2Binary:
         self.y_unique = None
         self.model_num = None
 
-    def _multi_fit(self, model: BaseClassifier):
+    def _multi_fit(self, model):
         self.y_unique = np.unique(model.y)
         self.model_num = len(self.y_unique)
         self.new_models = [model.new() for i in range(self.model_num)]

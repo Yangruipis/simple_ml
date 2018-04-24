@@ -37,6 +37,7 @@ class SVM(BaseClassifier):
         self.precision = precision
         self.max_iter = max_iter
         self.kernel_type = kernel_type
+        self.kwargs = kwargs
         self._check_kernel(kwargs)       # 检查核函数是否提供了对应参数，并存入self
         self.b = 0                       # 超平面偏移项
         self.error = None
@@ -319,4 +320,7 @@ class SVM(BaseClassifier):
 
     def classify_plot(self, x, y, title=""):
         y = self._adj_y(y)
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__ + title)
+        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)
+
+    def new(self):
+        return SVM(self.c, self.tol, self.precision, self.max_iter, self.kernel_type, **self.kwargs)

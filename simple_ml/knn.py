@@ -77,7 +77,10 @@ class KNN(BaseClassifier):
         return f1_score
 
     def classify_plot(self, x, y, title=""):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__+title)
+        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__+title)
+
+    def new(self):
+        return KNN(self.k, self.dist_type)
 
 
 class Node:

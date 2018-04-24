@@ -98,7 +98,10 @@ class NaiveBayes(BaseClassifier):
             return classify_f1_macro(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__ + title)
+        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)
+
+    def new(self):
+        return NaiveBayes()
 
 
 
@@ -173,7 +176,10 @@ class BayesMinimumError(BaseClassifier):
             return classify_f1_macro(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
-        classify_plot(self, self.x, self.y, x, y, title=self.__doc__+title)
+        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__+title)
+
+    def new(self):
+        return BayesMinimumError()
 
 
 class BayesMinimumRisk(BayesMinimumError):
@@ -203,3 +209,6 @@ class BayesMinimumRisk(BayesMinimumError):
         prob = self._get_probability(x)
         alpha = np.dot(prob, self.cost_mat)
         return self.labels[np.argmin(alpha)]
+
+    def new(self):
+        return BayesMinimumRisk(self.cost_mat)

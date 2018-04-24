@@ -109,12 +109,10 @@ class ID3(BaseClassifier):
         return classify_f1(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
-        classify_plot(self.new(self.max_depth, self.min_samples_leaf),
-                      self.x, self.y, x, y, title=self.__doc__ + title)
+        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)
 
-    @classmethod
-    def new(cls, depth, min_sample):
-        return cls(max_depth=depth, min_samples_leaf=min_sample)
+    def new(self):
+        return ID3(self.max_depth, self.min_samples_leaf)
 
 
 class CART(BaseClassifier):
@@ -291,9 +289,7 @@ class CART(BaseClassifier):
             return classify_f1(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
-        classify_plot(self.new(self.max_depth, self.min_samples_leaf),
-                      self.x, self.y, x, y, title=self.__doc__ + title)
+        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)
 
-    @classmethod
-    def new(cls, depth, min_sample):
-        return cls(max_depth=depth, min_samples_leaf=min_sample)
+    def new(self):
+        return CART(self.max_depth, self.min_samples_leaf)

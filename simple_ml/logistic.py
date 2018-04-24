@@ -120,15 +120,9 @@ class LogisticRegression(BaseClassifier):
     def classify_plot(self, x, y, title=""):
         if self.has_intercept:
             x = self._add_ones(x)
-        classify_plot(self.new(self.tol, self.alpha, self.threshold, self.has_intercept),
-                      self.x[:], self.y[:], x, y, title=self.__doc__ + title)
+        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)
 
-    @classmethod
-    def new(cls, tol, alpha, threshold, has_i):
-        # 返回当前类的新的实例，由于该类是超类，因此用classmethod，无论是什么类调用，返回的都是该类本身
-        return cls(tol=tol, alpha=alpha, threshold=threshold, has_intercept=has_i)
-
-    def new2(self):
+    def new(self):
         return LogisticRegression(self.tol, self.alpha, self.threshold, self.has_intercept)
 
 
@@ -199,6 +193,9 @@ class Lasso(LogisticRegression, BaseFeatureSelect):
         else:
             return w.argsort()[-top_n:][::-1]
 
+    def new(self):
+        return Lasso(self.tol, self.lamb, self.alpha, self.threshold, self.has_intercept)
+
 
 class Ridge(Lasso):
 
@@ -222,3 +219,6 @@ class Ridge(Lasso):
         :return: 损失函数值
         """
         return np.mean(np.square(self.y - self._sigmoid(np.dot(self.x, w)))) + self.lamb * np.sum(np.square(w))
+
+    def new(self):
+        return Ridge(self.tol, self.lamb, self.alpha, self.threshold, self.has_intercept)

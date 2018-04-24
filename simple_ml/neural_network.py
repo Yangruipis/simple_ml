@@ -249,15 +249,17 @@ class NeuralNetwork(BaseClassifier):
         return classify_f1(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
-        classify_plot(self.new(self.alpha, self.threshold, self.iter_times, self.output_neuron_num,
-                               self.output_active_func, self.cost_func, self.layers),
-                      self.x, self.y, x, y, title=self.__doc__ + title)
+        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)
 
-    @classmethod
-    def new(cls, alpha, threshold, iter_times, output_neuron_num, output_active_func, cost_func, layers):
-        new_cls = cls(alpha, threshold, iter_times, output_neuron_num, output_active_func, cost_func)
-        new_cls.layers = layers
-        new_cls.layers_num = len(layers)
+    def new(self):
+        new_cls = NeuralNetwork(self.alpha,
+                                self.threshold,
+                                self.iter_times,
+                                self.output_neuron_num,
+                                self.output_active_func,
+                                self.cost_func)
+        new_cls.layers = self.layers
+        new_cls.layers_num = len(self.layers)
         return new_cls
 
     def auc_plot(self, x, y):

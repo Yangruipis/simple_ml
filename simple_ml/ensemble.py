@@ -119,12 +119,10 @@ class AdaBoost(BaseClassifier):
         return classify_f1(y_predict, y)
 
     def classify_plot(self, x, y, title=""):
-        classify_plot(self.new(self.classifier, self.nums),
-                      self.x, self.y, x, y, title=self.__doc__ + title)
+        classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)
 
-    @classmethod
-    def new(cls, a, b):
-        return cls(a, b)
+    def new(self):
+        return AdaBoost(self.classifier, self.nums)
 
 
 class _CARTForGBDT(CART):
@@ -296,6 +294,9 @@ class GBDT(BaseClassifier, BaseFeatureSelect):
         f0 = f0 * np.mean(self.y)
         self.F.append(f0)
 
+    def new(self):
+        return GBDT(self.nums, self.learning_rate)
+
 
 class RandomForest(BaseClassifier):
 
@@ -364,16 +365,15 @@ class RandomForest(BaseClassifier):
             return classify_f1_micro(y_predict, y)
 
     def classify_plot(self, test_x, test_y, title=""):
-        classify_plot(self.new(self.m, self.tree_num), self.x, self.y, test_x, test_y, title=self.__doc__ + title)
+        classify_plot(self.new(), self.x, self.y, test_x, test_y, title=self.__doc__ + title)
 
-    @classmethod
-    def new(cls, *args):
-        return cls(*args)
+    def new(self):
+        return RandomForest(self.m, self.tree_num)
 
 
 class Stacking(BaseClassifier):
 
-    __doc__ = "模型融合 Stacking 方法"
+    __doc__ = "Ensemble Model of Stacking"
 
     def __init__(self, models, meta_model=LogisticRegression(), k_folder=5):
         """
@@ -389,7 +389,8 @@ class Stacking(BaseClassifier):
             raise EmptyInputError("models 不能为空")
         if not isinstance(models[0], BaseClassifier) or not isinstance(meta_model, BaseClassifier):
             raise ClassifierTypeError("必须选择继承BaseClassifier的分类模型")
-        self.models = models
+        self.models = [[i.new() for j in range(k_folder)] for i in models]          # self.models[i][j] 第i个模型第j次folder
+        self.init_model = models
         self.meta_model = meta_model
         self.k_folder = k_folder
         self._x_train_stack = None
@@ -422,10 +423,10 @@ class Stacking(BaseClassifier):
             _y_test = self.y[test]
             _y_test_predict = np.zeros((_X_test.shape[0], self.model_num))
 
-            for j, model in enumerate(self.models):
-                model.fit(_X_train, _y_train)
-                self._score_mat[j, i] = model.score(_X_test, _y_test)
-                _y_test_predict[:, j] = model.predict(_X_test)
+            for j in range(self.model_num):
+                self.models[j][i].fit(_X_train, _y_train)
+                self._score_mat[j, i] = self.models[j][i].score(_X_test, _y_test)
+                _y_test_predict[:, j] = self.models[j][i].predict(_X_test)
                 if not quiet:
                     print("The %s th folder, %s th model finished." % (i+1, j+1))
 
@@ -440,8 +441,8 @@ class Stacking(BaseClassifier):
         self._x_test_stack = np.zeros((x.shape[0], self.model_num))
         for i in range(self.k_folder):
             y_test_predict = np.zeros((x.shape[0], self.model_num))
-            for j, model in enumerate(self.models):
-                predict = model.predict(x)
+            for j in range(self.model_num):
+                predict = self.models[j][i].predict(x)
                 y_test_predict[:, j] = predict
             self._x_test_stack += y_test_predict
         self._x_test_stack /= self.k_folder
@@ -451,4 +452,17 @@ class Stacking(BaseClassifier):
 
     def _predict_with_meta_classifier(self):
         self.meta_model.fit(self._x_train_stack, self.y)
-        return self.predict(self._x_test_stack)
+        return self.meta_model.predict(self._x_test_stack)
+
+    def score(self, x, y):
+        y_predict = self.predict(x)
+        if self.label_type == LabelType.binary:
+            return classify_f1(y_predict, y)
+        else:
+            return classify_f1_micro(y_predict, y)
+
+    def classify_plot(self, test_x, test_y, title=""):
+        classify_plot(self.new(), self.x, self.y, test_x, test_y, title=self.__doc__ + title)
+
+    def new(self):
+        return Stacking(self.init_model, self.meta_model, self.k_folder)

@@ -4,7 +4,6 @@
 from simple_ml.tree import CART
 import numpy as np
 
-from simple_ml import BINARY_CLASSIFY_MODEL
 
 X = np.array([[1,1.1],
               [1,2.0],

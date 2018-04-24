@@ -6,7 +6,7 @@ from simple_ml.base.base_error import *
 from simple_ml.base.base_model import *
 from simple_ml.base.base_enum import *
 import numpy as np
-from simple_ml.evaluation import classify_f1, classify_plot, classify_roc_plot
+from simple_ml.evaluation import *
 
 
 __all__ = ['NeuralNetwork', 'ActiveFunction', 'CostFunction']
@@ -115,7 +115,7 @@ class NeuralNetwork(BaseClassifier):
                      NeuralNetwork().add_layer(self, neuron_num, active_func=ActiveFunction.sigmoid) or
                      NeuralNetwork().add_some_layers(self, layer_num, neuron_num, active_func=ActiveFunction.sigmoid)
             """)
-        self._init(x, y)
+        super(NeuralNetwork, self).fit(x, y)
         if self.label_type != LabelType.binary:
             raise LabelTypeError("暂时只支持二分类")
         self._model_init()
@@ -228,6 +228,7 @@ class NeuralNetwork(BaseClassifier):
                 self.w_list[i] -= self.alpha / self.sample_num * np.dot(self.delta_list[i], self.x)
 
     def predict(self, x):
+        super(NeuralNetwork, self).predict(x)
         y_prob = self.predict_prob(x)
         return np.array([1 if i >= self.threshold else 0 for i in y_prob])
 
@@ -245,8 +246,14 @@ class NeuralNetwork(BaseClassifier):
         return self.a_list[-1].ravel()
 
     def score(self, x, y):
+        super(NeuralNetwork, self).score(x, y)
         y_predict = self.predict(x)
-        return classify_f1(y_predict, y)
+        if self.label_type == LabelType.binary:
+            return classify_f1(y_predict, y)
+        elif self.label_type == LabelType.multi_class:
+            return classify_f1_macro(y_predict, y)
+        else:
+            raise LabelTypeError
 
     def classify_plot(self, x, y, title=""):
         classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__ + title)

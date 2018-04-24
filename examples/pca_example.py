@@ -20,5 +20,9 @@ def iris_example():
     plt.show()
 
 
+def super_PCA_example():
+    pass
+
+
 if __name__ == '__main__':
     iris_example()

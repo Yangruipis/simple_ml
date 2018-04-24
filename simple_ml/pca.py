@@ -22,7 +22,7 @@ class PCA(BaseTransform):
         self._top_n_index = None
 
     def fit(self, x, y=None):
-        self._init(x, y)
+        super(PCA, self).fit(x, y)
         self._variable_num = x.shape[1]
         if self.top_n > self._variable_num:
             raise TopNTooLargeError
@@ -49,8 +49,7 @@ class PCA(BaseTransform):
         return self._explain
 
     def transform(self, x):
-        if x.shape[1] != self._variable_num:
-            raise FeatureNumberMismatchError
+        super(PCA, self).transform(x)
 
         if self._eigen_value is None:
             raise ModelNotFittedError
@@ -83,6 +82,7 @@ class SuperPCA(PCA):
         super(SuperPCA, self).__init__(top_n)
 
     def fit(self, x, y=None):
+        super(PCA, self).fit(x, y)
         _sample_number = x.shape[0]
         self._variable_num = x.shape[1]
         if _sample_number == 1:

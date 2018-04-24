@@ -71,7 +71,7 @@ class Filter(BaseTransform):
         - 输入x要么是连续，要么是0-1，不存在多分类
         - 输入y可以使连续，0-1或是多分类
         """
-        self._init(x, y)
+        super(Filter, self).fit(x, y)
         if self.filterType == FilterType.var:
             self._var_select()
         elif self.filterType == FilterType.corr:
@@ -83,9 +83,11 @@ class Filter(BaseTransform):
                 raise LabelTypeError
             self._chi_select()
         elif self.filterType == FilterType.entropy:
-            self._entropy_select()
+            raise FilterTypeError("由于Minepy包缺失，暂时无法执行此方法")
+            # self._entropy_select()
 
     def transform(self, x):
+        super(Filter, self).transform(x)
         return x[:, self._selectIds]
 
     def fit_transform(self, x, y):
@@ -102,7 +104,7 @@ class Embedded(BaseTransform):
         self.model = None
 
     def fit(self, x, y):
-        self._init(x, y)
+        super(Embedded, self).fit(x, y)
         if self.embedded_type == EmbeddedType.Lasso:
             from simple_ml.logistic import Lasso
             self.model = Lasso()
@@ -116,6 +118,7 @@ class Embedded(BaseTransform):
         self.selected_feature_id = self.model.feature_select(self.top_k)
 
     def transform(self, x):
+        super(Embedded, self).transform(x)
         return x[:, self.selected_feature_id]
 
     def fit_transform(self, x, y):

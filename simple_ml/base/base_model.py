@@ -98,6 +98,25 @@ class BaseModel(object):
                 res.append(LabelType.multi_class)
         return res
 
+    def _check_x_test(self, x):
+        self._check_x(x)
+        if x.shape[1] != self.variable_num:
+            raise FeatureNumberMismatchError
+
+    def _check_y_test(self, y):
+        if y is not None:
+            self._check_y(y)
+            y_type = self._check_label_type(y)
+            if y_type != self.label_type:
+                raise LabelTypeError("测试集标签类型必须和训练集一致")
+
+    def check_test_data(self, x, y=None):
+        self._check_x_test(x)
+        if y is not None:
+            self._check_y_test(y)
+            if y.shape[0] != x.shape[0]:
+                raise LabelLengthMismatchError
+
 
 class BaseClassifier(BaseModel):
 
@@ -108,15 +127,15 @@ class BaseClassifier(BaseModel):
 
     @abstractmethod
     def fit(self, x, y):
-        pass
+        self._init(x, y)
 
     @abstractmethod
     def predict(self, x):
-        pass
+        self.check_test_data(x)
 
     @abstractmethod
     def score(self, x, y):
-        pass
+        self.check_test_data(x, y)
 
 
 class BaseTransform(BaseModel):
@@ -133,15 +152,15 @@ class BaseTransform(BaseModel):
 
     @abstractmethod
     def fit(self, x, y):
-        pass
+        self._init(x, y)
 
     @abstractmethod
     def transform(self, x):
-        pass
+        self.check_test_data(x)
 
     @abstractmethod
     def fit_transform(self, x, y):
-        pass
+        self.check_test_data(x, y)
 
 
 class BaseFeatureSelect:

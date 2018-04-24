@@ -67,7 +67,7 @@ class LogisticRegression(BaseClassifier):
             self.variable_num += 1
 
     def fit(self, x, y):
-        self._init(x, y)
+        super(LogisticRegression, self).fit(x, y)
         if self.label_type != LabelType.binary:
             raise LabelTypeError("Logistic回归暂时只支持二分类问题")
         self.w, _ = self._fit()
@@ -91,27 +91,36 @@ class LogisticRegression(BaseClassifier):
         return w_old, loss_new
 
     def _predict(self, x):
-        if self.has_intercept and x[:, 0].any() != 0:
-            x = self._add_ones(x)
-
-        if x.shape[1] != self.variable_num:
-            raise FeatureNumberMismatchError
         y = np.dot(x, self.w)
         return self._sigmoid(y)
 
     def predict(self, x):
         if self.w is None:
             raise ModelNotFittedError
+        if self.has_intercept and not (x[:, 0] == 1).all():
+            x = self._add_ones(x)
+        super(LogisticRegression, self).predict(x)
+        if self.w is None:
+            raise ModelNotFittedError
 
         return np.array([1 if i >= self.threshold else 0 for i in self._predict(x)])
 
     def predict_prob(self, x):
+        if self.has_intercept and not (x[:, 0] == 1).all():
+            x = self._add_ones(x)
         return self._predict(x)
 
     def score(self, x, y):
-        # predict_prob = self._predict(x)
+        if self.has_intercept and not (x[:, 0] == 1).all():
+            x = self._add_ones(x)
+        super(LogisticRegression, self).score(x, y)
         predict_y = self.predict(x)
-        return classify_f1(predict_y, y)
+        if self.label_type == LabelType.binary:
+            return classify_f1(predict_y, y)
+        elif self.label_type == LabelType.multi_class:
+            return classify_f1_macro(predict_y, y)
+        else:
+            raise LabelTypeError
 
     def auc_plot(self, x, y):
         predict_y = self.predict_prob(x)

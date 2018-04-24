@@ -25,7 +25,7 @@ class KNN(BaseClassifier):
         self.y = None
 
     def fit(self, x, y):
-        self._init(x, y)
+        super(KNN, self).fit(x, y)
         self._fit(x, y)
 
     def _fit(self, x, y):
@@ -37,6 +37,7 @@ class KNN(BaseClassifier):
     def predict(self, x):
         if self.x is None:
             raise ModelNotFittedError
+        super(KNN, self).predict(x)
         dist_func = self._get_dist_func(self.dist_type)
         return np.array(list(map(lambda i: self._predict_single_sample(i, self.k, dist_func), x)))
 
@@ -67,14 +68,14 @@ class KNN(BaseClassifier):
             raise DistanceTypeError
 
     def score(self, x, y):
+        super(KNN, self).score(x, y)
         y_predict = self.predict(x)
         if self.label_type == LabelType.binary:
-            f1_score = classify_f1(y_predict, y)
+            return classify_f1(y_predict, y)
         elif self.label_type == LabelType.multi_class:
-            f1_score = classify_f1_macro(y_predict, y)
+            return classify_f1_macro(y_predict, y)
         else:
             raise LabelTypeError
-        return f1_score
 
     def classify_plot(self, x, y, title=""):
         classify_plot(self.new(), self.x, self.y, x, y, title=self.__doc__+title)

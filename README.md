@@ -157,6 +157,10 @@ Out[1]: np.array([1,1])
 - 2018-04-20
   - 加入BP神经网络算法`simple.neural_network`和相关的example
   - 更新github pages
+- 2018-04-23
+  - 加入Stacking model
+  - 更新每个模型的new()函数
+  - 重写BaseModel的predict和score抽象方法，以检查测试集是否满足要求
 
 # TODO list:
 
@@ -179,8 +183,8 @@ Out[1]: np.array([1,1])
 - [ ] stacking
 - [ ] 二分类转多分类器
 - [x] recognize nan and inf
-- [ ] check x before predict, check x and y before score
-- [ ] new function in each model
+- [x] check x before predict, check x and y before score
+- [x] new function in each model
 
 
 # TODO List AUTO MODEL

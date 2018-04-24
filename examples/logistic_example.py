@@ -11,7 +11,7 @@ def iris_example():
     y = y[(y==0)|(y==1)]
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
 
-    logistic = LogisticRegression(has_intercept=False)
+    logistic = LogisticRegression()
     logistic.fit(x_train, y_train)
     print(logistic.w)
     logistic.predict(x_test)

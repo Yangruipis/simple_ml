@@ -83,7 +83,7 @@ class SVM(BaseClassifier):
             1. SOM（本文直接实现该方法）
             2. 二次优化求解QP方法（调用python cvxopt包，参考http://tullo.ch/articles/svm-py/）
         """
-        self._init(x, y)
+        super(SVM, self).fit(x, y)
         if self.label_type != LabelType.binary:
             raise LabelTypeError("SVM 暂时只支持二分类问题")
         self.y = self._adj_y(self.y)
@@ -268,7 +268,7 @@ class SVM(BaseClassifier):
     def predict(self, x):
         if self.error is None:
             raise ModelNotFittedError
-
+        super(SVM, self).predict(x)
         # step1. 找到支持向量对应的坐标
         support_vector_index = list(np.nonzero(self.alphas > 0))[0]
 
@@ -312,6 +312,7 @@ class SVM(BaseClassifier):
         return kernel_vector
 
     def score(self, x, y):
+        super(SVM, self).score(x, y)
         y = self._adj_y(y)
         y_predict = self.predict(x)
         y_predict_binary = np.array([0 if i == -1 else i for i in y_predict])

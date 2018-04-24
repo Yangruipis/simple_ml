@@ -53,5 +53,5 @@ def random_forest_example():
 
 if __name__ == '__main__':
     # ID3_example()
-    # wine_example()
-    random_forest_example()
+    wine_example()
+    # random_forest_example()

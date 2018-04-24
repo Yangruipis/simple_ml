@@ -18,10 +18,6 @@ def wine_example():
     x_filter = _filter.fit_transform(x, y)
     print(x_filter.shape)
 
-    _filter = Filter(FilterType.entropy, 3)
-    x_filter = _filter.fit_transform(x, y)
-    print(x_filter.shape)
-
     embedded = Embedded(3, EmbeddedType.Lasso)
     x_embedded = embedded.fit_transform(x, y)
     print(x_embedded.shape) # lasso后稀疏到只有两个值非0，因此只输出了两个特征

@@ -11,6 +11,7 @@ from simple_ml.evaluation import classify_plot, classify_f1, classify_f1_micro, 
 from simple_ml.tree import CART
 from simple_ml.data_handle import get_k_folder_idx
 from simple_ml.logistic import LogisticRegression
+from simple_ml.bayes import BayesMinimumRisk
 
 
 __all__ = [
@@ -365,7 +366,10 @@ class RandomForest(BaseClassifier):
             return classify_f1_micro(y_predict, y)
 
     def classify_plot(self, test_x, test_y, title=""):
+        temp = self.m
+        self.m = 2
         classify_plot(self.new(), self.x, self.y, test_x, test_y, title=self.__doc__ + title)
+        self.m = temp
 
     def new(self):
         return RandomForest(self.m, self.tree_num)
@@ -384,11 +388,14 @@ class Stacking(BaseClassifier):
         """
         super(Stacking, self).__init__()
         if not isinstance(models, list):
-            raise ValueError("models 必须是一个继承fit和predict方法的object列表")
+            raise ModelInputError("models 必须是一个继承fit和predict方法的object列表")
         if len(models) == 0:
-            raise EmptyInputError("models 不能为空")
+            raise ModelInputError("models 不能为空")
         if not isinstance(models[0], BaseClassifier) or not isinstance(meta_model, BaseClassifier):
             raise ClassifierTypeError("必须选择继承BaseClassifier的分类模型")
+        for model in models:
+            if isinstance(model, BayesMinimumRisk):
+                raise ModelInputError("Stacking方法暂不支持Bayes Minimum Risk模型")
         self.models = [[i.new() for j in range(k_folder)] for i in models]          # self.models[i][j] 第i个模型第j次folder
         self.init_model = models
         self.meta_model = meta_model

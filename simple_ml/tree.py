@@ -36,7 +36,7 @@ class ID3(BaseClassifier):
         return self._root
 
     def fit(self, x, y):
-        self._init(x, y)
+        super(ID3, self).fit(x, y)
         if self.label_type != LabelType.binary and self.label_type != LabelType.multi_class:
             raise LabelTypeError("ID3算法只支持离散标签")
         if LabelType.continuous in self.feature_type:
@@ -91,6 +91,7 @@ class ID3(BaseClassifier):
     def predict(self, x):
         if self._root is None:
             raise ModelNotFittedError
+        super(ID3, self).predict(x)
         return np.array([self._predict_single(i, self._root) for i in x])
 
     def _predict_single(self, x, node):
@@ -105,6 +106,7 @@ class ID3(BaseClassifier):
         return np.random.choice(self.y, 1)
 
     def score(self, x, y):
+        super(ID3, self).score(x, y)
         y_predict = self.predict(x)
         return classify_f1(y_predict, y)
 
@@ -135,7 +137,7 @@ class CART(BaseClassifier):
         return self._root
 
     def fit(self, x, y):
-        self._init(x, y)
+        super(CART, self).fit(x, y)
         self._root = self._gen_tree(BinaryTreeNode(None, None, np.arange(self.x.shape[0])), 1)
 
     def _gen_tree(self, node, depth):
@@ -260,6 +262,7 @@ class CART(BaseClassifier):
     def predict(self, x):
         if self._root is None:
             raise ModelNotFittedError
+        super(CART, self).predict(x)
         return np.array([self._predict_single(i, self._root) for i in x])
 
 
@@ -280,6 +283,7 @@ class CART(BaseClassifier):
                 return self._predict_single(x, node.right)
 
     def score(self, x, y):
+        super(CART, self).score(x, y)
         y_predict = self.predict(x)
         if self.label_type == LabelType.continuous:
             return regression_r2(y_predict, y)

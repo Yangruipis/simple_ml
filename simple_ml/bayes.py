@@ -25,7 +25,7 @@ class NaiveBayes(BaseClassifier):
         self.prob_array = None
 
     def fit(self, x, y):
-        self._init(x, y)
+        super(NaiveBayes, self).fit(x, y)
         if self.label_type == LabelType.continuous:
             raise LabelTypeError
 
@@ -71,7 +71,7 @@ class NaiveBayes(BaseClassifier):
     def predict(self, x):
         if self.prob_array is None:
             raise ModelNotFittedError
-
+        super(NaiveBayes, self).predict(x)
         return np.array(list(map(self._predict_single_sample, x)))
 
     def _predict_single_sample(self, x):
@@ -91,6 +91,7 @@ class NaiveBayes(BaseClassifier):
         return np.argmax(p)
 
     def score(self, x, y):
+        super(NaiveBayes, self).score(x, y)
         y_predict = self.predict(x)
         if self.label_type == LabelType.binary:
             return classify_f1(y_predict, y)
@@ -125,7 +126,7 @@ class BayesMinimumError(BaseClassifier):
         return self._mu
 
     def fit(self, x, y):
-        self._init(x, y)
+        super(BayesMinimumError, self).fit(x, y)
         if self.label_type == LabelType.continuous:
             raise LabelTypeError
 
@@ -160,8 +161,9 @@ class BayesMinimumError(BaseClassifier):
         return np.cov(x.T)
 
     def predict(self, x):
-        if not self._mu:
+        if self._mu is None:
             raise ModelNotFittedError
+        super(BayesMinimumError, self).predict(x)
         return np.array([self._predict_single(i) for i in x])
 
     def _predict_single(self, x):
@@ -169,6 +171,7 @@ class BayesMinimumError(BaseClassifier):
         return self.labels[np.argmax(res)]
 
     def score(self, x, y):
+        super(BayesMinimumError, self).score(x, y)
         y_predict = self.predict(x)
         if self.label_type == LabelType.binary:
             return classify_f1(y_predict, y)

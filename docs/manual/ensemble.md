@@ -9,15 +9,21 @@
         - [2.1 初始化](#21-%E5%88%9D%E5%A7%8B%E5%8C%96)
         - [2.2 类方法](#22-%E7%B1%BB%E6%96%B9%E6%B3%95)
         - [2.3 类属性](#23-%E7%B1%BB%E5%B1%9E%E6%80%A7)
-    - [随机森林 (RandomForest)](#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-randomforest)
+    - [三、随机森林 (RandomForest)](#%E4%B8%89%E3%80%81%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-randomforest)
         - [3.1 初始化](#31-%E5%88%9D%E5%A7%8B%E5%8C%96)
         - [3.2 类方法](#32-%E7%B1%BB%E6%96%B9%E6%B3%95)
         - [3.3 类属性](#33-%E7%B1%BB%E5%B1%9E%E6%80%A7)
+    - [四、模型堆叠 (Stacking)](#%E5%9B%9B%E3%80%81%E6%A8%A1%E5%9E%8B%E5%A0%86%E5%8F%A0-stacking)
+        - [4.1 初始化](#41-%E5%88%9D%E5%A7%8B%E5%8C%96)
+        - [4.2 类方法](#42-%E7%B1%BB%E6%96%B9%E6%B3%95)
+        - [4.3 类属性](#43-%E7%B1%BB%E5%B1%9E%E6%80%A7)
     - [Examples](#examples)
         - [AdaBoost Example](#adaboost-example)
         - [GBDT Example](#gbdt-example)
         - [Random Forest Example](#random-forest-example)
+        - [Stacking Example](#stacking-example)
     - [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
+    - 
 
 ## 一、AdaBoost算法
 
@@ -235,7 +241,7 @@ def feature_select(self, top_n)
 | importance |    np.array(float)  |  特征的重要程度数组 |
 
 
-## 随机森林 (RandomForest)
+## 三、随机森林 (RandomForest)
 
 ```python
 from simple_ml.base.base_model import BaseClassifier
@@ -333,7 +339,7 @@ def classify_plot(self, x, y, title="")
 
 
 
-## 模型堆叠 (Stacking)
+## 四、模型堆叠 (Stacking)
 
 ```python
 from simple_ml.base.base_model import BaseClassifier

@@ -42,6 +42,7 @@
     - AdaBoost
     - GBDT
     - Random Forest
+    - Stacking
   - [神经网络模型](manual/bp.md)
     - BP 神经网络
   - [支持向量模型](manual/svm.md)

@@ -1,15 +1,19 @@
 # 数据处理模块 **simple_ml.data_handle**
 
-- [读取字符串](#%E8%AF%BB%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2)
-- [读取csv](#%E8%AF%BB%E5%8F%96csv)
-- [数据编码(Encoding)](#%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81encoding)
-- [获取变量类型](#%E8%8E%B7%E5%8F%96%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B)
-- [异常值处理](#%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86)
-- [缺失值处理](#%E7%BC%BA%E5%A4%B1%E5%80%BC%E5%A4%84%E7%90%86)
-- [独热编码(One-hot Encoding)](#%E7%8B%AC%E7%83%AD%E7%BC%96%E7%A0%81one-hot-encoding)
-- [全自动处理](#%E5%85%A8%E8%87%AA%E5%8A%A8%E5%A4%84%E7%90%86)
-- [随机数据集切分](#%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%87%E5%88%86)
-- [返回](#%E8%BF%94%E5%9B%9E)
+
+- [数据处理模块 **simple_ml.data_handle**](#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%A8%A1%E5%9D%97-simplemldatahandle)
+    - [读取字符串](#%E8%AF%BB%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2)
+    - [读取csv](#%E8%AF%BB%E5%8F%96csv)
+    - [数据编码(Encoding)](#%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81encoding)
+    - [获取变量类型](#%E8%8E%B7%E5%8F%96%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B)
+    - [异常值处理](#%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86)
+    - [缺失值处理](#%E7%BC%BA%E5%A4%B1%E5%80%BC%E5%A4%84%E7%90%86)
+    - [独热编码(One-hot Encoding)](#%E7%8B%AC%E7%83%AD%E7%BC%96%E7%A0%81one-hot-encoding)
+    - [全自动处理](#%E5%85%A8%E8%87%AA%E5%8A%A8%E5%A4%84%E7%90%86)
+    - [随机数据集切分](#%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%87%E5%88%86)
+    - [获取k折后的配对样本下标](#%E8%8E%B7%E5%8F%96k%E6%8A%98%E5%90%8E%E7%9A%84%E9%85%8D%E5%AF%B9%E6%A0%B7%E6%9C%AC%E4%B8%8B%E6%A0%87)
+- [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
+
 
 
 * * *

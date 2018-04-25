@@ -116,7 +116,7 @@ Out[1]: np.array([1,1])
 `simple_ml`暂时只提供了一些多分类算法，见下图，同样是[wine数据集](http://archive.ics.uci.edu/ml/datasets/Wine)，后面作者将会进行补充。
 
 <center>
-<img src="./imgs/wine2.jpg" width="75%" height="75%" />
+<img src="./imgs/wine2.jpg"  />
 
 图 2. 多分类效果图
 </center>

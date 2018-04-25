@@ -25,16 +25,6 @@ class TestLasso(unittest.TestCase):
         lasso.y = np.array([0, 1])
         self.assertEqual(lasso._loss_function_value(np.array([0, 0])), 0.25)
 
-    def test_error(self):
-        x = np.array([1,0,0,1])
-        y = np.array([1,0])
-        lasso = Lasso()
-        self.assertRaises(FeatureTypeError, lasso.fit, x, y)
-
-        x = np.array([[1, 0], [0, 1], [0, 0], [1, 1]])
-        y = np.array([0.1, 0.2, 0.3, 0.4])
-        lasso = Lasso()
-        self.assertRaises(LabelTypeError, lasso.fit, x, y)
 
 if __name__ == '__main__':
     unittest.main()

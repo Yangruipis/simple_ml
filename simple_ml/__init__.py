@@ -1,4 +1,4 @@
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
 from simple_ml.bayes import *
 from simple_ml.ensemble import *

@@ -8,7 +8,10 @@ Simple Machine Learning
 
 一个简单的机器学习算法实现
 
-![](https://img.shields.io/npm/l/express.svg) [![Build Status](https://travis-ci.org/Yangruipis/simple_ml.svg?branch=master)](https://travis-ci.org/Yangruipis/simple_ml) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806)](https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade) [![Join the chat at https://gitter.im/simple_ml/Lobby](https://badges.gitter.im/simple_ml/Lobby.svg)](https://gitter.im/simple_ml/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
+![](https://img.shields.io/npm/l/express.svg)
+![](https://img.shields.io/pypi/v/simple_male.svg) [![Build Status](https://travis-ci.org/Yangruipis/simple_ml.svg?branch=master)](https://travis-ci.org/Yangruipis/simple_ml)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/00c639db60364d12b0102456552fe806)](https://www.codacy.com/app/Yangruipis/simpleML?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yangruipis/simpleML&amp;utm_campaign=Badge_Grade)
+[![Join the chat at https://gitter.im/simple_ml/Lobby](https://badges.gitter.im/simple_ml/Lobby.svg)](https://gitter.im/simple_ml/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ---
 

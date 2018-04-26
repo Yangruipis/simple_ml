@@ -15,6 +15,3 @@ adh.read_from_file(PATH, header=True, index=False, sep=',')
 adh.auto_run(-1)
 for i, head in enumerate(adh._head):
     print(i, head, adh.type_list[i])
-
-
-

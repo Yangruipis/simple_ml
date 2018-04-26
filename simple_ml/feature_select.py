@@ -20,6 +20,11 @@ class Filter(BaseTransform):
         super(Filter, self).__init__()
         self.filterType = filter_type
         self.top_k = top_k
+        self._selectIds = None
+
+    @property
+    def get_support(self):
+        return self._selectIds
 
     def _var_select(self):
         variance_array = list(map(np.var, self.x.T))
@@ -102,6 +107,11 @@ class Embedded(BaseTransform):
         self.embedded_type = embedded_type
         self.top_k = top_k
         self.model = None
+        self.selected_feature_id = None
+
+    @property
+    def get_support(self):
+        return self.selected_feature_id
 
     def fit(self, x, y):
         super(Embedded, self).fit(x, y)

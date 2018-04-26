@@ -50,7 +50,7 @@ if sys.version_info < (3,5):
 
 setup(
     name="simple_male",
-    version="1.1.3",
+    version="1.1.",
     author="Ray Yang",
     author_email="yangruipis@163.com",
     description=("A machine learning algorithm implementation"),

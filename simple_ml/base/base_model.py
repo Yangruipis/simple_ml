@@ -86,9 +86,15 @@ class BaseModel(object):
     @staticmethod
     def _check_label_type(y):
         count = np.unique(y)
+        is_continuous = False
+        for i in count:
+            # 当存在浮点型，且小数点后有数字时，是连续值
+            if int(i) != i:
+                is_continuous = True
+
         if len(count) == 2:
             return LabelType.binary
-        elif len(count) > len(y) / 2:
+        elif is_continuous:
             return LabelType.continuous
         else:
             return LabelType.multi_class
@@ -97,10 +103,16 @@ class BaseModel(object):
     def _check_feature_type(x):
         res = []
         for feature in x.T:
-            count = np.unique(feature)
+            count = np.unique([i for i in feature])
+            is_continuous = False
+            for i in count:
+                # 当存在浮点型，且小数点后有数字时，是连续值
+                if int(i) != i:
+                    is_continuous = True
+
             if len(count) == 2:
                 res.append(LabelType.binary)
-            elif len(count) > len(feature) // 2:
+            elif is_continuous:
                 res.append(LabelType.continuous)
             else:
                 res.append(LabelType.multi_class)

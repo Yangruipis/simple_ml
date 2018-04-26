@@ -22,6 +22,17 @@ __all__ = [
     'DisMissingHandle',
     'ConMissingHandle',
     'get_k_folder_idx',
+    'nan_summary',
+    'get_head_list',
+]
+
+
+MISSING_VALUE_MARK = [
+    "",
+    "?",
+    "NAN",
+    "nan",
+
 ]
 
 
@@ -61,20 +72,20 @@ def read_string(string, header=True, index=True, sep=","):
         is_float = True
         is_int = True
         for j, _res in enumerate(res):
-            if not str.isdigit(res[j][i]):
+            if not str.isdigit(res[j][i]) and res[j][i] not in MISSING_VALUE_MARK:
                 is_int = False
-            if not _is_number(res[j][i]):
+            if not _is_number(res[j][i]) and res[j][i] not in MISSING_VALUE_MARK:
                 is_float = False
 
         if is_int:
             for j, _res in enumerate(res):
-                if res[j][i] == "" or res[j][i] == "?" or res[j][i].lower() == "nan":
+                if res[j][i].strip() in MISSING_VALUE_MARK:
                     res[j][i] = np.nan
                 else:
                     res[j][i] = int(res[j][i])
         elif is_float:
             for j, _res in enumerate(res):
-                if res[j][i] == "" or res[j][i] == "?" or res[j][i].lower() == "nan":
+                if res[j][i].strip() in MISSING_VALUE_MARK:
                     res[j][i] = np.nan
                 else:
                     res[j][i] = float(res[j][i])
@@ -127,6 +138,8 @@ def get_type(arr):
             if int(i) != i:
                 is_continuous = True
 
+        if np.max(feature) - np.min(feature) > 10:
+            is_continuous = True
         if len(count) == 2:
             res.append(LabelType.binary)
         elif is_continuous:
@@ -199,11 +212,11 @@ def missing_value_handle(arr, type_list, continuous_method=ConMissingHandle.mean
                 raise MissingHandleTypeError
         else:
             if discrete_method == discrete_method.mode_fill:
-                count_dic = dict(Counter(arr[:, i]))
+                count_dic = dict(Counter([i for i in arr[:, i] if not np.isnan(i)]))
                 mode = max(count_dic.keys(), key=lambda x: count_dic[x])
                 arr[:, i] = [mode if np.isnan(num) else num for num in arr[:, i]]
             elif discrete_method == discrete_method.one_hot:
-                other_code = np.max(arr[:, i]) + 1
+                other_code = np.nanmax(arr[:, i]) + 1
                 arr[:, i] = [other_code if np.isnan(num) else num for num in arr[:, i]]
             elif discrete_method == discrete_method.sample_drop:
                 drop_sample_idx += [j for j, num in enumerate(arr[:, i]) if np.isnan(num)]
@@ -300,3 +313,24 @@ def get_k_folder_idx(length, k_folder, seed=918):
     group_list = np.array([i % k_folder for i in arr])
     for i in range(k_folder):
         yield (random_arr[group_list == i], random_arr[group_list != i])
+
+
+def nan_summary(arr, head=None):
+    if not isinstance(arr, np.ndarray):
+        raise ValueError("必须输入numpy数组")
+    for j, i in enumerate(arr.T):
+        if head is None:
+            s = "The %sth feature's nan number" % j
+            print("{:<40}".format(s) + ": %s / %s" % (sum(np.isnan(i)), len(i)))
+        else:
+            if len(head) != arr.shape[1]:
+                raise FeatureNumberMismatchError("特征数目不匹配")
+            s = "Feature: %s's nan number" % head[j]
+            print("{:<60}".format(s) + ": %s / %s" % (sum(np.isnan(i)), len(i)))
+
+
+def get_head_list(path, sep):
+    with open(path, 'r') as f:
+        header = f.readline().strip()
+    header_list = header.split(sep)
+    return header_list

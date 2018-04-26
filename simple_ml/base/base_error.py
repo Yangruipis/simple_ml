@@ -118,3 +118,7 @@ class ArrayContainNANorINF(MisMatchError):
 
 class ModelInputError(ValueError):
     pass
+
+
+class InputTypeError(ValueError):
+    pass

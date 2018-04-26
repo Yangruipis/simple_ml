@@ -198,5 +198,3 @@ Out[1]: np.array([1,1])
 - [ ] auto feature select
 - [ ] auto param select
 - [ ] auto model select
-
-

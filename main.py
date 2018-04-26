@@ -4,7 +4,6 @@
 from simple_ml.tree import CART
 import numpy as np
 
-
 X = np.array([[1,1.1],
               [1,2.0],
               [0,3.0],

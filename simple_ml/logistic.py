@@ -62,19 +62,20 @@ class LogisticRegression(BaseClassifier, Multi2Binary):
 
     def _init(self, x, y):
         super(LogisticRegression, self)._init(x, y)
-        if self.has_intercept and not (self.x[:, 0] == 1).all():
+        if self.has_intercept and not (self.x[:, 0] == 1).all() and x.shape[1] > 1:
             self.x = self._add_ones(self.x)
             self.variable_num += 1
 
     def fit(self, x, y):
         super(LogisticRegression, self).fit(x, y)
-        if self.label_type != LabelType.binary:
+        if self.label_type == LabelType.multi_class:
             self._multi_fit(self)
-            #raise LabelTypeError("Logistic回归暂时只支持二分类问题")
-        else:
+        elif self.label_type == LabelType.binary:
             self.w, _ = self._fit()
             if len(self.w) != self.variable_num:
                 raise FeatureNumberMismatchError
+        else:
+            raise LabelTypeError("Logistic回归不支持连续标签")
 
     def _fit(self):
         """
@@ -99,7 +100,7 @@ class LogisticRegression(BaseClassifier, Multi2Binary):
     def predict(self, x):
         if self.w is None and self.new_models is None:
             raise ModelNotFittedError
-        if self.has_intercept and not (x[:, 0] == 1).all():
+        if self.has_intercept and not (x[:, 0] == 1).all() and x.shape[1] > 1:
             x = self._add_ones(x)
         super(LogisticRegression, self).predict(x)
 
@@ -109,12 +110,12 @@ class LogisticRegression(BaseClassifier, Multi2Binary):
             return self._multi_predict(x)
 
     def predict_prob(self, x):
-        if self.has_intercept and not (x[:, 0] == 1).all():
+        if self.has_intercept and not (x[:, 0] == 1).all() and x.shape[1] > 1:
             x = self._add_ones(x)
         return self._predict(x)
 
     def score(self, x, y):
-        if self.has_intercept and not (x[:, 0] == 1).all():
+        if self.has_intercept and not (x[:, 0] == 1).all() and x.shape[1] > 1:
             x = self._add_ones(x)
         super(LogisticRegression, self).score(x, y)
         predict_y = self.predict(x)

@@ -158,7 +158,7 @@ def get_type(arr):
 
         if np.max(arr) - np.min(arr) > 10:
             is_continuous = True
-        if len(count) == 2:
+        if len(count) == 2 or len(count == 1):
             return LabelType.binary
         elif is_continuous:
             return LabelType.continuous

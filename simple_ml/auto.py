@@ -6,6 +6,8 @@ The Kernel Module of simple_ml
 
 from simple_ml.base import *
 from simple_ml.data_handle import *
+from simple_ml.feature_select import *
+from simple_ml.logistic import *
 from simple_ml.helper import *
 import numpy as np
 import os
@@ -187,8 +189,76 @@ class AutoDataHandle(BaseAuto):
 
 
 class AutoFeatureHandle(BaseAuto):
-    pass
 
+    def __init__(self, cv_times):
+        super(AutoFeatureHandle, self).__init__(cv_times)
+        self.y_column = None
+        self._data = None
+        self._handled_data = None
+
+    def read_array(self, arr):
+        if isinstance(arr, np.ndarray):
+            self._data = arr
+        else:
+            raise InputTypeError("必须输入numpy二维数组，如果不是，请先利用AutoDataHandle模块进行处理")
+
+    def auto_run(self, y_column=-1):
+        if self._data is None:
+            raise EmptyInputError("请先运行read_array函数读取数组")
+        if y_column < 0:
+            self.y_column = self._data.shape[1] + y_column
+        else:
+            self.y_column = y_column
+        type_list = get_type(self._data)
+        percent_list = np.linspace(0.1, 1, 10)
+        params = {'top_k' : [int(self._data.shape[1] * i) for i in percent_list]}
+        if type_list[self.y_column] == LabelType.continuous:
+            """
+            标签为连续变量，此时只能选择 Filter.corr，Filter.var, Embedded.gbdt三种方法
+            """
+            params['select_type'] = [
+                FilterType.corr,
+                FilterType.var,
+                EmbeddedType.GBDT
+            ]
+        else:
+            """
+            标签为离散，可以选择 Filter.chi2(确保data都大于0）， Filter.var, Embedded.lasso 三种方法
+            """
+            params['select_type'] = [
+                FilterType.var,
+                EmbeddedType.Lasso
+            ]
+
+        grid_search(self._get_feature_score, params, cv_times=self.cv_times, quiet=False)
+
+
+    def _get_feature_score(self, top_k, select_type):
+        """
+        获取当前特征选择方法的效果
+        :param top_k:         前几个特征
+        :param filter_type:   特征选择方法
+        :return:              得分，回归用平均相关系数判断，二分类用logistic模型得分判断
+        """
+        x_train, y_train, x_test, y_test = train_test_split(
+            self._data[:, np.arange(self._data.shape[1]) != self.y_column], self._data[:, self.y_column])
+
+        if select_type in FilterType:
+            model = Filter(select_type, top_k)
+            new_x_train = model.fit_transform(x_train, y_train)
+            new_x_test = model.transform(x_test)
+        elif select_type in EmbeddedType:
+            model = Embedded(top_k, select_type)
+            new_x_train = model.fit_transform(x_train, y_train)
+            new_x_test = model.transform(x_test)
+        else:
+            raise InputTypeError("特征选择方法不存在")
+
+        if new_x_test.shape[1] == 0:
+            raise ModelInputError("所有特征均和标签无关系")
+        lr = LogisticRegression()
+        lr.fit(new_x_train, y_train)
+        return lr.score(new_x_test, y_test)
 
 class AutoModelOpt(BaseAuto):
     pass
@@ -198,10 +268,18 @@ class AutoModelSelect(BaseAuto):
 
 
 if __name__ == '__main__':
-    arr =np.array([[1,2.1,3], [4, np.nan, 6], [np.nan, 8, 9], [10, 11, 12]])
-    y = np.array([1,2,3, 3])
+    # arr =np.array([[1,2.1,3], [4, np.nan, 6], [np.nan, 8, 9], [10, 11, 12]])
+    # y = np.array([1,2,3, 3])
+    # arr = np.column_stack((arr, y.reshape(-1, 1)))
+    # atd = AutoDataHandle(5)
+    # atd.read_from_array(arr)
+    # atd.auto_run(-1)
+    # print(atd.handled_data)
+
+    np.random.seed(918)
+    arr = np.random.rand(20, 10)
+    y = np.random.choice([0, 1], 20, True)
     arr = np.column_stack((arr, y.reshape(-1, 1)))
-    atd = AutoDataHandle(5)
-    atd.read_from_array(arr)
-    atd.auto_run(-1)
-    print(atd.handled_data)
+    afh = AutoFeatureHandle(cv_times=5)
+    afh.read_array(arr)
+    afh.auto_run(-1)

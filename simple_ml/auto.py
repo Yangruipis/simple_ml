@@ -70,12 +70,18 @@ def bayes_search():
 
 class BaseAuto:
 
-    pass
+    def __init__(self, cv_times):
+        self.cv_times = cv_times
+
+    def auto_run(self, **kwargs):
+        pass
+
+
 
 class AutoDataHandle(BaseAuto):
 
     def __init__(self, cv_times=1):
-        self.cv_times = cv_times
+        super(AutoDataHandle, self).__init__(cv_times)
         self._data = None
         self._types = None
         self._data_handled = None
@@ -160,13 +166,22 @@ class AutoDataHandle(BaseAuto):
 
 
     def missing_handle_score(self, continuous_method, discrete_method):
+        """
+        - 一个用于网格搜索的函数，满足固定输入和输出
+        - 输入值为确实样本处理方法，缺失值为处理方法的得分，我通过计算确实处理后的特征与模型标签的相关系数，
+          并且用样本数对数进行惩罚得到的每个特征的平均值作为处理得分，越大越好
+        :param continuous_method:    连续数据处理方法
+        :param discrete_method:      离散树处理方法
+        :return:                     float， 得分
+        """
         arr = missing_value_handle(self._data_handled, self._types, continuous_method, discrete_method)
         corr_list = []
         for i in range(arr.shape[1]):
             if i != self.y_column:
                 if (arr[:, i] == arr[:, i][0]).all():
                     continue
-                corr_list.append(np.corrcoef(arr[:, i], arr[:, self.y_column])[0, 1])
+                # 通过样本数对数进行惩罚，防止样本数少导致的相关系数偏高
+                corr_list.append(np.corrcoef(arr[:, i], arr[:, self.y_column])[0, 1] * np.log(arr.shape[0]))
         return np.nanmean(corr_list)
 
 

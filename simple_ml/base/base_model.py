@@ -6,6 +6,7 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
+from simple_ml.data_handle import get_type
 from collections import defaultdict
 
 
@@ -85,38 +86,11 @@ class BaseModel(object):
 
     @staticmethod
     def _check_label_type(y):
-        count = np.unique(y)
-        is_continuous = False
-        for i in count:
-            # 当存在浮点型，且小数点后有数字时，是连续值
-            if int(i) != i:
-                is_continuous = True
-
-        if len(count) == 2:
-            return LabelType.binary
-        elif is_continuous:
-            return LabelType.continuous
-        else:
-            return LabelType.multi_class
+        return get_type(y)
 
     @staticmethod
     def _check_feature_type(x):
-        res = []
-        for feature in x.T:
-            count = np.unique([i for i in feature])
-            is_continuous = False
-            for i in count:
-                # 当存在浮点型，且小数点后有数字时，是连续值
-                if int(i) != i:
-                    is_continuous = True
-
-            if len(count) == 2:
-                res.append(LabelType.binary)
-            elif is_continuous:
-                res.append(LabelType.continuous)
-            else:
-                res.append(LabelType.multi_class)
-        return res
+        return get_type(x)
 
     def _check_x_test(self, x):
         self._check_x(x)

@@ -169,6 +169,13 @@ Out[1]: np.array([1,1])
   - 加入类： Multi2binary，继承该类的BaseClassifier可以将多分类问题转为二分类问题
   - 添加SVM， Logistic，NeuralNetwork, AdaBoost 的继承关系和多分类方法
   - 增加相关的多分类例子，以及帮助文档
+  - 重写特征类型推断函数，根据多种线索进行推断
+- 2018-04-26
+  - 重写自动化模块，实现BaseAuto抽象类以及数据自动预处理的AutoDataHandle类
+  - 加入网格搜索方法
+  - 加入[宫颈癌数据](https://archive.ics.uci.edu/ml/datasets/Cervical+cancer+%28Risk+Factors%29)的完整处理Example
+  - 加入helper模块，用于格式化输出
+  - 加入`data_handle`模块的缺失值统计方法`nan_summary`
 
 # TODO list:
 

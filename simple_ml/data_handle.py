@@ -129,24 +129,41 @@ def get_type(arr):
     :param arr:   np.ndarray
     :return:      list[LabelType]
     """
-    res = []
-    for feature in arr.T:
-        count = np.unique([i for i in feature if not np.isnan(i)])
+    if len(arr.shape) == 2:
+        res = []
+        for feature in arr.T:
+            count = np.unique([i for i in feature if not np.isnan(i)])
+            is_continuous = False
+            for i in count:
+                # 当存在浮点型，且小数点后有数字时，是连续值
+                if int(i) != i:
+                    is_continuous = True
+
+            if np.max(feature) - np.min(feature) > 10:
+                is_continuous = True
+            if len(count) == 2:
+                res.append(LabelType.binary)
+            elif is_continuous:
+                res.append(LabelType.continuous)
+            else:
+                res.append(LabelType.multi_class)
+        return res
+    elif len(arr.shape) == 1:
+        count = np.unique([i for i in arr if not np.isnan(i)])
         is_continuous = False
         for i in count:
             # 当存在浮点型，且小数点后有数字时，是连续值
             if int(i) != i:
                 is_continuous = True
 
-        if np.max(feature) - np.min(feature) > 10:
+        if np.max(arr) - np.min(arr) > 10:
             is_continuous = True
         if len(count) == 2:
-            res.append(LabelType.binary)
+            return LabelType.binary
         elif is_continuous:
-            res.append(LabelType.continuous)
+            return LabelType.continuous
         else:
-            res.append(LabelType.multi_class)
-    return res
+            return LabelType.multi_class
 
 
 def abnormal_handle(arr, type_list, up=90, lp=10):

@@ -246,7 +246,7 @@ def missing_value_handle(arr, type_list, continuous_method=ConMissingHandle.mean
         return arr[list(set(list(range(arr.shape[0]))) - set(drop_sample_idx))]
 
 
-def one_hot_encoder(arr, type_list):
+def one_hot_encoder(arr, type_list, names=None):
     """
     独热编码，尤其针对多分类变量
     注意：需要提前进行缺失值处理，确保内部没有缺失值
@@ -257,16 +257,22 @@ def one_hot_encoder(arr, type_list):
     if arr.shape[1] != len(type_list):
         raise FeatureNumberMismatchError
     res = []
+    if names is None:
+        names = [str(i) for i in np.arange(arr.shape[1])]
+    new_names = []
     for i, _type in enumerate(type_list):
         if _type == LabelType.binary:
             res.append(list(map(int, arr[:, i] == arr[0, i])))
+            new_names.append(names[i])
         elif _type == LabelType.multi_class:
             unique_value = np.unique(arr[:, i])
-            for j in unique_value[1:]:
+            for num, j in enumerate(unique_value[1:]):
                 res.append(list(map(int, arr[:, i] == j)))
+                new_names.append(names[i] + " = " + str(int(j)))
         else:
             res.append(list(arr[:, i]))
-    return np.array(res).T
+            new_names.append(names[i])
+    return np.array(res).T, new_names
 
 
 def BIGMOM(path, header=True, index=True, sep=","):

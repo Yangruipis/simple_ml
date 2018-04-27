@@ -33,6 +33,15 @@ def _get_pairs(arr, i, res):
 
 
 def grid_search(func, params: dict, cv_times=5, increase=True, quiet=True):
+    """
+    网格搜索
+    :param func:      目标函数，满足对应参数的输入和float类型输出
+    :param params:    参数， 字典类型，key必须是func中定义的形参
+    :param cv_times:  交叉验证次数
+    :param increase:  True if func返回值越大越好 else func返回值越小越好
+    :param quiet:     安静的进行着，否则启动log_print函数
+    :return:          (最优参数dict, 最优得分)
+    """
     if increase:
         best = (None, -np.inf)
     else:
@@ -74,6 +83,21 @@ class BaseAuto:
 
     def __init__(self, cv_times):
         self.cv_times = cv_times
+        self._data = None
+        self._types = None
+        self._handled_data = None
+
+    @property
+    def origin_data(self):
+        return self._data
+
+    @property
+    def handled_data(self):
+        return self._handled_data
+
+    @property
+    def type_list(self):
+        return self._types
 
     def auto_run(self, **kwargs):
         pass
@@ -84,22 +108,19 @@ class AutoDataHandle(BaseAuto):
 
     def __init__(self, cv_times=1):
         super(AutoDataHandle, self).__init__(cv_times)
-        self._data = None
-        self._types = None
-        self._data_handled = None
+        self.y_column = None
         self._head = None
+        self._head_new_name = None
 
     @property
-    def origin_data(self):
-        return self._data
+    def head_names(self):
+        return self._head
 
     @property
-    def handled_data(self):
-        return self._data_handled
-
-    @property
-    def type_list(self):
-        return self._types
+    def head_new_names(self):
+        if self._head is None:
+            return None
+        return self._head_new_name
 
     def read_from_file(self, path, header, index, sep):
         if os.path.exists(path):
@@ -137,14 +158,17 @@ class AutoDataHandle(BaseAuto):
             raise InputTypeError("请输入numpy二维数组")
 
     def auto_run(self, y_column=-1):
-        self.y_column = y_column
+        if y_column < 0:
+            self.y_column = self._data.shape[1] + y_column
+        else:
+            self.y_column = y_column
         if self._data is None:
             raise EmptyInputError("请先通过AutoDataHandle.read*相关命令读取数据")
 
         if self._data.shape[0] < 1000:
-            self._data_handled = abnormal_handle(self._data, self._types, 95, 5)
+            self._handled_data = abnormal_handle(self._data, self._types, 95, 5)
         else:
-            self._data_handled = abnormal_handle(self._data, self._types, 99, 1)
+            self._handled_data = abnormal_handle(self._data, self._types, 99, 1)
 
         log_print("异常值处理结束")
 
@@ -156,14 +180,14 @@ class AutoDataHandle(BaseAuto):
                                        DisMissingHandle.one_hot]
                   }
 
-        nan_summary(self._data_handled, None)
+        nan_summary(self._handled_data, self._head)
         log_print("缺失值统计结束")
 
         log_print("缺失值处理方法寻优开始")
         best_param = grid_search(self.missing_handle_score, params, cv_times=self.cv_times, quiet=False)
-        self._data_handled = missing_value_handle(self._data_handled, self._types, **best_param[0])
+        self._handled_data = missing_value_handle(self._handled_data, self._types, **best_param[0])
         log_print("缺失值处理结束")
-        self._data_handled = one_hot_encoder(self._data_handled, self._types)
+        self._handled_data,  self._head_new_name = one_hot_encoder(self._handled_data, self._types, self._head)
         log_print("独热编码结束")
 
 
@@ -176,7 +200,7 @@ class AutoDataHandle(BaseAuto):
         :param discrete_method:      离散树处理方法
         :return:                     float， 得分
         """
-        arr = missing_value_handle(self._data_handled, self._types, continuous_method, discrete_method)
+        arr = missing_value_handle(self._handled_data, self._types, continuous_method, discrete_method)
         corr_list = []
         for i in range(arr.shape[1]):
             if i != self.y_column:
@@ -187,32 +211,46 @@ class AutoDataHandle(BaseAuto):
         return np.nanmean(corr_list)
 
 
-
 class AutoFeatureHandle(BaseAuto):
 
-    def __init__(self, cv_times):
+    def __init__(self, cv_times=5):
         super(AutoFeatureHandle, self).__init__(cv_times)
         self.y_column = None
-        self._data = None
-        self._handled_data = None
+        self._support = None
+        self._new_head_name = None
+
+    @property
+    def support(self):
+        """
+        :return: 所选特征的id列p表
+        """
+        return self._support
+
+    @property
+    def get_select_head_name(self):
+        if self._new_head_name is None:
+            raise EmptyInputError("必须在auto_run参数中加入AutoDataHandle.head_nea_name结果")
+        return [self._new_head_name[i] for i in self.support]
 
     def read_array(self, arr):
         if isinstance(arr, np.ndarray):
             self._data = arr
+            self._types = get_type(self._data)
         else:
             raise InputTypeError("必须输入numpy二维数组，如果不是，请先利用AutoDataHandle模块进行处理")
 
-    def auto_run(self, y_column=-1):
+    def auto_run(self, y_column=-1, new_head_name=None):
+        self._new_head_name = new_head_name
         if self._data is None:
             raise EmptyInputError("请先运行read_array函数读取数组")
         if y_column < 0:
             self.y_column = self._data.shape[1] + y_column
         else:
             self.y_column = y_column
-        type_list = get_type(self._data)
+
         percent_list = np.linspace(0.1, 1, 10)
         params = {'top_k' : [int(self._data.shape[1] * i) for i in percent_list]}
-        if type_list[self.y_column] == LabelType.continuous:
+        if self._types[self.y_column] == LabelType.continuous:
             """
             标签为连续变量，此时只能选择 Filter.corr，Filter.var, Embedded.gbdt三种方法
             """
@@ -230,8 +268,19 @@ class AutoFeatureHandle(BaseAuto):
                 EmbeddedType.Lasso
             ]
 
-        grid_search(self._get_feature_score, params, cv_times=self.cv_times, quiet=False)
+        log_print("特征选择方法寻优开始")
+        best_param, score = grid_search(self._get_feature_score, params, cv_times=self.cv_times, quiet=False)
+        log_print("最优参数：%s，得分:%.4f" % (best_param, score) )
+        if best_param['select_type'] in FilterType:
+            model = Filter(best_param['select_type'], best_param['top_k'])
+            new_train = model.fit_transform(self._data[:, np.arange(self._data.shape[1]) != self.y_column], None)
+        else:
+            model = Embedded(best_param['top_k'], best_param['select_type'])
+            new_train = model.fit_transform(self._data[:, np.arange(self._data.shape[1]) != self.y_column], None)
 
+        self._support = model.get_support
+        self._handled_data = np.column_stack((new_train, self._data[:, self.y_column]))
+        log_print("特征自动处理结束")
 
     def _get_feature_score(self, top_k, select_type):
         """
@@ -259,6 +308,7 @@ class AutoFeatureHandle(BaseAuto):
         lr = LogisticRegression()
         lr.fit(new_x_train, y_train)
         return lr.score(new_x_test, y_test)
+
 
 class AutoModelOpt(BaseAuto):
     pass

@@ -46,7 +46,7 @@ class TestDataHandle(unittest.TestCase):
         a3 = np.random.choice([3, 4, 5], 10, replace=True)
         arr = np.column_stack((a1, a2, a3))
         types = get_type(arr)
-        res = one_hot_encoder(arr, types)
+        res = one_hot_encoder(arr, types)[0]
         self.assertEqual(res.shape[0], 10)
         self.assertEqual(res.shape[1], 4)
 

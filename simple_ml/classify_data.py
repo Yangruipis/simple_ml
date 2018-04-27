@@ -130,7 +130,7 @@ class DataCollector:
         types = get_type(arr)
         arr = abnormal_handle(arr, types)
         arr = missing_value_handle(arr, types)
-        arr = one_hot_encoder(arr, types)
+        arr = one_hot_encoder(arr, types)[0]
         return arr
 
 

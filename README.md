@@ -177,6 +177,8 @@ Out[1]: np.array([1,1])
   - 加入[宫颈癌数据](https://archive.ics.uci.edu/ml/datasets/Cervical+cancer+%28Risk+Factors%29)的完整处理Example
   - 加入`helper`模块，用于格式化输出
   - 加入`data_handle`模块的缺失值统计方法`nan_summary`
+- 2018-04-27
+  - 加入自动特征选择类 `AutoFeatureHandle` ，以及对应的宫颈癌Example
 
 # TODO list:
 
@@ -206,6 +208,6 @@ Out[1]: np.array([1,1])
 # TODO List AUTO MODEL
 
 - [x] auto data handle
-- [ ] auto feature select
+- [x] auto feature select
 - [ ] auto param select
 - [ ] auto model select

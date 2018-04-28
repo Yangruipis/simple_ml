@@ -313,6 +313,7 @@ class AutoFeatureHandle(BaseAuto):
 class AutoModelOpt(BaseAuto):
     pass
 
+
 class AutoModelSelect(BaseAuto):
     pass
 

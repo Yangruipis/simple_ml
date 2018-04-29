@@ -1,8 +1,4 @@
 
-
-![](imgs/logo2.png)
-
-
 # [介绍](./introduction.md)
 
 

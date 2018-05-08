@@ -4,7 +4,6 @@ from __future__ import division, absolute_import
 
 from abc import ABCMeta, abstractmethod
 import numpy as np
-from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
 from simple_ml.data_handle import get_type
 from collections import defaultdict

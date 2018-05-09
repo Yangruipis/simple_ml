@@ -311,7 +311,37 @@ class AutoFeatureHandle(BaseAuto):
 
 
 class AutoModelOpt(BaseAuto):
-    pass
+
+    __doc__ = "自动化模型最优调参"
+
+    def __init__(self, opt_method=OptMethod.grid_search, cv_times=5):
+        """
+        自动模型调参，包括了网格搜索法、贝叶斯方法
+        """
+        super(AutoModelOpt, self).__init__(cv_times)
+        self.opt_method = OptMethod.grid_search
+
+    def read_array(self, arr):
+        if isinstance(arr, np.ndarray):
+            self._data = arr
+            self._types = get_type(self._data)
+        else:
+            raise InputTypeError("必须输入numpy二维数组，如果不是，请先利用AutoDataHandle模块进行处理")
+
+    def auto_run(self, model: BaseClassifier, y_column):
+        """
+        继承BaseAuto
+        """
+        if self._data is None:
+            raise EmptyInputError("请先运行read_array函数读取数组")
+
+        if y_column < 0:
+            self.y_column = self._data.shape[1] + y_column
+        else:
+            self.y_column = y_column
+
+        # 想好一个有机的体系之后再写
+        pass
 
 
 class AutoModelSelect(BaseAuto):

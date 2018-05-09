@@ -13,7 +13,8 @@ __all__ = [
     'ConMissingHandle',
     'DisMissingHandle',
     'CostFunction',
-    'ActiveFunction'
+    'ActiveFunction',
+    'OptMethod',
 ]
 
 
@@ -95,3 +96,10 @@ class ActiveFunction(Enum):
     sigmoid = 0
     tanh = 1
     relu = 2
+
+
+class OptMethod(Enum):
+
+    grid_search = 0
+    random_search = 1
+    bayes = 2

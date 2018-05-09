@@ -344,6 +344,7 @@ class AutoModelOpt(BaseAuto):
         pass
 
 
+
 class AutoModelSelect(BaseAuto):
     pass
 

@@ -120,5 +120,9 @@ class ModelInputError(ValueError):
     pass
 
 
+class ParamInputError(ValueError):
+    pass
+
+
 class InputTypeError(ValueError):
     pass

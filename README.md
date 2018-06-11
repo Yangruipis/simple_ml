@@ -194,6 +194,7 @@ Out[1]: np.array([1,1])
 - [x] examples
 - [x] get more datasets
 - [ ] regression plot
+- [ ] more regression method
 - [ ] kd_tree
 - [ ] Support Machine Regression
 - [ ] more metrics

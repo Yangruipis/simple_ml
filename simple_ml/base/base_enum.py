@@ -15,6 +15,7 @@ __all__ = [
     'CostFunction',
     'ActiveFunction',
     'OptMethod',
+    'Function',
 ]
 
 
@@ -103,3 +104,11 @@ class OptMethod(Enum):
     grid_search = 0
     random_search = 1
     bayes = 2
+
+
+class Function(Enum):
+
+    classify = 1
+    regression = 2
+    cls_and_reg = 3
+    cluster = 4

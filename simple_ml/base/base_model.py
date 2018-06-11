@@ -5,6 +5,7 @@ from __future__ import division, absolute_import
 from abc import ABCMeta, abstractmethod
 import numpy as np
 from simple_ml.base.base_error import *
+from simple_ml.base.base_enum import *
 from simple_ml.data_handle import get_type
 from collections import defaultdict
 
@@ -118,6 +119,7 @@ class BaseClassifier(BaseModel):
     __metaclass__ = ABCMeta
 
     def __init__(self):
+        self._function = Function.classify
         super(BaseClassifier, self).__init__()
 
     @abstractmethod

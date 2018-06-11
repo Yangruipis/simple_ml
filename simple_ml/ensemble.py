@@ -227,6 +227,7 @@ class GBDT(BaseClassifier, BaseFeatureSelect):
         - label支持连续值和离散值
         """
         super(GBDT, self).__init__()
+        self._function = Function.regression
         self.nums = nums
         self.learning_rate = learning_rate
         self.F = []

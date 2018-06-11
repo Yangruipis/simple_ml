@@ -31,7 +31,8 @@ from __future__ import division, absolute_import
 from collections import Counter
 import numpy as np
 from matplotlib import pyplot as plt
-from simple_ml.base.base_enum import LabelType, CrossValidationType
+from simple_ml.base.base_model import BaseClassifier
+from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
 from simple_ml.data_handle import transform_y, train_test_split, get_k_folder_idx
 from simple_ml.pca import PCA
@@ -56,6 +57,7 @@ __all__ = [
     'regression_rmse',
     'regression_rmsel',
     'regression_squared_error',
+    'regression_plot',
 
     'cross_validation',
     'CrossValidationType'
@@ -466,3 +468,28 @@ def cross_validation(model, x, y, method=CrossValidationType.holdout, test_size=
         return result
     else:
         raise CrossValidationTypeError
+
+def regression_plot(x_train, y_train, x_test, y_test, x_column_id=None, title=""):
+    if x_train.shape[1] != x_test.shape[1]:
+        raise FeatureNumberMismatchError
+    if x_train.shape[0] != y_train.shape[0] or x_test.shape[0] != y_test.shape[0]:
+        raise SampleNumberMismatchError
+
+    figure = plt.figure(figsize=(6, 6))
+    ax = figure.add_subplot(111)
+    if x_column_id is None:
+        x_column_train = np.arange(x_train.shape[0])
+        x_column_test = np.arange(x_train.shape[0], x_train.shape[0]+x_test.shape[0])
+    else:
+        if x_column_id < 0:
+            raise ParamInputError('x_column_id must be greater than 0')
+        if x_column_id >= x_train.shape[1]:
+            raise ParamInputError('x_column_id out of bound')
+        x_column_train = x_train[:, x_column_id]
+        x_column_test = x_test[:, x_column_id]
+    colors = ['#67001F', '#053061', '#29A086', '#0000FF']
+    ax.scatter(x=x_column_train, y=y_train, c=colors[0], label='train', alpha=0.8)
+    ax.scatter(x=x_column_test, y=y_test, c=colors[1], label='test', alpha=0.8)
+    ax.legend()
+    ax.set_title(title)
+    plt.show()

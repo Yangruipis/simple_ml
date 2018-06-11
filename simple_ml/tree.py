@@ -128,6 +128,7 @@ class CART(BaseClassifier):
         :param min_samples_leaf: 叶子节点最大样本数（最好是奇数，用以投票）
         """
         super(CART, self).__init__()
+        self._function = Function.cls_and_reg
         self.max_depth = max_depth if max_depth is not None else np.inf
         self.min_samples_leaf = min_samples_leaf
         self._root = None

@@ -188,8 +188,17 @@ r方 = SSR / SST
 ```python
 def regression_median_absolute_error(y_predict, y_true)
 ```
-
 中位数绝对误差
+
+
+### 3.8 regression_plot
+
+```python
+def regression_plot(x_train, y_train, x_test, y_test, x_column_id, title)
+```
+
+回归结果作图
+
 
 ## 四、交叉验证
 
@@ -208,6 +217,8 @@ def cross_validation(model, x, y, method=CrossValidationType.holdout, test_size=
 |             | test_size |                    float                    |             测试集占的比重              |
 |             |    cv     |                     int                     |   交叉验证次数，如果是K折则等同于K的值    |
 |    Returns: |           |                  np.array                   | 长度等于cv的数组，表示每一次交叉验证的结果 |
+
+
 
 
 # [返回主页](../index.md)

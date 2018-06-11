@@ -179,6 +179,8 @@ Out[1]: np.array([1,1])
   - 加入`data_handle`模块的缺失值统计方法`nan_summary`
 - 2018-04-27
   - 加入自动特征选择类 `AutoFeatureHandle` ，以及对应的宫颈癌Example
+- 2018-06-11
+  - 加入回归作图方法
 
 # TODO list:
 
@@ -193,7 +195,7 @@ Out[1]: np.array([1,1])
 - [x] setup.py
 - [x] examples
 - [x] get more datasets
-- [ ] regression plot
+- [x] regression plot
 - [ ] more regression method
 - [ ] kd_tree
 - [ ] Support Machine Regression

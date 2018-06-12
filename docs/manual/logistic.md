@@ -444,6 +444,107 @@ def auc_plot(self, x, y)
 | weight |   np.array(float)   | 每个特征的参数 |
 
 
+## 四、多元线性回归 (MultiRegression)
+
+```python
+from simple_ml.regression import MultiRegression
+
+class MultiRegression(BaseClassifier):
+
+    def __init__(self, has_intercept=False):
+        super(MultiRegression, self).__init__()
+        self.has_intercept = has_intercept
+```
+
+`simple_ml` 提供了一般的多元线性回归模型`MultiRegression`
+
+
+`MultiRegression`回归支持：
+- 一般回归问题
+- 加权回归问题
+
+
+* * *
+
+### 3.1 初始化
+
+|             |     名称      |     类型     |              描述               |
+|------------:|:-------------:|:------------:|:-------------------------------:|
+| Parameters:            | has_intercept |     bool     |          是否含有截距项          |
+
+
+
+### 3.2 类方法
+
+1 拟合
+
+```python
+def fit(self, x, y, weight=None)
+```
+
+拟合特征
+
+|             | 名称 |    类型     |     描述      |
+|------------:|:----:|:----------:|:------------:|
+| Parameters: |  x   | np.2darray |     训练集特征      |
+|             |  y   |  np.array  | 训练集标签  |
+|              |  weight| np.array |   训练集样本权重（长度必须等于样本数）       |
+|    Returns: |      |    Void    |              |
+
+
+2 预测
+
+```python
+def predict(self, x, weight=None)
+```
+
+
+给定测试集特征x，进行预测
+
+|             | 名称 |    类型     |    描述    |
+|------------:|:----:|:----------:|:---------:|
+| Parameters: |  x   | np.2darray | 测试集特征 |
+|              |  weight| np.array |   测试集样本权重（长度必须等于样本数）       |
+|    Returns: |      |  np.array  | 预测的结果 |
+
+3 结果评价
+
+```python
+def score(self, x, y, weight=None)
+```
+
+拟合并进行预测，最后给出预测效果的得分
+
+
+|             | 名称 |    类型     |                            描述                            |
+|------------:|:----:|:----------:|:---------------------------------------------------------:|
+| Parameters: |  x   | np.2darray |                         测试集特征                         |
+|             |  y   |  np.array  |                         测试集标签                         |
+|              |  weight| np.array |   测试集样本权重（长度必须等于样本数）       |
+|    Returns: |      |   float    | 预测结果评分，此处给出F1值 |
+
+4 回归作图
+
+绘制回归图
+
+```python
+def regression_plot(self, x, weight=None)
+```
+
+|             | 名称 |    类型     |    描述    |
+|------------:|:----:|:----------:|:---------:|
+| Parameters: |  x   | np.2darray | 测试集特征 |
+|             |  weight   |  np.array  | 测试集权重 |
+|    Returns: |      |    Void    |           |
+
+
+### 3.3 成员属性
+
+|     名称      |    类型    |         描述          |
+|:-------------:|:----------:|:---------------------:|
+| beta | np.array | 每个特征的参数 |
+| r_square | float | 解释平方和 |
+
 
 ## Examples
 

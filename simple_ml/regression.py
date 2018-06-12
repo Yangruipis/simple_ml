@@ -3,24 +3,25 @@
 from simple_ml.base.base_model import *
 from simple_ml.base.base_error import *
 from simple_ml.base.base_enum import *
-from simple_ml.evaluation import regression_r2
+from simple_ml.evaluation import regression_r2, regression_plot
 import numpy as np
 
 
 class MultiRegression(BaseClassifier):
 
-    def __init__(self, has_intercept=False, weight=None):
+    def __init__(self, has_intercept=False):
         super(MultiRegression, self).__init__()
         self._function = Function.regression
-        self.weight = weight
         self.has_intercept = has_intercept
         self._kernel_mat = None                 # (X^T X)^-1 X^T
         self._beta_hat = None
         self._sigma_beta_hat = None
         self._r_square = None
+        self.weight = None
 
-    def fit(self, x, y):
+    def fit(self, x, y, weight=None):
         super(MultiRegression, self).fit(x, y)
+        self.weight = weight
         self.y = y
         if self.weight is not None:
             self._check_weight()
@@ -45,7 +46,7 @@ class MultiRegression(BaseClassifier):
         if self.sample_num < self.variable_num:
             raise ParamInputError("样本数少于待估参数数目，自由度不够")
 
-        if not self.weight:
+        if self.weight is None:
             temp = np.dot(self.x.T, self.x)
             if np.linalg.det(temp) != 0:
                 self._kernel_mat = np.array(np.mat(temp).I)          # k * k
@@ -58,7 +59,7 @@ class MultiRegression(BaseClassifier):
             if np.linalg.det(temp) != 0:
                 self._kernel_mat = np.array(np.mat(temp).I)
                 self._beta_hat = np.dot(np.dot(self._kernel_mat, self.x.T),
-                                        self.weight.reshape(1, -1) * self.y).T   # k x 1
+                                        self.weight * self.y)   # k x 1
             else:
                 raise ParamInputError("输入的样本矩阵必须为非奇异矩阵！")
         _y_hat = np.dot(self.x, self._beta_hat)  # n x 1
@@ -76,10 +77,10 @@ class MultiRegression(BaseClassifier):
 
         if self.weight is not None and weight is None:
             raise EmptyInputError("必须输入权重")
-        if x.shape[0] != len(weight):
+        if weight is not None and x.shape[0] != len(weight):
             raise SampleNumberMismatchError("样本权重和测试样本长度必须一致")
 
-        if weight:
+        if weight is not None:
             return np.dot(weight.reshape(-1, 1) * x, self._beta_hat)
         else:
             return np.dot(x, self._beta_hat)
@@ -101,4 +102,10 @@ class MultiRegression(BaseClassifier):
         return regression_r2(y_predict, y)
 
     def new(self):
-        return MultiRegression(self.has_intercept, self.weight)
+        return MultiRegression(self.has_intercept)
+
+    def regression_plot(self, x, weight=None, col_id=None):
+        if self._beta_hat is None:
+            raise ModelNotFittedError
+        y = self.predict(x, weight)
+        regression_plot(self.x, self.y, x, y, col_id)

@@ -182,7 +182,8 @@ Out[1]: np.array([1,1])
 - 2018-06-11
   - 加入回归作图方法
 - 2018-06-12
-  - 加入多元回归方法并测试
+  - 加入多元回归方法`MultiRegression`并测试
+  - `MultiRegression`中加入加权回归方法
 
 # TODO list:
 

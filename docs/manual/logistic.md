@@ -1,5 +1,12 @@
 # 线性学习模块 **simple_ml.logistic**
 
+
+
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
 - [线性学习模块 **simple_ml.logistic**](#线性学习模块-simple_mllogistic)
     - [一、标准Logistic回归](#一标准logistic回归)
         - [1.1 初始化](#11-初始化)
@@ -19,6 +26,9 @@
         - [4.3 成员属性](#43-成员属性)
     - [Examples](#examples)
 - [返回主页](#返回主页)
+
+<!-- /code_chunk_output -->
+
 
 ## 一、标准Logistic回归
 

@@ -22,10 +22,6 @@ class TestEvaluation(unittest.TestCase):
         y_test = np.array([0.12, 0.13])
         self.assertRaises(SampleNumberMismatchError, regression_plot, x_train, y_train, x_test, y_test)
 
-        y_test = np.array([0.12])
-        self.assertRaises(ParamInputError, regression_plot, x_train, y_train, x_test, y_test, -1)
-        self.assertRaises(ParamInputError, regression_plot, x_train, y_train, x_test, y_test,  3)
-
 
 if __name__ == '__main__':
     unittest.main()

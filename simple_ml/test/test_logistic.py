@@ -9,13 +9,13 @@ from simple_ml.base.base_error import *
 class TestLogistic(unittest.TestCase):
 
     def test_type_check(self):
-        x = [[1,2], [2,4],[5,6]]
-        y = [1,0,0]
+        x = [[1, 2], [2, 4], [5, 6]]
+        y = [1, 0, 0]
         lr = LogisticRegression()
-        self.assertRaises(FeatureTypeError, lr.fit(x, y))
+        self.assertRaises(FeatureTypeError, lr.fit, x, y)
         x = np.array(x)
         y = np.array(y+[1])
-        self.assertRaises(SampleNumberMismatchError, lr.fit(x, y))
+        self.assertRaises(SampleNumberMismatchError, lr.fit, x, y)
 
     def test_add_ones(self):
         pass

@@ -3,7 +3,7 @@
 from __future__ import division, absolute_import
 
 from simple_ml.base.base_model import *
-from simple_ml.base.base_enum import LabelType
+from simple_ml.base.base_enum import *
 from simple_ml.base.base_error import *
 import numpy as np
 from collections import Counter

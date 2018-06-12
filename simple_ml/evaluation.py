@@ -65,6 +65,8 @@ __all__ = [
 
 
 def _check_input(y_predict, y_true):
+    if len(y_predict.shape) != 1 or len(y_true.shape)!= 1:
+        raise InputTypeError("函数输入必须是一维数组")
     if len(y_predict) != len(y_true):
         raise LabelLengthMismatchError
 

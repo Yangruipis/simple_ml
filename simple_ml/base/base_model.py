@@ -36,6 +36,7 @@ class BaseModel(object):
             self.variable_num = x.shape[1]
             self.x = np.array(x)
 
+            # 统一分类标签的名称
             _min = min(y)
             for i in np.unique(y):
                 self.y_dic[i] = i - _min

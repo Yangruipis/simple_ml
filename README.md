@@ -130,7 +130,7 @@ Out[1]: np.array([1,1])
 
 #### 2.3 回归
 
-`simple_ml`提供了`CART`、`GBDT`这两种回归方法，后面将加入`SVR`
+`simple_ml`提供了`MultiRegression`、`CART`、`GBDT`这些回归方法，后面将加入`SVR`
 
 
 #### 2.4 聚类
@@ -141,7 +141,7 @@ Out[1]: np.array([1,1])
 
 ### 3. 效果评价
 
-
+包括了分类和回归作图、以及针对二分类、多分类、回归问题的评价指标计算，包括Precision, Recall等等
 
 # 为什么会有这个项目 & 致谢
 
@@ -181,6 +181,8 @@ Out[1]: np.array([1,1])
   - 加入自动特征选择类 `AutoFeatureHandle` ，以及对应的宫颈癌Example
 - 2018-06-11
   - 加入回归作图方法
+- 2018-06-12
+  - 加入多元回归方法并测试
 
 # TODO list:
 
@@ -196,7 +198,7 @@ Out[1]: np.array([1,1])
 - [x] examples
 - [x] get more datasets
 - [x] regression plot
-- [ ] more regression method
+- [x] more regression method
 - [ ] kd_tree
 - [ ] Support Machine Regression
 - [ ] more metrics

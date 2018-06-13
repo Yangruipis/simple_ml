@@ -13,3 +13,6 @@ install:
 
 script:
   - pytest  # or py.test for Python versions 3.5 and below
+  - coverage run --source=simple_ml setup.py test
+after_success:
+  - coveralls

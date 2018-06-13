@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 
-from .base_model import *
-from .base_enum import *
-from .base_error import *
+__all__ = [
+    'base_enum',
+    'base_error',
+    'base_model',
+]

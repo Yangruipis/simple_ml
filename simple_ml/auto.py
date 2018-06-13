@@ -4,7 +4,9 @@
 The Kernel Module of simple_ml
 """
 
-from simple_ml.base import *
+from simple_ml.base.base_model import *
+from simple_ml.base.base_error import *
+from simple_ml.base.base_enum import *
 from simple_ml.data_handle import *
 from simple_ml.feature_select import *
 from simple_ml.logistic import *
@@ -319,7 +321,7 @@ class AutoModelOpt(BaseAuto):
         自动模型调参，包括了网格搜索法、贝叶斯方法
         """
         super(AutoModelOpt, self).__init__(cv_times)
-        self.opt_method = OptMethod.grid_search
+        self.opt_method = opt_method
 
     def read_array(self, arr):
         if isinstance(arr, np.ndarray):

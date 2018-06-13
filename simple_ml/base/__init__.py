@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
 
-from simple_ml.base.base_model import *
-from simple_ml.base.base_enum import *
-from simple_ml.base.base_error import *
+from .base_model import *
+from .base_enum import *
+from .base_error import *

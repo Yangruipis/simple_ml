@@ -23,10 +23,11 @@ Simple Machine Learning
 **环境和依赖库**
 - python3.5及以上
 - windows or Linux
-- numpy
-- matplotlib
-- scipy
-- requests
+- numpy      (数组)
+- matplotlib (作图)
+- scipy      (求解优化问题)
+- requests   (用于在线数据集获取)
+- openopt    (支持向量机中的二次规划问题)
 
 `强烈推荐Anaconda环境`
 
@@ -130,8 +131,11 @@ Out[1]: np.array([1,1])
 
 #### 2.3 回归
 
-`simple_ml`提供了`MultiRegression`、`CART`、`GBDT`这些回归方法，后面将加入`SVR`
-
+`simple_ml`提供了回归方法如下
+- `MultiRegression`
+- `CART`
+- `GBDT`
+- `SVR`
 
 #### 2.4 聚类
 
@@ -184,7 +188,11 @@ Out[1]: np.array([1,1])
 - 2018-06-12
   - 加入多元回归方法`MultiRegression`并测试
   - `MultiRegression`中加入加权回归方法
-
+- 2018-06-13
+  - 重写支持向量机`SVM`，调用优化库进行求解，而不是手写SMO
+  - 加入支持向量回归`SVR`
+  - 整个支持向量相关算法,包括了`Kernel`类, `BaseSupportVector`类以及`SVM`,`SVR`
+  
 # TODO list:
 
 - [ ] test cases
@@ -201,15 +209,17 @@ Out[1]: np.array([1,1])
 - [x] regression plot
 - [x] more regression method
 - [ ] kd_tree
-- [ ] Support Machine Regression
-- [ ] more metrics
+- [x] Support Machine Regression
+- [x] more metrics
 - [x] github pages, especially the class map
 - [x] stacking
 - [x] 二分类转多分类器
 - [x] recognize nan and inf
 - [x] check x before predict, check x and y before score
 - [x] "self.new()" function in each model
-
+- [ ] 支持向量相关算法测试和文档撰写
+- [ ] pypi发布
+- [ ] 移除logistic.py 中对scipy的依赖,自己写fmin()
 
 # TODO List AUTO MODEL
 

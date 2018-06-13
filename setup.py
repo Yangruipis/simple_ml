@@ -50,7 +50,7 @@ if sys.version_info < (3,5):
 
 setup(
     name="simple_male",
-    version="1.1.",
+    version="0.1.1",
     author="Ray Yang",
     author_email="yangruipis@163.com",
     description=("A machine learning algorithm implementation"),
@@ -62,7 +62,7 @@ setup(
     packages=['simple_ml', 'simple_ml.base', 'simple_ml.data_sets'],
     package_data={'': ['*.md', '*.txt', '*.data']},
     include_package_data=True,
-    install_requires=['numpy>=1.10', 'setuptools>=16.0', 'matplotlib>2.0.0', 'scipy>0.15.0', 'requests>2.10'],
+    install_requires=['numpy>=1.10','openopt>0.5', 'setuptools>=16.0', 'matplotlib>2.0.0', 'scipy>0.15.0', 'requests>2.10'],
     # dependency_links = ['https://github.com/minepy/minepy/archive/1.2.2.tar.gz#egg=minepy-1.2.2']
     classifiers=[
         "Environment :: Console",

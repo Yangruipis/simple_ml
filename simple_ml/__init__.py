@@ -1,70 +1,29 @@
-__version__ = "1.1.2"
+# -*- coding:utf-8 -*-
 
-from simple_ml.bayes import *
-from simple_ml.ensemble import *
-from simple_ml.knn import *
-from simple_ml.logistic import *
-from simple_ml.neural_network import *
-from simple_ml.svm import *
-from simple_ml.tree import *
-from simple_ml.pca import *
-from simple_ml.cluster import *
-from simple_ml.data_handle import *
-from simple_ml.feature_select import *
-from simple_ml.evaluation import *
-from simple_ml.auto import *
+"""
+==================================
 
+Simple Machine Learning
 
-# __all__ = [
-#     'NaiveBayes',
-#     'BayesMinimumError',
-#     'BayesMinimumRisk',
-#     'RandomForest',
-#     'AdaBoost',
-#     'LogisticRegression',
-#     'Lasso',
-#     'Ridge',
-#     'NeuralNetwork',
-#     'KNN',
-#     'SVM',
-#     'ID3',
-#     'CART',
-#     'GBDT',
-#     'PCA',
-#     'SuperPCA',
-#     'KMeans',
-#     'Hierarchical',
-# ]
+一个简单的机器学习算法实现
 
+==================================
+"""
 
-BINARY_CLASSIFY_MODEL = [
-    NaiveBayes,
-    BayesMinimumError,
-    BayesMinimumRisk,
-    RandomForest,
-    AdaBoost,
-    LogisticRegression,
-    Lasso,
-    Ridge,
-    NeuralNetwork,
-    KNN,
-    SVM,
-    ID3,
-    CART,
-]
-
-
-MULTI_CLASSIFY_MODEL = [
-    NaiveBayes,
-    BayesMinimumRisk,
-    BayesMinimumError,
-    RandomForest,
-    KNN,
-    CART
-]
-
-
-REGRESSION_MODEL = [
-    CART,
-    GBDT,
+__all__ = [
+    'bayes',
+    'auto',
+    'classify_data',
+    'cluster',
+    'data_handle',
+    'ensemble',
+    'evaluation',
+    'feature_select',
+    'knn',
+    'logistic',
+    'neural_network',
+    'pca',
+    'regression',
+    'support_vector',
+    'tree',
 ]

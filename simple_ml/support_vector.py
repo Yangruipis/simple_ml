@@ -8,6 +8,12 @@ from simple_ml.base.base_enum import *
 from simple_ml.evaluation import *
 
 
+__all__ = [
+    'SVR',
+    'SVM',
+]
+
+
 # 大于该值则为支持向量
 MIN_SUPPORT_VECTOR_THRESHOLD = 1e-5
 

@@ -2,7 +2,7 @@
 
 import numpy as np
 from openopt import QP
-from simple_ml.base import BaseClassifier
+from simple_ml.base.base_model import BaseClassifier
 from simple_ml.base.base_error import *
 from simple_ml.base.base_enum import *
 from simple_ml.evaluation import *

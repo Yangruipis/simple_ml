@@ -42,9 +42,10 @@
     - Stacking
   - [神经网络模型](manual/bp.md)
     - BP 神经网络
-  - [支持向量模型](manual/svm.md)
-    - SVMachine
-    - SVRegression
+  - [支持向量模型](manual/support_vector.md)
+    - SVMachine 支持向量机(PD优化包求解)
+    - SVRegression 支持向量机(PD优化包求解)
+    - [SVMachine 支持向量机(SMO算法求解)](manual/svm.md)
   - [聚类模型](manual/cluster.md)
     - K-means
     - 层次聚类

@@ -12,7 +12,7 @@
 - [返回主页](#%E8%BF%94%E5%9B%9E%E4%B8%BB%E9%A1%B5)
 
 * * *
-## 一、支持向量机 (SVM)
+## 一、支持向量机 (SMO算法求解)
 
 ```python
 from simple_ml.base.base_model import BaseClassifier

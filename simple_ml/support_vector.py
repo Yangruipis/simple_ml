@@ -2,7 +2,7 @@
 
 import numpy as np
 from openopt import QP
-from simple_ml.base.base_model import BaseClassifier
+from simple_ml.base.base_model import *
 from simple_ml.base.base_error import *
 from simple_ml.base.base_enum import *
 from simple_ml.evaluation import *
@@ -19,7 +19,8 @@ MIN_SUPPORT_VECTOR_THRESHOLD = 1e-5
 
 
 class Kernel(object):
-    """Implements list of kernels from
+    """
+    Implements list of kernels from
     http://en.wikipedia.org/wiki/Support_vector_machine
     """
 
@@ -72,13 +73,28 @@ class BaseSupportVector:
                 return Kernel.polykernel(kwargs['d'])
         elif kernel_name == KernelType.laplace:
             return Kernel.laplace(kwargs['sigma'])
+        elif kernel_name == KernelType.sigmoid:
+            return Kernel.hyperbolic_tangent(kwargs['beta'], kwargs['theta'])
         else:
             raise KernelTypeError("非法的核函数名称")
 
 
 class SVR(BaseSupportVector, BaseClassifier):
 
+    __doc__ = "Support Vector Regression"
+
     def __init__(self, c, eps=0.1, kernel=KernelType.linear, **kwargs):
+        """
+        param:
+            C           软间隔支持向量机参数（越大越迫使所有样本满足约束）
+            eps         容忍的带宽
+            kernel_type 核函数类型:
+                        linear（无需提供参数，相当于没有用核函数）
+                        polynomial(需提供参数：d)
+                        gassian(需提供参数：sigma)
+                        laplace(需提供参数：sigma)
+                        sigmoid(需提供参数：beta, theta)
+        """
         super(SVR, self).__init__()
         self._kernel_name = kernel
         self._kernel = self._get_kernel_func(kernel, kwargs)
@@ -177,9 +193,22 @@ class SVR(BaseSupportVector, BaseClassifier):
         return SVR(self.C, self.eps, self._kernel_name, **self._kwargs)
 
 
-class SVM(BaseClassifier, BaseSupportVector):
+class SVM(BaseClassifier, BaseSupportVector, Multi2Binary):
+
+    __doc__ = "Support Vector Machine"
 
     def __init__(self, c, eps=0.1, kernel=KernelType.linear, **kwargs):
+        """
+        param:
+            C           软间隔支持向量机参数（越大越迫使所有样本满足约束）
+            eps         容忍的带宽
+            kernel_type 核函数类型:
+                        linear（无需提供参数，相当于没有用核函数）
+                        polynomial(需提供参数：d)
+                        gassian(需提供参数：sigma)
+                        laplace(需提供参数：sigma)
+                        sigmoid(需提供参数：beta, theta)
+        """
         super(SVM, self).__init__()
         self._kernel_name = kernel
         self._kernel = self._get_kernel_func(kernel, kwargs)

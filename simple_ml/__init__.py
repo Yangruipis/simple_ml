@@ -9,6 +9,21 @@ Simple Machine Learning
 
 ==================================
 """
+from simple_ml.bayes import *
+from simple_ml.classify_data import *
+from simple_ml.auto import *
+from simple_ml.classify_data import *
+from simple_ml.ensemble import *
+from simple_ml.evaluation import *
+from simple_ml.feature_select import *
+from simple_ml.knn import *
+from simple_ml.logistic import *
+from simple_ml.neural_network import *
+from simple_ml.pca import *
+from simple_ml.regression import *
+from simple_ml.support_vector import *
+# from simple_ml.svm import *
+from simple_ml.tree import *
 
 __all__ = [
     'bayes',

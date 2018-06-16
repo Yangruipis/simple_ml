@@ -22,7 +22,7 @@ class MultiRegression(BaseClassifier):
     def fit(self, x, y, weight=None):
         super(MultiRegression, self).fit(x, y)
         self.weight = weight
-        self.y = y
+        # self.y = y
         if self.weight is not None:
             self._check_weight()
         self._fit()

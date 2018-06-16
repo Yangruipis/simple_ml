@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import numpy as np
-from openopt import QP
+import cvxopt
 from simple_ml.base.base_model import *
 from simple_ml.base.base_error import *
 from simple_ml.base.base_enum import *
@@ -79,6 +79,9 @@ class BaseSupportVector:
             raise KernelTypeError("非法的核函数名称")
 
 
+# TODO:
+#     1. b的计算
+#     2. 添加软间隔C的约束
 class SVR(BaseSupportVector, BaseClassifier):
 
     __doc__ = "Support Vector Regression"
@@ -96,6 +99,7 @@ class SVR(BaseSupportVector, BaseClassifier):
                         sigmoid(需提供参数：beta, theta)
         """
         super(SVR, self).__init__()
+        self._function = Function.regression
         self._kernel_name = kernel
         self._kernel = self._get_kernel_func(kernel, kwargs)
         self.C = c
@@ -109,7 +113,6 @@ class SVR(BaseSupportVector, BaseClassifier):
         self._fit()
 
     def _fit(self):
-        # 列出openopt所需的约束条件的标准型
         # QP: constructor for Quadratic Problem assignment
         # 1 / 2 x' H x  + f'x -> min
         # subjected to Ax <= b
@@ -123,26 +126,31 @@ class SVR(BaseSupportVector, BaseClassifier):
                 kernel[i + self.sample_num][j] = -1.0 * kernel[i][j]
                 kernel[i][self.sample_num + j] = -1.0 * kernel[i][j]
 
-        f = np.zeros(self.sample_num * 2)
+        P = cvxopt.matrix(kernel)
+
+        q = np.zeros(self.sample_num * 2)
         for i in range(self.sample_num):
-            f[i] = 1.0 * self.y[i] + self.eps
-            f[i + self.sample_num] = -1.0 * self.y[i] + self.eps
+            q[i] = 1.0 * self.y[i] + self.eps
+            q[i + self.sample_num] = -1.0 * self.y[i] + self.eps
+        q = cvxopt.matrix(q)
 
-        lower_bound = np.zeros(self.sample_num * 2)
-        upper_bound = np.ones(self.sample_num * 2) * self.C
-        aeq = np.append(np.ones(self.sample_num), -1.0*np.ones(self.sample_num))
-        beq = 0.0
+        G = cvxopt.matrix(np.diag(np.ones(self.sample_num * 2) * -1.0))
+        h = cvxopt.matrix(np.zeros(self.sample_num * 2))
 
-        eq = QP(np.asmatrix(kernel), np.asmatrix(f), lb=np.asmatrix(lower_bound),
-                        ub=np.asmatrix(upper_bound), Aeq=aeq, beq=beq)
-        p = eq._solve('cvxopt_qp', iprint=0)
-        f_optimized, alpha = p.ff, p.xf
+        A = cvxopt.matrix(np.append(np.ones(self.sample_num), -1.0*np.ones(self.sample_num)), (1, self.sample_num*2))
+        b = cvxopt.matrix(0.0)
+
+        # upper_bound = np.ones(self.sample_num * 2) * self.C
+
+        cvxopt.solvers.options['show_progress'] = False
+        sol = cvxopt.solvers.qp(P, q, G, h, A, b)
+        alpha = np.array(sol['x'])
 
         # 注意这里的_w 是向量：alpha_i - alpha^*_i，
         # 因为在不同核下需要计算内积，不能写成论文中 \sum_i (alpha_i - alpha^*_i)x_i的形式
-        self._w = alpha[:self.sample_num] - alpha[self.sample_num:]  # 1 x n
-        b_array = self.y - self._inner_mat(self.x) - self.eps
-        self._b = np.mean(b_array)
+        self._w = (alpha[:self.sample_num] - alpha[self.sample_num:]).ravel()  # 1 x n
+        b_array = self.y - self._inner_mat(self.x)  # - self.eps
+        self._b = np.mean(b_array[self.support_vector_id])
 
     def _inner_array(self, x):
         """
@@ -173,13 +181,13 @@ class SVR(BaseSupportVector, BaseClassifier):
 
     @property
     def support_vector_id(self):
-        return np.arange(self.sample_num)[self._w > MIN_SUPPORT_VECTOR_THRESHOLD]
+        return np.arange(self.sample_num)[(self._w > MIN_SUPPORT_VECTOR_THRESHOLD) | (self._w < -MIN_SUPPORT_VECTOR_THRESHOLD)]
 
     def predict(self, x):
         if self._w is None:
             raise ModelNotFittedError
 
-        return self._inner_mat(x)
+        return self._inner_mat(x) + self._b
 
     def score(self, x, y):
         y_predict = self.predict(x)
@@ -193,6 +201,9 @@ class SVR(BaseSupportVector, BaseClassifier):
         return SVR(self.C, self.eps, self._kernel_name, **self._kwargs)
 
 
+# TODO:
+# 1. y transfer
+# 2. Multi2binary
 class SVM(BaseClassifier, BaseSupportVector, Multi2Binary):
 
     __doc__ = "Support Vector Machine"
@@ -200,7 +211,7 @@ class SVM(BaseClassifier, BaseSupportVector, Multi2Binary):
     def __init__(self, c, eps=0.1, kernel=KernelType.linear, **kwargs):
         """
         param:
-            C           软间隔支持向量机参数（越大越迫使所有样本满足约束）
+            C           软间隔支持向量机参数（越大越迫使所有样本满足约束），如果为None意味着不添加松弛变量
             eps         容忍的带宽
             kernel_type 核函数类型:
                         linear（无需提供参数，相当于没有用核函数）
@@ -220,39 +231,45 @@ class SVM(BaseClassifier, BaseSupportVector, Multi2Binary):
 
     def fit(self, x, y):
         super(SVM, self).fit(x, y)
+        self.y = np.array([1 if i == 1 else -1 for i in self.y])
         self._fit()
 
     def _fit(self):
-        # 列出openopt所需的约束条件的标准型
-        # QP: constructor for Quadratic Problem assignment
-        # 1 / 2 x' H x  + f'x -> min
-        # subjected to Ax <= b
-        # Aeq x = beq
-        # lb <= x <= ub
+        # 列出cvxopt所需的约束条件的标准型
+        # Solves a quadratic program
+        #
+        #     minimize    (1/2)*x'*P*x + q'*x
+        #     subject to  G*x <= h
+        #                 A*x = b
+        # ref: http://goelhardik.github.io/2016/11/28/svm-cvxopt/
         kernel = np.zeros((self.sample_num, self.sample_num))
         for i in range(self.sample_num):
             for j in range(self.sample_num):
                 kernel[i, j] = self._kernel(self.x[i], self.x[j])
-        kernel = np.multiply(np.outer(self.y, self.y), kernel)
-        f = -1.0 * np.ones(self.sample_num)
-        A_std = np.diag(np.ones(self.sample_num) * -1.0)
-        b_std = np.zeros(self.sample_num)
+        P = cvxopt.matrix(np.multiply(np.outer(self.y, self.y), kernel))
+        q = cvxopt.matrix(-1.0 * np.ones(self.sample_num))
+        A = cvxopt.matrix(1.0 * self.y, (1, self.sample_num))
+        b = cvxopt.matrix(0.0)
 
-        A_slack = np.diag(np.ones(self.sample_num))
-        b_slack = np.ones(self.sample_num) * self.C
+        if self.C is None:
+            G = cvxopt.matrix(-1.0 * np.eye(self.sample_num))
+            h = cvxopt.matrix(np.zeros(self.sample_num))
+        else:
+            tmp1 = -1.0 * np.eye(self.sample_num)
+            tmp2 = np.eye(self.sample_num)
+            G = cvxopt.matrix(np.vstack((tmp1, tmp2)))
+            tmp1 = np.zeros(self.sample_num)
+            tmp2 = np.ones(self.sample_num) * self.C
+            h = cvxopt.matrix(np.hstack((tmp1, tmp2)))
 
-        A = np.vstack((A_std, A_slack))
-        b = np.vstack((b_std, b_slack))
-        Aeq = self.y
-        beq = 0.0
-
-        eq = QP(np.asmatrix(kernel), np.asmatrix(f), A=np.asmatrix(A),
-                b=np.asmatrix(b), Aeq=Aeq, beq=beq)
-        p = eq._solve('cvxopt_qp', iprint=0)
-        f_optimized, alpha = p.ff, p.xf
-        self._w = np.multiply(alpha, self.y)
+        cvxopt.solvers.options['show_progress'] = False
+        sol = cvxopt.solvers.qp(P, q, G, h, A, b)
+        alpha = np.array(sol['x'])
+        self._w = np.multiply(alpha.ravel(), self.y)
         b_array = self.y - self._inner_mat(self.x)
-        self._b = np.mean(b_array)
+        # if len(self.support_vector_id) == 0:
+        #     raise ValueError
+        self._b = np.mean(b_array[self.support_vector_id])
 
     def _inner_array(self, x):
         """
@@ -289,7 +306,7 @@ class SVM(BaseClassifier, BaseSupportVector, Multi2Binary):
         if self._w is None:
             raise ModelNotFittedError
 
-        return np.sign(self._inner_mat(x))
+        return np.sign(self._inner_mat(x) + self._b)    # 别忘了加偏移项！！
 
     def score(self, x, y):
         y_predict = self.predict(x)

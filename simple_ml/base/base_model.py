@@ -35,14 +35,19 @@ class BaseModel(object):
             self.sample_num = x_sample_num
             self.variable_num = x.shape[1]
             self.x = np.array(x)
+            self.label_type = self._check_label_type(y)
 
             # 统一分类标签的名称
             _min = min(y)
             for i in np.unique(y):
                 self.y_dic[i] = i - _min
 
-            self.y = np.array([self.y_dic[i] for i in y])
-            self.label_type = self._check_label_type(self.y)
+            # 如果是连续型，则不变，如果是离散型，则进行统一
+            if self.label_type == LabelType.continuous:
+                self.y = y
+            else:
+                self.y = np.array([self.y_dic[i] for i in y])
+
             self.feature_type = self._check_feature_type(self.x)
         else:
             self.sample_num = self._check_x(x)

@@ -22,7 +22,7 @@ class MultiRegression(BaseClassifier):
     def fit(self, x, y, weight=None):
         super(MultiRegression, self).fit(x, y)
         self.weight = weight
-        # self.y = y
+        self.y = y  # 此时一定是连续型变量，不需要进行转换，为了防止出错（识别成多分类），在此重新赋值
         if self.weight is not None:
             self._check_weight()
         self._fit()

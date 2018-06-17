@@ -62,7 +62,7 @@ setup(
     packages=['simple_ml', 'simple_ml.base', 'simple_ml.data_sets'],
     package_data={'': ['*.md', '*.txt', '*.data']},
     include_package_data=True,
-    install_requires=['numpy>=1.10','openopt>0.5', 'setuptools>=16.0', 'matplotlib>2.0.0', 'scipy>0.15.0', 'requests>2.10'],
+    install_requires=['numpy>=1.10', 'cvxopt>1.0.0', 'setuptools>=16.0', 'matplotlib>2.0.0', 'scipy>0.15.0', 'requests>2.10'],
     # dependency_links = ['https://github.com/minepy/minepy/archive/1.2.2.tar.gz#egg=minepy-1.2.2']
     classifiers=[
         "Environment :: Console",

@@ -108,6 +108,7 @@ class SVR(BaseSupportVector, BaseClassifier):
 
     def fit(self, x, y):
         super(SVR, self).fit(x, y)
+        self.y = y  # 此时一定是连续型变量，不需要进行转换，为了防止出错（识别成多分类），在此重新赋值
         self._fit()
 
     def _fit(self):

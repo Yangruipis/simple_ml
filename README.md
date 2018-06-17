@@ -218,7 +218,7 @@ Out[1]: np.array([1,1])
 - [x] recognize nan and inf
 - [x] check x before predict, check x and y before score
 - [x] "self.new()" function in each model
-- [ ] 支持向量相关算法测试和文档撰写
+- [x] 支持向量相关算法测试和文档撰写
 - [ ] pypi发布
 - [ ] 移除logistic.py 中对scipy的依赖,自己写fmin(),以及实现底层优化算法
 - [ ] LSTM

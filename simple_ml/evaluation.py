@@ -144,7 +144,7 @@ def _gen_binary_pairs(y_predict, y_true):
     _check_input(y_predict, y_true)
     label_set = set(y_predict) | set(y_true)
     for label in label_set:
-        yield [1 if i == label else 0 for i in y_predict], [1 if i == label else 0 for i in y_true]
+        yield np.array([1 if i == label else 0 for i in y_predict]), np.array([1 if i == label else 0 for i in y_true])
 
 
 def classify_f1_micro(y_predict, y_true):
@@ -471,10 +471,13 @@ def cross_validation(model, x, y, method=CrossValidationType.holdout, test_size=
     else:
         raise CrossValidationTypeError
 
-def regression_plot(x_train, y_train, x_test, y_test, x_column_id=None, title=""):
+
+def regression_plot(x_train, y_train, x_test, y_test_true, y_test_predict, x_column_id=None, title=""):
     if x_train.shape[1] != x_test.shape[1]:
         raise FeatureNumberMismatchError
-    if x_train.shape[0] != y_train.shape[0] or x_test.shape[0] != y_test.shape[0]:
+    if x_train.shape[0] != y_train.shape[0] or x_test.shape[0] != y_test_true.shape[0]:
+        raise SampleNumberMismatchError
+    if y_test_true.shape != y_test_predict.shape:
         raise SampleNumberMismatchError
 
     figure = plt.figure(figsize=(6, 6))
@@ -491,7 +494,8 @@ def regression_plot(x_train, y_train, x_test, y_test, x_column_id=None, title=""
         x_column_test = x_test[:, x_column_id]
     colors = ['#67001F', '#053061', '#29A086', '#0000FF']
     ax.scatter(x=x_column_train, y=y_train, c=colors[0], label='train', alpha=0.8)
-    ax.scatter(x=x_column_test, y=y_test, c=colors[1], label='test', alpha=0.8)
+    ax.scatter(x=x_column_test, y=y_test_true, c=colors[1], label='test true', alpha=0.8)
+    ax.scatter(x=x_column_test, y=y_test_predict, c=colors[1], label='test predict', alpha=0.5)
     ax.legend()
     ax.set_title(title)
     plt.show()

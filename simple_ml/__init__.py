@@ -35,6 +35,7 @@ __all__ = [
     'evaluation',
     'feature_select',
     'knn',
+    'svm',
     'logistic',
     'neural_network',
     'pca',

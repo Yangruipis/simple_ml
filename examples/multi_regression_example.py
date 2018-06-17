@@ -17,8 +17,7 @@ def iris_example():
     print(reg.beta)
     print(reg.r_square)
     print(reg.score(x_test, y_test))
-    reg.regression_plot(x_test, col_id=1)
-
+    reg.regression_plot(x_test, y_test, col_id=1)
 
 
 def weighted_iris_example():
@@ -32,7 +31,7 @@ def weighted_iris_example():
     reg = MultiRegression()
     reg.fit(x_train, y_train, w_train)
     print(reg.score(x_test, y_test, w_test))
-    reg.regression_plot(x_test, w_test, col_id=1)
+    reg.regression_plot(x_test, y_test, weight=w_test, col_id=1)
 
 
 if __name__ == '__main__':

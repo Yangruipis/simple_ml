@@ -104,8 +104,8 @@ class MultiRegression(BaseClassifier):
     def new(self):
         return MultiRegression(self.has_intercept)
 
-    def regression_plot(self, x, weight=None, col_id=None):
+    def regression_plot(self, x, y, weight=None, col_id=None, title=""):
         if self._beta_hat is None:
             raise ModelNotFittedError
-        y = self.predict(x, weight)
-        regression_plot(self.x, self.y, x, y, col_id)
+        y_predict = self.predict(x, weight)
+        regression_plot(self.x, self.y, x, y, y_predict,x_column_id=col_id, title=title)

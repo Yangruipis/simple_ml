@@ -205,6 +205,7 @@ class Multi2Binary:
             if y_predict == 1:
                 dic[i] += 1
             else:
+                # 如果第i个类别分类是0，则以为其他所有类别得分都加1
                 for j in range(self.model_num):
                     if j != i:
                         dic[j] += 1

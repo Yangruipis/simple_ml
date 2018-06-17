@@ -8,8 +8,8 @@ install:
   - pip install matplotlib
   - pip install scipy
   - pip install requests
-  - pip install openopt
-  - pip install coveralls
+  - pip install cvxopt
+  - pip install coveralls    # 代码覆盖率测试
   - python setup.py install
 
 script:

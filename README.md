@@ -28,7 +28,7 @@ Simple Machine Learning
 - matplotlib (作图)
 - scipy      (求解优化问题)
 - requests   (用于在线数据集获取)
-- openopt    (支持向量机中的二次规划问题)
+- cvxopt    (支持向量机中的二次规划问题)
 
 `强烈推荐Anaconda环境`
 

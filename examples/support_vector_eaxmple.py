@@ -22,7 +22,7 @@ def iris_svr_example():
     x = _x[:, 1:]
     y = _x[:, 0]
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
-    svr = SVR(c=1.0,eps=0.9, kernel=KernelType.gaussian, sigma=2.0)
+    svr = SVR(c=1.0, eps=0.9, kernel=KernelType.gaussian, sigma=2.0)
     svr.fit(x_train, y_train)
     y_predict = svr.predict(x_test)
     print(np.corrcoef(y_predict.ravel(), y_test))
@@ -34,10 +34,10 @@ def iris_svr_example():
 def multi_svm_example():
     x, y = get_wine()  # get moon()
     x_train, y_train, x_test, y_test = train_test_split(x, y, 0.3, 918)
-    svm = SVM()
+    svm = SVM(kernel=KernelType.polynomial, d=2)
     svm.fit(x_train, y_train)
     y_predict = svm.predict(x_test)
-    print(y_predict)
+    print(y_predict, list(y_test))
 
 
 if __name__ == '__main__':

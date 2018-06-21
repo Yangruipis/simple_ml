@@ -72,7 +72,24 @@ def _check_input(y_predict, y_true):
 
 
 def _get_binary_confusion_matrix(y_predict, y_true):
+    """
+    返回混淆矩阵
+    :param y_predict:
+    :param y_true:
+    :return:
+    预测\实际 |   1   |    0   |
+         1   |       |        |
+         0   |       |        |
+    """
     _check_input(y_predict, y_true)
+    y_unique = np.unique(np.append(y_predict, y_true))
+    if np.array_equal(y_unique, np.array([0, 1])) or \
+        np.array_equal(y_unique, np.array([0])) or \
+            np.array_equal(y_unique, np.array([1])):
+        pass
+    else:
+        raise ParamInputError("混淆矩阵必须输入二分类标签")
+
     joint = list(zip(y_predict, y_true))
     joint_counted = dict(Counter(joint))
     # if len(joint_counted) < 4:

@@ -2,9 +2,11 @@
 
 import unittest
 from simple_ml.evaluation import *
+from simple_ml.evaluation import _check_input, _get_binary_confusion_matrix, _gen_binary_pairs
 import numpy as np
-from simple_ml.base.base_enum import *
+from numpy.testing import assert_array_equal
 from simple_ml.base.base_error import *
+
 
 class TestEvaluation(unittest.TestCase):
 
@@ -21,6 +23,23 @@ class TestEvaluation(unittest.TestCase):
         x_test = np.array([[1,3,4]])
         y_test = np.array([0.12, 0.13])
         self.assertRaises(SampleNumberMismatchError, regression_plot, x_train, y_train, x_test, y_test, y_test)
+
+    def test_check_input(self):
+        y_true = np.array([[1, 2, 3], [4, 5, 6]])
+        y_predict = y_true.copy()
+        self.assertRaises(InputTypeError, _check_input, y_predict, y_true)
+        y_true = np.array([1, 2])
+        y_predict = np.array([1, 2, 3])
+        self.assertRaises(LabelLengthMismatchError, _check_input, y_predict, y_true)
+
+    def test_confusion_matrix(self):
+        y1 = np.array([1, 0, 0, 1])
+        y2 = np.array([1, 0, 0, 2])
+        self.assertRaises(ParamInputError, _get_binary_confusion_matrix, y1, y2)
+        y2 = np.array([1, 0, 0, 0])
+        confusion_matrix = _get_binary_confusion_matrix(y1, y2)
+        assert_array_equal(confusion_matrix, np.array([[1, 1],
+                                                       [0, 2]]))
 
 
 if __name__ == '__main__':

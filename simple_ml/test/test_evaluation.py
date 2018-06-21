@@ -41,7 +41,24 @@ class TestEvaluation(unittest.TestCase):
         assert_array_equal(confusion_matrix, np.array([[1, 1],
                                                        [0, 2]]))
 
+    def test_classify_accuracy(self):
+        y1 = np.array([1, 0, 0, 1])
+        y2 = np.array([1, 0, 1, 1])
+        score = classify_accuracy(y1, y2)
+        self.assertEqual(score, 0.75)
+
+    def test_classify_precision(self):
+        y1 = np.array([1, 1, 0, 0, 1])
+        y2 = np.array([1, 0, 1, 0, 0])
+        score = classify_precision(y1, y2)
+        self.assertEqual(score, 1/3)
+
+    def test_classify_recall(self):
+        y1 = np.array([1, 1, 0, 0, 1])
+        y2 = np.array([1, 0, 1, 0, 0])
+        score = classify_recall(y1, y2)
+        self.assertEqual(score, 0.5)
+
 
 if __name__ == '__main__':
     unittest.main()
-

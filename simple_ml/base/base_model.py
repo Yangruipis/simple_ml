@@ -11,6 +11,7 @@ from collections import defaultdict
 
 
 __all__ = [
+    'BaseModel',
     'BaseClassifier',
     'BaseFeatureSelect',
     'BaseTransform',
@@ -19,6 +20,7 @@ __all__ = [
     'MultiTreeNode',
     'GBDTTreeNode'
 ]
+
 
 class BaseModel(object):
 

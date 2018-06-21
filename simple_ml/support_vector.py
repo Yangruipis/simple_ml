@@ -208,9 +208,6 @@ class SVR(BaseSupportVector, BaseClassifier):
         return SVR(self.C, self.eps, self._kernel_name, **self._kwargs)
 
 
-# TODO:
-# 1. y transfer
-# 2. Multi2binary
 class SVM(BaseClassifier, BaseSupportVector, Multi2Binary):
 
     __doc__ = "Support Vector Machine"

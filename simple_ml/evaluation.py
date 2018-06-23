@@ -234,7 +234,7 @@ def classify_roc(y_predict, y_true):
     pair = sorted(pair, key=lambda x: x[0], reverse=True)
 
     def get_tpr_and_fpr(threshold):
-        y_pred_bin = [1 if i >= threshold else 0 for i in y_predict]
+        y_pred_bin = np.array([1 if i >= threshold else 0 for i in y_predict])
         con_matrix = _get_binary_confusion_matrix(y_pred_bin, y_true)
         _tpr = con_matrix[0][0]/(con_matrix[0][0] + con_matrix[1][0])
         _fpr = con_matrix[0][1]/(con_matrix[0][1] + con_matrix[1][1])

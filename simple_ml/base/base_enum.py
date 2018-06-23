@@ -101,9 +101,11 @@ class ActiveFunction(Enum):
 
 class OptMethod(Enum):
 
-    grid_search = 0
-    random_search = 1
-    bayes = 2
+    SA = 0
+    PSO = 1
+    down_hill = 2
+    grid_search = 3
+    bayes = 4
 
 
 class Function(Enum):

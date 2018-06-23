@@ -179,6 +179,10 @@ class Lasso(LogisticRegression, BaseFeatureSelect):
         if i >= len(w_old):
             raise MisMatchError
         w_old[i] = so.fmin(self._loss_change_one_value, w_old[i], (w_old, i), disp=False)[0]
+        # func = lambda x: self._loss_change_one_value(x[0], w_old, i)
+        # from simple_ml.optimal import SimulatedAnneal
+        # sa = SimulatedAnneal(func, np.array([w_old[i]]), iter_times=20)
+        # w_old[i] = sa.run()
 
     def _fit(self):
         _min = np.inf

@@ -44,13 +44,13 @@ def read(fname):
 PUBLISH_CMD = 'python setup.py register sdist upload'
 
 
-if sys.version_info < (3,5):
+if sys.version_info < (3, 5):
     sys.exit('Sorry, Python < 3.5 is not supported')
 
 
 setup(
     name="simple_male",
-    version="0.1.1",
+    version="0.1.2",
     author="Ray Yang",
     author_email="yangruipis@163.com",
     description=("A machine learning algorithm implementation"),

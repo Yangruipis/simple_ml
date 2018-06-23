@@ -43,7 +43,7 @@ class NaiveBayes(BaseClassifier):
 
     @staticmethod
     def _get_normal_prob(value, mu, sigma2):
-        cons = np.sqrt(2 * np.pi)
+        cons = np.sqrt(2 * np.pi * sigma2)
         return 1 / cons * np.exp(- (value - mu)**2 / (2 * sigma2))
 
     @property

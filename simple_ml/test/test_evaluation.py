@@ -59,6 +59,21 @@ class TestEvaluation(unittest.TestCase):
         score = classify_recall(y1, y2)
         self.assertEqual(score, 0.5)
 
+    def test_classify_f1(self):
+        y1 = np.array([1, 1, 0, 0, 1])
+        y2 = np.array([1, 0, 1, 0, 0])
+        score = classify_f1(y1, y2)
+        self.assertEqual(score, (2 * 0.5 / 3) / (0.5 + 1/3))
+
+    def test_gen_binary_paris(self):
+        y1 = np.array([1, 1])
+        y2 = np.array([1, 0])
+        res = list(_gen_binary_pairs(y1, y2))
+        assert_array_equal(res, [(np.array([0, 0]), np.array([0, 1])), (np.array([1, 1]), np.array([1, 0]))])
+
+    def test_auc(self):
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()

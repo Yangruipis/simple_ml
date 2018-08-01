@@ -16,6 +16,13 @@ def iris_example():
     plt.scatter(x=x[:, 0], y=x[:, 1], c=k_means.labels)
     plt.show()
 
+    dbscan = DBSCAN(0.3, 10)
+    dbscan.fit(x[:, :2])
+    print(dbscan.labels)
+
+    plt.scatter(x=x[:, 0], y=x[:, 1], c=dbscan.labels)
+    plt.show()
+
     h_cluster = Hierarchical(dis_type=DisType.Manhattan)
     h_cluster.fit(x[:, :2])
     # 选取距离为最大距离的四分之一

@@ -198,6 +198,9 @@ Out[1]: np.array([1,1])
 - 2018-06-23
   - 添加`optimal`模块，包括了爬山法和模拟退火法进行最小值求解
   - pypi发布，版本 `0.1.2`
+- 2018-08-01
+  - 添加`DBSCAN`聚类方法
+  - 添加`DBSCAN`相关例子
 
 # TODO list:
 
@@ -224,9 +227,10 @@ Out[1]: np.array([1,1])
 - [x] check x before predict, check x and y before score
 - [x] "self.new()" function in each model
 - [x] 支持向量相关算法测试和文档撰写
-- [ ] pypi发布
+- [x] pypi发布
 - [ ] 移除logistic.py 中对scipy的依赖,自己写fmin(),以及实现底层优化算法
 - [ ] LSTM
+- [ ] DBSCAN cluster
 
 # TODO List AUTO MODEL
 

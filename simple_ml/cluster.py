@@ -4,20 +4,24 @@ from __future__ import division, absolute_import
 
 import numpy as np
 from numpy.linalg import norm
+from collections import defaultdict
 
 from simple_ml.base.base_enum import DisType
 from simple_ml.base.base_error import *
+from simple_ml.base.base_model import BaseModel
 
 
-__all__ = ['KMeans', 'Hierarchical', 'DisType']
+__all__ = ['KMeans', 'Hierarchical', 'DisType', 'DBSCAN']
 
 
-class KMeans(object):
+class KMeans(BaseModel):
 
     def __init__(self, k, dis_type=DisType.Eculidean, d=1):
+        super(KMeans, self).__init__()
         self.k = k
         self.disType = dis_type
         self.d = d
+        self._labels = None
 
     def _get_dis_func(self, x1, x2):
 
@@ -34,19 +38,9 @@ class KMeans(object):
         else:
             raise DistanceTypeError
 
-    def _clear(self):
-        self.variable_num = self.sample_num = 0
-        self.x = None
-
-    def _init(self, x):
-        self._clear()
-        self.variable_num = x.shape[1]
-        self.sample_num = x.shape[0]
-        self.x = x
+    def fit(self, x, y=None):
+        self._init(x, y)
         self._labels = np.zeros(self.sample_num)
-
-    def fit(self, x):
-        self._init(x)
         self._fit()
 
     @staticmethod
@@ -87,7 +81,7 @@ class KMeans(object):
         return self._labels
 
 
-class ClusterNode(object):
+class ClusterNode:
 
     def __init__(self, left, right, parent, ids, distance=0):
         self.left = left
@@ -97,11 +91,15 @@ class ClusterNode(object):
         self.distance = distance
 
 
-class Hierarchical(object):
+class Hierarchical(BaseModel):
 
     def __init__(self, dis_type=DisType.Eculidean, d=1):
+        super(Hierarchical, self).__init__()
         self.disType = dis_type
         self.d = d
+        self.disMat = None
+        self.root = None
+        self._labels = None
 
     def _get_dis_func(self, x1, x2):
 
@@ -118,21 +116,9 @@ class Hierarchical(object):
         else:
             raise DistanceTypeError
 
-    def _clear(self):
-        self.variable_num = self.sample_num = 0
-        self.x = None
-        self.disMat = None
-        self.root = None
-
-    def _init(self, x):
-        self._clear()
-        self.variable_num = x.shape[1]
-        self.sample_num = x.shape[0]
-        self.x = x
-        self._labels = np.arange(self.sample_num)
-
-    def fit(self, x):
-        self._init(x)
+    def fit(self, x, y=None):
+        super(Hierarchical, self)._init(x, y)
+        self._labels = np.zeros(self.sample_num)
         self.root = self._fit()
 
     def _cal_dis_mat(self):
@@ -222,5 +208,70 @@ class Hierarchical(object):
     def max_dis(self):
         return self.root.distance
 
-if __name__ == '__main__':
-    km = KMeans(10)
+
+class DBSCAN(BaseModel):
+
+    __doc__ = "基于密度的聚类DBSCAN"
+
+    def __init__(self, eps, min_sample, dis_type=DisType.Eculidean, d=1):
+        super(DBSCAN, self).__init__()
+        self.eps = eps
+        self.min_sample = min_sample
+        self.disType = dis_type
+        self.d = d
+        self._labels = None
+
+    def _get_dis_func(self, x1, x2):
+
+        if self.disType == DisType.Eculidean:
+            return norm(x1 - x2)
+        elif self.disType == DisType.Manhattan:
+            return norm(x1 - x2, 1)
+        elif self.disType == DisType.Minkowski:
+            return norm(x1 - x2, self.d)
+        elif self.disType == DisType.Chebyshev:
+            return norm(x1 - x2, np.inf)
+        elif self.disType == DisType.CosSim:
+            return np.dot(x1, x2) / (norm(x1) * norm(x2))
+        else:
+            raise DistanceTypeError
+
+    def fit(self, x, y=None):
+        super(DBSCAN, self)._init(x, y)
+        self._fit()
+
+    def _fit(self):
+        self._labels = [-1] * self.sample_num
+        neighbours = defaultdict(list)
+        C = []
+        kernels = []
+        for i in range(self.sample_num):
+            for j in range(i+1, self.sample_num):
+                dist = self._get_dis_func(self.x[i], self.x[j])
+                print(dist)
+                if dist < self.eps:
+                    neighbours[i].append(j)
+                    neighbours[j].append(i)
+            if len(neighbours[i]) > self.min_sample:
+                kernels.append(i)
+
+        while kernels:
+            kernel = kernels.pop()
+            c = [kernel]
+            neighbour = neighbours[kernel]
+            while neighbour:
+                new_neighbour = []
+                for i in neighbour:
+                    c.append(i)
+                    if i in kernels:
+                        new_neighbour += neighbours[i]
+                        kernels.remove(i)
+                neighbour = new_neighbour
+            C.append(c)
+        for i, c in enumerate(C):
+            for j in c:
+                self._labels[j] = i
+
+    @property
+    def labels(self):
+        return self._labels

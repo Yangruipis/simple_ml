@@ -140,7 +140,7 @@ Out[1]: np.array([1,1])
 
 #### 2.4 聚类
 
-`simple_ml`提供了`K-means聚类`和`层次聚类`两种聚类方法
+`simple_ml`提供了`K-means聚类`、`层次聚类`、`DBSCAN密度聚类`三种聚类方法
 
 `注:`以上所有图均为simple_ml直出（需要matplotlib）
 

@@ -49,6 +49,7 @@
   - [聚类模型](manual/cluster.md)
     - K-means
     - 层次聚类
+    - DBSCAN
 
 - [效果评价(Model Evaluation)](manual/metric.md)
   - 二分类模型评分

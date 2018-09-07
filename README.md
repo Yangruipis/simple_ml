@@ -231,7 +231,7 @@ Out[1]: np.array([1,1])
 - [ ] 移除logistic.py 中对scipy的依赖,自己写fmin(),以及实现底层优化算法
 - [ ] LSTM
 - [x] DBSCAN cluster
-- [ ] 新增Kmeans++ 以及 相似度模型补全缺失值的算法
+
 
 # TODO List AUTO MODEL
 

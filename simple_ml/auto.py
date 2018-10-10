@@ -10,6 +10,9 @@ from simple_ml.base.base_enum import *
 from simple_ml.data_handle import *
 from simple_ml.feature_select import *
 from simple_ml.logistic import *
+from simple_ml.support_vector import SVM
+from simple_ml.pca import *
+from simple_ml.evaluation import *
 from simple_ml.helper import *
 import numpy as np
 import os
@@ -66,16 +69,10 @@ def grid_search(func, params: dict, cv_times=5, increase=True, quiet=True):
     return best
 
 
-def random_search():
-    """
-    随机搜索，包括了模拟退火，粒子群，等等， 后面慢慢写，由于simple_ml提供的参数较少，没有必要用到随机搜索
-    :return:
-    """
-    pass
-
 def bayes_search():
     """
-    贝叶斯搜索，通过高斯过程实现
+    TODO: 贝叶斯搜索，通过高斯过程实现
+    先尝试使用 baeys_opt 库,完成整个框架, 然后手写bayes优化
     :return:
     """
     pass
@@ -105,8 +102,29 @@ class BaseAuto:
         pass
 
 
+def logistic_score(X, y):
+    lr = LogisticRegression()
+    scores = cross_validation(lr, X, y)
+    return np.mean(scores)
+
+
+def svm_score(X, y):
+    svm = SVM(0.1)
+    scores = cross_validation(svm, X, y)
+    return np.mean(scores)
+
 
 class AutoDataHandle(BaseAuto):
+
+    """
+    steps
+    0. auto encode
+    1. auto missing data imputation
+    2. auto abnormal data handle
+    3. auto rescaling
+    4. auto balance
+    5. auto dimension reduction
+    """
 
     def __init__(self, cv_times=1):
         super(AutoDataHandle, self).__init__(cv_times)
@@ -159,7 +177,13 @@ class AutoDataHandle(BaseAuto):
         else:
             raise InputTypeError("请输入numpy二维数组")
 
-    def auto_run(self, y_column=-1):
+    @staticmethod
+    def _get_X_and_y(arr, y_column):
+        mask = [True] * arr.shape[1]
+        mask[y_column] = False
+        return arr[:, mask], arr[y_column]
+
+    def auto_run(self, y_column=-1, quiet=False):
         if y_column < 0:
             self.y_column = self._data.shape[1] + y_column
         else:
@@ -177,7 +201,7 @@ class AutoDataHandle(BaseAuto):
         params = {'continuous_method': [ConMissingHandle.mean_fill,
                                         ConMissingHandle.median_fill,
                                         ConMissingHandle.sample_drop],
-                  'discrete_method' : [DisMissingHandle.mode_fill,
+                  'discrete_method': [DisMissingHandle.mode_fill,
                                        DisMissingHandle.sample_drop,
                                        DisMissingHandle.one_hot]
                   }
@@ -186,11 +210,41 @@ class AutoDataHandle(BaseAuto):
         log_print("缺失值统计结束")
 
         log_print("缺失值处理方法寻优开始")
-        best_param = grid_search(self.missing_handle_score, params, cv_times=self.cv_times, quiet=False)
+        best_param = grid_search(self.missing_handle_score, params, cv_times=self.cv_times, quiet=quiet)
         self._handled_data = missing_value_handle(self._handled_data, self._types, **best_param[0])
         log_print("缺失值处理结束")
+
         self._handled_data,  self._head_new_name = one_hot_encoder(self._handled_data, self._types, self._head)
         log_print("独热编码结束")
+
+        log_print("降维方法寻优开始")
+        feature_num = self._handled_data.shape[1]
+        pca_n_list = list(np.arange(1, feature_num, feature_num//5))
+        params = {
+            'pca_n': [None] + pca_n_list
+        }
+        best_param = grid_search(self.dimension_reduction_score, params, cv_times=self.cv_times, quiet=quiet)
+        self._handled_data, self._head_new_name = self.dimension_reduction_handle(**best_param[0])
+        log_print("降维结束")
+
+    def dimension_reduction_score(self, pca_n):
+        X, y = self._get_X_and_y(self._handled_data, self.y_column)
+        if pca_n is None:
+            return logistic_score(X, y)
+        else:
+            pca = PCA(pca_n)
+            X = pca.fit_transform(X)
+            return logistic_score(X, y)
+
+    def dimension_reduction_handle(self, pca_n):
+        X, y = self._get_X_and_y(self._handled_data, self.y_column)
+        if pca_n is None:
+            return self._handled_data
+        else:
+            pca = PCA(pca_n)
+            X = pca.fit_transform(X)
+            new_columns_names = ['pca_' + str(i+1) for i in range(pca_n)]
+            return np.column_stack((X[:, :self.y_column], y, X[:, self.y_column:])), new_columns_names
 
 
     def missing_handle_score(self, continuous_method, discrete_method):
@@ -241,6 +295,17 @@ class AutoFeatureHandle(BaseAuto):
         else:
             raise InputTypeError("必须输入numpy二维数组，如果不是，请先利用AutoDataHandle模块进行处理")
 
+    def cross_important_features(self):
+        """
+        多个特征相互交叉,平方,带入处理好的特征之后再次进行特征选择
+        :return:
+        """
+        new_features = []
+        for i, name in enumerate(self._new_head_name):
+            new_features.append(np.square(self._handled_data[i]))
+            self._new_head_name.append(name+'_square')
+        self._handled_data = np.column_stack((self._handled_data, np.array(new_features)))
+
     def auto_run(self, y_column=-1, new_head_name=None):
         self._new_head_name = new_head_name
         if self._data is None:
@@ -251,7 +316,7 @@ class AutoFeatureHandle(BaseAuto):
             self.y_column = y_column
 
         percent_list = np.linspace(0.1, 1, 10)
-        params = {'top_k' : [int(self._data.shape[1] * i) for i in percent_list]}
+        params = {'top_k': [int(self._data.shape[1] * i) for i in percent_list]}
         if self._types[self.y_column] == LabelType.continuous:
             """
             标签为连续变量，此时只能选择 Filter.corr，Filter.var, Embedded.gbdt三种方法
@@ -272,7 +337,7 @@ class AutoFeatureHandle(BaseAuto):
 
         log_print("特征选择方法寻优开始")
         best_param, score = grid_search(self._get_feature_score, params, cv_times=self.cv_times, quiet=False)
-        log_print("最优参数：%s，得分:%.4f" % (best_param, score) )
+        log_print("最优参数：%s，得分:%.4f" % (best_param, score))
         if best_param['select_type'] in FilterType:
             model = Filter(best_param['select_type'], best_param['top_k'])
             new_train = model.fit_transform(self._data[:, np.arange(self._data.shape[1]) != self.y_column], None)
@@ -346,24 +411,23 @@ class AutoModelOpt(BaseAuto):
         pass
 
 
-
 class AutoModelSelect(BaseAuto):
     pass
 
-
-if __name__ == '__main__':
-    # arr =np.array([[1,2.1,3], [4, np.nan, 6], [np.nan, 8, 9], [10, 11, 12]])
-    # y = np.array([1,2,3, 3])
-    # arr = np.column_stack((arr, y.reshape(-1, 1)))
-    # atd = AutoDataHandle(5)
-    # atd.read_from_array(arr)
-    # atd.auto_run(-1)
-    # print(atd.handled_data)
-
-    np.random.seed(918)
-    arr = np.random.rand(20, 10)
-    y = np.random.choice([0, 1], 20, True)
-    arr = np.column_stack((arr, y.reshape(-1, 1)))
-    afh = AutoFeatureHandle(cv_times=5)
-    afh.read_array(arr)
-    afh.auto_run(-1)
+#
+# if __name__ == '__main__':
+#     # arr =np.array([[1,2.1,3], [4, np.nan, 6], [np.nan, 8, 9], [10, 11, 12]])
+#     # y = np.array([1,2,3, 3])
+#     # arr = np.column_stack((arr, y.reshape(-1, 1)))
+#     # atd = AutoDataHandle(5)
+#     # atd.read_from_array(arr)
+#     # atd.auto_run(-1)
+#     # print(atd.handled_data)
+#
+#     np.random.seed(918)
+#     arr = np.random.rand(20, 10)
+#     y = np.random.choice([0, 1], 20, True)
+#     arr = np.column_stack((arr, y.reshape(-1, 1)))
+#     afh = AutoFeatureHandle(cv_times=5)
+#     afh.read_array(arr)
+#     afh.auto_run(-1)

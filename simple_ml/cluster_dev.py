@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import numpy as np
-from sklearn.cluster import KMeans
+# from sklearn.cluster import KMeans
 
 class Kmeans:
 
@@ -78,21 +78,21 @@ class Kmeans:
         return labels, init_center
 
 
-if __name__ == '__main__':
-    from simple_ml.classify_data import get_iris
-    X, y = get_iris()
-    np.random.seed(918)
-    n = 50
-    a = np.random.choice(np.arange(X.shape[0]), n, False)
-    b = np.random.choice(np.arange(X.shape[1]), n, True)
-    for i in range(n):
-        X[a[i], b[i]] = np.nan
-    km = Kmeans(3)
-    km.fit(X)
-    print(km.labels)
-    new_X = km.transform()
-    km2 = Kmeans(3)
-    km2.fit(new_X)
-    print(km2.labels)
+# if __name__ == '__main__':
+#     from simple_ml.classify_data import get_iris
+#     X, y = get_iris()
+#     np.random.seed(918)
+#     n = 50
+#     a = np.random.choice(np.arange(X.shape[0]), n, False)
+#     b = np.random.choice(np.arange(X.shape[1]), n, True)
+#     for i in range(n):
+#         X[a[i], b[i]] = np.nan
+#     km = Kmeans(3)
+#     km.fit(X)
+#     print(km.labels)
+#     new_X = km.transform()
+#     km2 = Kmeans(3)
+#     km2.fit(new_X)
+#     print(km2.labels)
 
 
